@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 	<meta charset="UTF-8">
 	<title><%= title%></title>
 </head>
 <body>
 	Hello,World
+	<% if(!user) { %>
+	<a href="/signin">登录</a>
+	<a href="/signup">注册</a>
+	<%} else {%>
+	<a href="/signout">注销</a>
+	<% } %>
+	<div>
+		<span id="fullName"></span>
+	</div>
+	<div id="userinfo">
+		<span id="fullName"></span>
+		<span id="college"></span>
+	</div>
+	
 </body>
+<script type="text/javascript">
+	window.user = <%- user || 'null' %>;
+	document.getElementById("fullName").innerText=window.user.fullName;
+	document.getElementById("college").innerText=window.user.college;
+	</script>
 </html>

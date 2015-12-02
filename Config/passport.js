@@ -11,7 +11,7 @@ var passport = require('passport'),
 		passport.deserializeUser(function(id, done) {
 			User.findOne({
 				_id: id
-			}, 'password -salt', function(err, user) {
+			}, '-password -salt', function(err, user) {
 				if(err)
 				 throw err;
 				 done(err, user);
