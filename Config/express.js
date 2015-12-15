@@ -43,6 +43,7 @@ module.exports = function(db){
 	app.use(passport.session());
 	require('../Server/routes/index.js')(app);
 	require('../Server/routes/users.js')(app);
+	require('../Server/routes/items.js')(app);
 	// require('./socketio')(server,io,mongoStore);
 	app.use(express.static('./Client'));
 	return server;

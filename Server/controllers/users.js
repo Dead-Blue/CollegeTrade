@@ -33,7 +33,7 @@ exports.renderSignin = function (req, res, next) {
 };
 
 exports.renderSignup = function(req, res, next) {
-	if (!req.usesr) {
+	if (!req.user) {
 		res.render('signup', {
 			title: 'Sign-up Form',
 			messages: req.flash('error')

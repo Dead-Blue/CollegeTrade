@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title><%=title%></title>
+</head>
+<body>
+	<% for(var i in messages) { %>
+	<div class="flash"><%= messages[i] %></div>
+	<% } %>
+	<h3>发布商品</h3>
+	<form action="/publish_items" method="post">
+	<label for="itemname">商品名称：</label>
+	<input type="text" name="itemname">
+	<label for="description">描述：</label>
+	<input type="text" name="description">
+	<label for="quantity">数量：</label>
+	<input type="text" name="quantity">
+	<label for="unitPrice">单价</label>
+	<input type="text" name="unitPrice">
+	<input type="submit" value="发布">
+	</form>
+</body>
+</html>
