@@ -50,7 +50,7 @@ exports.articleByID = function (req, res, next, id) {
 
 exports.renderPublish = function(req, res, next) {
 	if (req.user) {
-		res.render('items_publish', {
+		res.render('item', {
 			title: 'Publish items Form',
 			messages: req.flash('error')
 		});
