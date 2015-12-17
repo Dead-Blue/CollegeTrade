@@ -14,6 +14,11 @@ var OrderSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
+	rate:{
+		type:String,
+		default:'',
+		trim:true
+	},
 	state: {
 		type: String,
 		enum: ['selling', 'trading', 'evaluating','successCompleted','failedCompleted']
