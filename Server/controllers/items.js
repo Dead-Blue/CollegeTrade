@@ -37,8 +37,8 @@ exports.list = function (req, res) {
 	});
 };
 
-exports.articleByID = function (req, res, next, id) {
-	Item.findById(id).populate('seller')//或者使用populate('seller','xx'),其中xx为限定返回的内容
+exports.itemByID = function (req, res, next, id) {
+	Item.findById(id).populate('seller','firstName lastName fullName college')//或者使用populate('seller','xx'),其中xx为限定返回的内容
 		.exec(function (err, item) {
 			if (err)
 				return next(err);
@@ -57,4 +57,7 @@ exports.renderPublish = function(req, res, next) {
 	} else {
 		return res.redirect('/signin');
 	}
+};
+exports.read = function(req, res){
+	res.json(req.item);
 };

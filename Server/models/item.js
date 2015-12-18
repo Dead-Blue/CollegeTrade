@@ -28,7 +28,7 @@ var ItemSchema = new Schema({
 			function(quantity){
 				return quantity>=1&&quantity<=9999;
 			},
-			'数量必须大于1或小于9999'
+			'剩余库存数量必须大于1或小于9999'
 		]
 	},
 	unitPrice: {
@@ -40,10 +40,9 @@ var ItemSchema = new Schema({
 		enum: ['selling', 'noStock', 'invalid']
 	}
 });
-
-ItemSchema.virtual('price').get(function() {
-	return this.quantity*this.unitPrice;
-});
+ItemSchema.methods.isHaveStock = function(quantity) {
+	return this.quantity >= quantity;
+};
 ItemSchema.set('toJSON', {
 	getters:true,
 	virtuals: true

@@ -8,5 +8,10 @@ module.exports = function(app){
 	   
 	   app.route('/items')
 	   .get(items.list)
-	   .post(users.requiresLogin, orders.create)
+	   .post(users.requiresLogin, orders.create);
+	   
+	   app.route('/items/:itemId')
+	   .get(items.read);
+	   
+	   app.param('itemId',items.itemByID);
 }
