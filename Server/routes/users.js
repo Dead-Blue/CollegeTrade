@@ -9,5 +9,5 @@ module.exports = function(app) {
 	
 	app.route('/api/authentication')
     .post(users.signin)
-    .delete('/api/authentication', users.signout);
+    .delete(users.signout);
 };

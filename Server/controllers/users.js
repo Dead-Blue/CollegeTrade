@@ -54,15 +54,24 @@ exports.signup = function(req, res, next) {
 		if(err) {
 			var message = getErrorMessage(err);
 			req.flash('error', message);
-			return res.redirect('/signup');
+			return res.send({
+			message: '注册失败',
+            success: false
+		});
 		}
 		req.login(user, function(err) {
 			if (err) return next(err);
-			return res.redirect('/');
+			return res.send({
+			message: '登录成功',
+            success: true
+		});
 		});
 	});
 	} else {
-		return res.redirect('/');
+		return res.send({
+			message: '用户已登录',
+            success: false
+		});
 	}
 };
 
@@ -74,7 +83,9 @@ exports.signout = function(req, res) {
 exports.requiresLogin = function(req, res, next) {
 	if (!req.isAuthenticated()) {
 		return res.status(401).send({
-			message: 'User is not logged in'
+			message: 'User is not logged in',
+            success: false
+            
 		});
 	}
 	next();
@@ -84,13 +95,15 @@ exports.signin=function(req, res, next) {
     if (err) { return next(err); }
     if (!user) { return res.status(401.1).send({
 			message: '登陆失败',
-            info:info
+            info:info,
+            success: false
 		}); }
     req.logIn(user, function(err) {
       if (err) { return next(err); }
       return res.send({
 			message: '登陆成功',
-            user:user
+            user:user,
+            success: true
 		});
     });
   })(req, res, next);
