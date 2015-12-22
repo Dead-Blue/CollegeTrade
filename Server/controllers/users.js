@@ -93,7 +93,7 @@ exports.requiresLogin = function(req, res, next) {
 exports.signin=function(req, res, next) {
   passport.authenticate('local', function(err, user, info) {
     if (err) { return next(err); }
-    if (!user) { return res.status(401.1).send({
+    if (!user) { return res.status(401).send({
 			message: '登陆失败',
             info:info,
             success: false
@@ -108,3 +108,29 @@ exports.signin=function(req, res, next) {
     });
   })(req, res, next);
 };
+
+exports.isLogin = function(req,res){
+    if(req.user)
+    return res.send({
+        isLogin:true,
+        messages: req.flash('error')|| req.flash('info')
+    });
+    else
+    return res.send({
+        isLogin:false,
+        messages: req.flash('error')|| req.flash('info')
+    });
+}
+exports.userInfo = function(req,res){
+     if(req.user)
+    return res.send({
+        success:true,
+        user:req.user,
+        messages: req.flash('error')|| req.flash('info')
+    });
+    else
+    return res.send({
+        success:false,
+        messages: req.flash('error')|| req.flash('info')
+    });
+}
