@@ -79,3 +79,19 @@ exports.requiresLogin = function(req, res, next) {
 	}
 	next();
 };
+exports.signin=function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { return res.status(401.1).send({
+			message: '登陆失败',
+            info:info
+		}); }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.send({
+			message: '登陆成功',
+            user:user
+		});
+    });
+  })(req, res, next);
+};

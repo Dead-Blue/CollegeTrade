@@ -9,11 +9,9 @@
 </head>
 
 <body>
-	<% for(var i in messages) { %>
-	<div class="flash"><%= messages[i] %></div>
-	<% } %>
+	
 	<h1>登录</h1>
-	<form action="/signin" method="post">
+	<form action="http://localhost:8080/api/authentication" method="post">
 		<label for="username">用户名：</label>
 		<input type="text" name="username">
 		<label for="username">密码：</label>
@@ -21,5 +19,11 @@
 		<input type="submit" value="登录">
 	</form>
 </body>
-
+ <!--<script>
+     window.messages ='';
+     <% for(var i in messages) { %>
+	window.messages=window.messages+'<%=messages[i]%>'
+	<% } %>
+   
+    </script>-->
 </html>
