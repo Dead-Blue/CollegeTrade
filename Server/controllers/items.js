@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     Item = mongoose.model('Item');
+    var formidable = require('formidable');
 var getErrorMessage = function (err) {
 	if (err.errors) {
 		for (var errName in err.errors) {
@@ -13,6 +14,7 @@ var getErrorMessage = function (err) {
 exports.create = function (req, res) {
     var item = new Item(req.body);
     item.seller = req.user;
+    item.imagesUrl=req.body.filepaths;
 	item.state = "selling";
 	item.save(function (err) {
 		if (err) {
@@ -60,4 +62,23 @@ exports.renderPublish = function(req, res, next) {
 };
 exports.read = function(req, res){
 	res.json(req.item);
+};
+exports.parseForm=function(req,res,next){
+  var form = new formidable.IncomingForm();
+  form.uploadDir =__dirname+"../../../Client/uploadImages/";
+  form.encoding = 'utf-8';
+  form.maxFieldsSize = 2 * 1024 * 1024;
+  form.maxFields = 1000;
+  form.multiples = true;
+  form.keepExtensions = true;
+  form.parse(req, function(err, fields, files) {
+    if (err)
+      return next(err);
+      req.body=fields;
+      console.log(files.img[0])
+      req.body.filepaths=new Array();
+      for(var i in files.img)
+      req.body.filepaths[i]=files.img[i].path;
+      next();
+    });
 };

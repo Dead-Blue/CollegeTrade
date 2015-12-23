@@ -3,22 +3,41 @@
 <head>
 	<meta charset="UTF-8">
 	<title><%=title%></title>
+	<script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
 </head>
 <body>
 	<% for(var i in messages) { %>
 	<div class="flash"><%= messages[i] %></div>
 	<% } %>
 	<h3>发布商品</h3>
-	<form action="/item" method="post">
+	<form id='publishform' action="/api/item" method="post" enctype="multipart/form-data">
 	<label for="itemname">商品名称：</label>
-	<input type="text" name="itemname">
+	<input id='itemname' type="text" name="itemname">
 	<label for="description">描述：</label>
-	<input type="text" name="description">
+	<input id="description" type="text" name="description">
 	<label for="stock">库存数量：</label>
-	<input type="text" name="stock">
+	<input id="stock" type="text" name="stock">
 	<label for="unitPrice">单价</label>
-	<input type="text" name="unitPrice">
-	<input type="submit" value="发布">
+	<input id="unitPrice" type="text" name="unitPrice">
+	<label for="unitPrice">上传图片</label>
+	<input type="file" name="img" multiple="multiple" />
+	<input type="submit"   value="发布">
+	<!-- <input type="button" onclick="publish()"  value="发布"> -->
 	</form>
 </body>
+<!-- <script>
+	function publish(){
+		var formParam = $("#publishform").serialize();
+		$.ajax({
+			type:'POST',
+			url:"/api/item",
+			data:formParam,
+			dataType:'JSON',
+			success:function(data){
+				var str='<ul><li><a href="/api/items/'+data._id+'">已发布商品:订单号：'+data._id+'</a></li></ul>';
+				$('body').append(str)
+			}
+		})
+	}
+</script> -->
 </html>

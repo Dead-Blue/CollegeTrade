@@ -12,4 +12,12 @@ module.exports = function(app) {
     .get(users.isLogin)
     .post(users.signin)
     .delete(users.signout);
+    
+    app.route('/signin')
+    .get(users.renderSignin);
+    
+    app.route('/signup')
+    .get(users.renderSignup);
+    app.route('/signout')
+    .get(users.signout);
 };

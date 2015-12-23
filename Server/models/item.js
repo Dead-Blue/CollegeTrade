@@ -35,6 +35,10 @@ var ItemSchema = new Schema({
 		type: Number,
 		required: '请输入价格'
 	},
+  imagesUrl:[{
+		type:String,
+		default:''
+	}],
 	state: {
 		type: String,
 		enum: ['selling', 'noStock', 'invalid']

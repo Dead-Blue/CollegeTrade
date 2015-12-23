@@ -103,6 +103,7 @@ exports.signin=function(req, res, next) {
       return res.send({
 			message: '登陆成功',
             user:user,
+			id:user._id,
             success: true
 		});
     });
