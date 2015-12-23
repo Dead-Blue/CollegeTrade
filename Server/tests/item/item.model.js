@@ -5,7 +5,7 @@ var User=mongoose.model('User');
 var Item = mongoose.model('Item');
 
 var user,item;
-describe('Item Model Unit Tests:', function(){
+describe('商品Model单元测试', function(){
 	beforeEach(function(done){
 		user=new User({
 			firstName: 'Full',
@@ -21,28 +21,36 @@ describe('Item Model Unit Tests:', function(){
 				seller:user,
 				itemname:'test',
 				description:'test',
-				quantity:1,
+				stock:3,
 				unitPrice:2
 				
 			});
 			done();
 		});
 	});
-	describe('Testting the save method', function() {
-		it('Should be able to save without problems', function(){
+	describe('测试商品的数据库存储操作', function() {
+		it('正确存储商品', function(){
 			item.save(function(err){
 				should.not.exist(err);
 			});
 		});
-		it('Should not be able to save an item without an item name',function(){
+		it('没有商品名称时商品存储应当出错',function(){
 			item.itemname='';
 			item.save(function(err){
 				should.exist(err);
 			});
 		});
-		it('Should not be able to save an item that have seller',function(){
+		it('存储的商品中应当包含卖家信息',function(){
 			item.save(function(err){
 				should.exist(item.seller);
+			});
+		});
+	});
+    describe('测试商品的数据库更新操作', function() {
+        it('正确更新商品库存', function(){
+            item.stock=item.stock-1;
+            item.save(function(err,item){
+                item.should.have.property('stock',2);
 			});
 		});
 	});

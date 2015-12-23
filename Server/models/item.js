@@ -21,14 +21,14 @@ var ItemSchema = new Schema({
 		default: '',
 		trim: true
 	},
-	quantity:{
+	stock:{
 		type: Number,
 		default: 1,
 		validate: [
-			function(quantity){
-				return quantity>=1&&quantity<=9999;
+			function(stock){
+				return stock>=0&&stock<=9999;
 			},
-			'剩余库存数量必须大于1或小于9999'
+			'剩余库存数量必须大于0或小于9999'
 		]
 	},
 	unitPrice: {
@@ -40,8 +40,8 @@ var ItemSchema = new Schema({
 		enum: ['selling', 'noStock', 'invalid']
 	}
 });
-ItemSchema.methods.isHaveStock = function(quantity) {
-	return this.quantity >= quantity;
+ItemSchema.methods.isHaveStock = function(stock) {
+	return this.stock >= stock;
 };
 ItemSchema.set('toJSON', {
 	getters:true,

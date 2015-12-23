@@ -24,7 +24,12 @@ var OrderSchema = new Schema({
 	},
 	quantity:{
 		type:Number,
-		required:'购买数量必须大于0'
+        validate: [
+			function(quantity){
+				return quantity>0;
+			},
+			'购买数量必须大于0'
+		]
 	},
 	rate:{
 		type:String,

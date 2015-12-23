@@ -44,6 +44,7 @@ module.exports = function(db){
 	require('../Server/routes/index.js')(app);
 	require('../Server/routes/users.js')(app);
 	require('../Server/routes/items.js')(app);
+    require('../Server/routes/orders.js')(app);
 	// require('./socketio')(server,io,mongoStore);
 	app.use(express.static('./Client'));
 	return server;

@@ -1,5 +1,5 @@
-var mongoose = require('mongoose'),
-    Order = mongoose.model('Order');
+var mongoose = require('mongoose');
+var Order = mongoose.model('Order');
 var User = mongoose.model('User');
 var Item = mongoose.model('Item');
 var getErrorMessage = function (err) {
@@ -9,33 +9,39 @@ var getErrorMessage = function (err) {
 				return err.errors[errName].message;
 		}
 	} else {
-		return 'Unknown server error';
+		return '未知服务器错误';
 	}
 };
 exports.create = function (req, res) {
-	var item = req.item;
-	var oldQuantity = item.quantity;
-	if (oldQuantity <= req.body.quantity)
+	var item = (req.body.item);
+	var stock = item.stock;
+    if(!item){
+        return res.status(400).send({
+			message: '获取商品信息失败'
+		});
+    }else if (stock < req.body.quantity)
 		return res.status(400).send({
 			message: '商品库存不足'
 		});
 	else {
-		item.update({ $set: { quantity: oldQuantity - req.body.quantity } }, { w: 1 }, function (err, item) {
+       Item.findById(item._id,function(err,item){
+           item.stock=stock-req.body.quantity; 
+		item.save(function (err, item) {
 			if (err) {
+                throw err;
 				return res.status(400).send({
 					message: getErrorMessage(err)
 				});
 			} else {
-				req.item.quantity = item.quantity;
 				var order = new Order({
-					seller:req.item.seller,
-					item:req.item,
-					customer:req.body.user,
-					unitPrice:req.body.user,
+					seller:item.seller,
+					item:item,
+					customer:req.user,
+					unitPrice:req.body.unitPrice,
 					quantity:req.body.quantity,
 					state:"trading"
 				});
-				order.save(function (err) {
+				order.save(function (err,order) {
 					if (err) {
 						return res.status(400).send({
 							message: getErrorMessage(err)
@@ -46,7 +52,37 @@ exports.create = function (req, res) {
 				});
 			}
 		});
+       });        
 	}
-
-
+};
+exports.list = function (req, res) {
+	Order.find({customer:req.user._id}).sort('-created')
+    .populate('customer','firstName lastName fullName')
+    .populate('seller','firstName lastName fullName')
+    .populate('item','firstNaitemnameme description unitPrice')
+    .exec(function (err, orders) {
+		if (err) {
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});
+		} else {
+			res.json(orders);
+		}
+	});
+};
+exports.orderById= function(req,res,next,id){
+    Order.findById(id)
+    .populate('customer','firstName lastName fullName')
+    .populate('seller','firstName lastName fullName')
+    .populate('item','firstNaitemnameme description unitPrice')
+    .exec(function(err,order){
+        if (err)
+				return next(err);
+			if (!order) return next(new Error('载入订单信息' + id + '失败'));
+		req.order=order;
+		next();
+    })
+};
+exports.read = function(req, res){
+	res.json(req.order);
 };
