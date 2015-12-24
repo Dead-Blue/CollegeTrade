@@ -77,7 +77,11 @@ exports.signup = function(req, res, next) {
 
 exports.signout = function(req, res) {
 	req.logout();
-	res.redirect('/');
+	return res.send({
+			message: '注销成功',
+            success: true
+            
+		});
 };
 
 exports.requiresLogin = function(req, res, next) {
