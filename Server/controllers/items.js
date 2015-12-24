@@ -15,6 +15,9 @@ exports.create = function (req, res) {
     var item = new Item(req.body);
     item.seller = req.user;
     item.imagesUrl = req.body.filepaths;
+    if(item.stock===0)
+    item.state="noStock"
+    else
     item.state = "selling";
     item.save(function (err) {
         if (err) {

@@ -46,8 +46,9 @@ exports.renderSignup = function(req, res, next) {
 exports.signup = function(req, res, next) {
 	if(!req.user) {
 		var user = new User(req.body);
+        user.username=user.username.toLowerCase() ;
 		var message = null;
-		
+		console.log(user);
 		user.provider = 'local';
 		
 	user.save(function(err) {
@@ -55,7 +56,7 @@ exports.signup = function(req, res, next) {
 			var message = getErrorMessage(err);
 			req.flash('error', message);
 			return res.send({
-			message: '注册失败',
+			message: '注册失败'+message,
             success: false
 		});
 		}
@@ -63,7 +64,8 @@ exports.signup = function(req, res, next) {
 			if (err) return next(err);
 			return res.send({
 			message: '登录成功',
-            success: true
+            success: true,
+            user:user
 		});
 		});
 	});

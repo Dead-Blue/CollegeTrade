@@ -26,6 +26,8 @@ exports.create = function (req, res) {
 	else {
        Item.findById(item._id,function(err,item){
            item.stock=stock-req.body.quantity; 
+           if(item.stock===0)
+           item.state='noStock'
 		item.save(function (err, item) {
 			if (err) {
                 throw err;

@@ -5,7 +5,7 @@ var passport = require('passport'),
 module.exports = function(){
 	passport.use(new LocalStrategy(function(username,password, done) {
 		User.findOne({
-			username: username
+			username: username.toLowerCase()
 		}, function(err, user) {
 			if(err){
 				return done(err);
