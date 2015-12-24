@@ -1,29 +1,66 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
 
-<head>
-	<meta charset="UTF-8">
-	<title>
-		<%=title%>
-	</title>
-</head>
 
-<body>
-	
-	<h1>登录</h1>
-	<form action="http://localhost:8080/api/authentication" method="post">
-		<label for="username">用户名：</label>
-		<input type="text" name="username">
-		<label for="username">密码：</label>
-		<input type="password" name="password">
-		<input type="submit" value="登录">
-	</form>
-</body>
- <script>
-     window.messages ='';
-     <% for(var i in messages) { %>
-	window.messages=window.messages+'<%=messages[i]%>'
-	<% } %>
-   
-    </script>
-</html>
+<section>
+	<!--<% for(var i in messages) { %>-->
+    <!--<div class="flash"><%= messages[i] %></div>-->
+    <!--<% } %>-->
+    <div class="container-fluid" >
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <form class="" role="form"  novalidate>
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-md-2 control-label">
+                                    用户名：
+                                </label>
+
+                                <div class="col-md-4">
+                                    <input  class="form-control" name="username" placeholder="用户名" ng-model="credentials.username" required>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">
+                                        密码：
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input type="password" name="password" class="form-control" placeholder="只能是数字、字母、下划线" ng-model="credentials.password">
+
+                                    </div>
+
+                            </div>
+                        </div>
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    </div>
+                            </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button class="col-md-offset-4 btn btn-primary" ng-click="login(credentials)">登录</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+
+                    </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
