@@ -2,8 +2,8 @@
  * Created by sun on 2015/12/17.
  */
 var client=angular.module('clientControllers',[]);
-client.controller('loginCtrl',['$rootScope','$scope','$http','$location','$cookieStore','authService',function($rootScope,$scope,$http,$location,$cookieStore,authService) {
-
+client.controller('loginCtrl',['$rootScope','$scope','$location','$cookieStore','authService',function($rootScope,$scope,$location,$cookieStore,authService) {
+    console.log('loginCtrl');
     $scope.login =function(credentials){
 
         authService.login(credentials).then(function(response){
@@ -28,6 +28,7 @@ client.controller('loginCtrl',['$rootScope','$scope','$http','$location','$cooki
 }]);
 
 client.controller('mainCtrl',['$rootScope','$scope','$cookieStore',function($rootScope,$scope,$cookieStore) {
+    console.log('mainCtrl');
     $rootScope.isSigned=false;
     $rootScope.user=$cookieStore.get('user');
     if($rootScope.user!=null){
@@ -37,18 +38,28 @@ client.controller('mainCtrl',['$rootScope','$scope','$cookieStore',function($roo
         if( $rootScope.user!=null){
             $rootScope.isSigned=true;
         }
-        $scope.test=function(){
-            $scope.isSigned=!$scope.isSigned;
-            console.log($scope.isSigned);
-        }
-
-
     })
 
 }]);
-
-client.controller('logoutCtrl',['$rootScope','$scope','$cookieStore',function($rootScope,$scope,$cookieStore) {
+//
+//注销
+client.controller('logoutCtrl',['$rootScope','$scope','$cookieStore','$location','authService',function($rootScope,$scope,$cookieStore,$location,authService) {
+    console.log('logoutCtrl');
     $rootScope.isSigned=false;
     $cookieStore.remove('user');
+        authService.logout().then(function(response){
+            //注销成功
+            $scope.resposeMessage=response;
+            $rootScope.user=response.user;
+            $rootScope.isSigned=true;
+            $location.path('/');
+            console.log('注销成功');
+        },function(response){
+
+            $scope.resposeMessage=response;
+            $rootScope.isSigned=false;
+            console.log('注销失败');
+//失败
+        });
 
 }]);
