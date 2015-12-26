@@ -38,11 +38,11 @@
 //
 //    });
 //});
-angular.module('clientApp',['ngRoute','ngCookies','clientServices','clientControllers'])
+angular.module('clientApp',['ngRoute','ngCookies','clientServices','clientControllers','clientDirectives'])
     .config(function ($routeProvider) {
         $routeProvider.when('/',{
             templateUrl: '/views/goods-list.html',
-            controller:'loginCtrl',
+            controller:'mainCtrl',
             publicAccess: true
         });
         $routeProvider.when('/signin',{
@@ -53,6 +53,16 @@ angular.module('clientApp',['ngRoute','ngCookies','clientServices','clientContro
         $routeProvider.when('/signout',{
             controller:'logoutCtrl',
             templateUrl: '/views/goods-list.html',
+            publicAccess: true
+        });
+        $routeProvider.when('/signup',{
+            controller:'registerCtrl',
+            templateUrl: '/views/signup.html',
+            publicAccess: true
+        });
+        $routeProvider.when('/publishItem',{
+            controller:'publishItemCtrl',
+            templateUrl: '/views/publishItem.html',
             publicAccess: true
         });
 });
