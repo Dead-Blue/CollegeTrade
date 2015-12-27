@@ -49,7 +49,12 @@ describe('商品Controller测试', function () {
             var req = request
                 .post('/api/item');
             agent.attachCookies(req);
-            req.send({ itemname: 'test', description: 'test', unitPrice: 2, stock: 10 })
+             req.attach('img','test.png')
+                .field('itemname', 'test')
+                .field('description', 'test')
+                .field('unitPrice', 2)
+                .field('stock', 10)
+                .field('itemType', '生活用品')
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200)
@@ -66,7 +71,12 @@ describe('商品Controller测试', function () {
             var req = request
                 .post('/api/item');
             agent.attachCookies(req);
-            req.send({  itemname: '', description: 'test', unitPrice: 2, stock: 10 })
+            req.attach('img','test.png')
+                .field('itemname', '')
+                .field('description', 'test')
+                .field('unitPrice', 2)
+                .field('stock', 10)
+                .field('itemType', '生活用品')
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200)

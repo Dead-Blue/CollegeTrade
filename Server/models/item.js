@@ -39,9 +39,16 @@ var ItemSchema = new Schema({
 		type:String,
 		default:''
 	}],
+    itemType:{
+        type:String,
+        enum:{
+            values:'生活用品 电子产品 学习用品 图书 电脑配件 其他'.split(' '),
+            message:'商品类型错误'
+        }
+    },
 	state: {
 		type: String,
-		enum: ['selling', 'noStock', 'invalid']
+		enum: 'selling noStock invalid'.split(' ')
 	}
 });
 ItemSchema.methods.isHaveStock = function(stock) {

@@ -86,12 +86,17 @@ exports.parseForm = function (req, res, next) {
                         message: '请上传正确的图片格式文件'
                     });
                 }
-                req.body.filepaths[i] = files.img[i].path;
+                req.body.filepaths[i] = setImageUrl((files.img[i].path));
             }
         }
         else
-            req.body.filepaths = files.img.path
+            req.body.filepaths =setImageUrl((files.img.path))
         console.log(req.body.filepaths);
         next();
     });
 };
+function setImageUrl(path){
+    var index=path.indexOf("\\uploadImages\\");
+    
+    return '/uploadImages/'+path.substring(index+14);
+}

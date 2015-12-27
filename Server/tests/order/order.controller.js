@@ -38,7 +38,8 @@ describe('订单Controller单元测试', function () {
             itemname: 'test',
             description: 'test',
             stock: 10,
-            unitPrice: 2
+            unitPrice: 2,
+            itemType:'生活用品'
         });
         item.save(function (err) {
             done();

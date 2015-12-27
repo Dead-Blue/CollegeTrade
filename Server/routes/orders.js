@@ -9,7 +9,8 @@ module.exports = function(app){
 	   .get(users.requiresLogin, orders.list)
        
 	   app.route('/api/orders/:orderId')
-	   .get(users.requiresLogin,orders.read);
+	   .get(users.requiresLogin,orders.read)
+       .put(users.requiresLogin,orders.hasAuthorization,orders.update);
 	   
 	   app.param('orderId',orders.orderById);
 }

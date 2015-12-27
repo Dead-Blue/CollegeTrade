@@ -88,3 +88,24 @@ exports.orderById= function(req,res,next,id){
 exports.read = function(req, res){
 	res.json(req.order);
 };
+exports.update=function(req,res){
+    var order = req.order;
+    order.state=req.body.state;
+    order.save(function(err){
+        if(err){           
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});	
+        } else {
+			res.json(order);
+        }
+    })
+};
+exports.hasAuthorization = function(req, res, next) {
+	if (req.order.customer.id !== req.user.id) {
+		return res.status(403).send({
+			message: '用户未授权'
+		});
+	}
+	next();
+};
