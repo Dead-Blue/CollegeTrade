@@ -1,0 +1,117 @@
+<section>
+    <!--<% for(var i in messages) { %>-->
+    <!--<div class="flash"><%= messages[i] %></div>-->
+    <!--<% } %>-->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <form role="form" name="itemForm" class="form-horizontal" novalidate  method="post" enctype="multipart/form-data">
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-5"/>
+                            <div class="col-md-2">
+                                <h1>发布商品</h1>
+                            </div>
+                            <div class="col-md-2"/>
+                        </div>
+                        <hr/>
+
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-4"/>
+                            <div class="col-md-2">
+                                <label>商品名称：</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" id="number" name="itemname" type="text" required
+                                       ng-model='itemInfo.itemname' required/>
+                        <span class="glyphicon glyphicon-ok form-control-feedback"
+                              ng-show="itemForm.itemname.$dirty && itemForm.itemname.$valid"></span>
+                            </div>
+                            <div class="col-md-3"/>
+                        </div>
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-4"/>
+                            <div class="col-md-2">
+                                <label>库存数量：</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" id="stock" name="stock" type="number" required
+                                       ng-model='itemInfo.stock' required/>
+                        <span class="glyphicon glyphicon-ok form-control-feedback"
+                              ng-show="itemForm.stock.$dirty && itemForm.stock.$valid"></span>
+                            </div>
+                            <div class="col-md-3"/>
+                        </div>
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-4"/>
+                            <div class="col-md-2">
+                                <label>单价：</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" id="unitPrice" name="unitPrice" required
+                                       ng-model='itemInfo.unitPrice' required/>
+                        <span class="glyphicon glyphicon-ok form-control-feedback"
+                              ng-show="itemForm.unitPrice.$dirty && itemForm.unitPrice.$valid"></span>
+                            </div>
+                            <div class="col-md-3"/>
+                        </div>
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-4"/>
+                            <div class="col-md-2">
+                                <label>描述：</label>
+                            </div>
+                            <div class="col-md-3">
+                                <textarea class="input-xlarge" id="description" name="description" rows="3" cols="35"
+                                          ng-model='itemInfo.description' required></textarea>
+                        <span class="glyphicon glyphicon-ok form-control-feedback"
+                              ng-show="itemForm.description.$dirty && itemForm.description.$valid"></span>
+                            </div>
+                            <div class="col-md-3"/>
+                        </div>
+
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-4"/>
+                            <div class="col-md-2">
+                                <label>图片：</label>
+                            </div>
+
+                            <div class="col-md-3">
+                                <input accept="image/*" type="file" file-model="images" multiple="multiple"/>
+                                <!--<input accept="image/*" name="file" ng-value="fileToUpload" value="{{fileToUpload}}" file-model="fileToUpload" set-file-data="fileToUpload = value;" type="file" id="my_file" />-->
+                            </div>
+                            <div class="col-md-3"/>
+                        </div>
+
+                        <div class="form-group  has-feedback">
+                            <div ng-repeat=" imageSrc in imageSrcs" class="col-md-1">
+                                <div class="col-md-1"/>
+                                <img class="carousel-inner img-responsive img-rounded img-thumbnail" ng-src="{{imageSrc}}" />
+                            </div>
+                        </div>
+
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-5"/>
+                            <div class="col-md-2">
+                                <button class="col-md-offset-4 btn btn-primary" ng-click="publishItem(itemInfo)">发布
+                                </button>
+                            </div>
+                            <div class="col-md-5"/>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</section>
