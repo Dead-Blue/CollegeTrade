@@ -14,6 +14,7 @@
         <button type="button" onclick='submit()'>提交</button>
       <a href="/signout">注销</a>
 </body>
+<button type="button" onclick='submit2()'>提交</button>
 <script>
     function submit(){
         $.ajax({  
@@ -31,6 +32,24 @@
         }else{  
              alert("失败");  
         }  
+     },  
+     error : function() {  
+          alert("异常！");  
+     }  
+});
+}
+function submit2(){
+        $.ajax({  
+    url:'http://localhost:8080/api/order',// 跳转到 action  
+    data:{   
+             item :  {"_id":"5683a51a1d9643b82a1056f3","state":"selling","seller":{"_id":"567b9670d36d5c501c94495d","firstName":"耿","lastName":"夏琛","college":"南京理工大学","fullName":"耿夏琛","id":"567b9670d36d5c501c94495d"},"unitPrice":5000,"__v":0,"imagesUrl":["/uploadImages/upload_ae3974c19ddec59212eb708c35cc09f3.gif"],"stock":200,"description":"iphone6s","itemname":"iphone6s","created":"2015-12-30T09:34:18.789Z","id":"5683a51a1d9643b82a1056f3"},  
+             quantity :  1,
+             unitPrice:5000
+    },  
+    type:'POST',  
+    dataType:'json',  
+    success:function(data) {  
+        alert(date);  
      },  
      error : function() {  
           alert("异常！");  

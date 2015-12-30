@@ -91,7 +91,6 @@ exports.parseForm = function (req, res, next) {
         }
         else
             req.body.filepaths =setImageUrl((files.img.path))
-        console.log(req.body.filepaths);
         next();
     });
 };

@@ -144,6 +144,37 @@ describe('订单Controller单元测试', function () {
                 });
         });
     });
+     describe('测试PUT方法', function () {
+        var agent;
+        beforeEach(function (done) {
+            order = new Order({
+                seller: seller,
+                customer: customer,
+                item: item,
+                unitPrice: 2,
+                quantity: 1,
+                state: 'trading'
+            });
+            order.save(function (err) {
+            });
+            login.login(request, function (loginAgent) {
+                agent = loginAgent;
+                done();
+            });
+        });
+        it('修改一个特定的商品的状态', function (done) {
+            var req = request.put('/api/orders/' + order.id)
+            agent.attachCookies(req);
+            req.send({state:'evaluating'})
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function (err, res) {
+                    res.body.should.have.property('state','evaluating')
+                    done();
+                });
+        });
+    });
     afterEach(function (done) {
         Order.remove().exec();
         Item.remove().exec();
