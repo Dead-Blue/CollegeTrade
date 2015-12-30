@@ -5,8 +5,8 @@ module.exports = function(app) {
 	
 	app.route('/api/user')
     .get(users.userInfo)
-	.post(users.signup);
-
+	.post(users.signup)
+    .put(users.changePassword);
 	
 	app.route('/api/authentication')
     .get(users.isLogin)

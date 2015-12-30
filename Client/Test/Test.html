@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+    <form >
+    用户名：<input type="text" name="username" id="username"><br>
+    旧密码：<input type="password" name="oldPassword" id="oldPassword"><br>
+    新密码：<input type="password" name="newPassword" id="newPassword"><br>
+    </form>
+        <button type="button" onclick='submit()'>提交</button>
+      <a href="/signout">注销</a>
+</body>
+<script>
+    function submit(){
+        $.ajax({  
+    url:'http://localhost:8080/api/user',// 跳转到 action  
+    data:{  
+             username : $('#username').val(),  
+             oldPassword :  $('#oldPassword').val(),  
+             newPassword :  $('#newPassword').val() 
+    },  
+    type:'PUT',  
+    dataType:'json',  
+    success:function(data) {  
+        if(data.success =="true" ){  
+            alert("修改成功！");  
+        }else{  
+             alert("失败");  
+        }  
+     },  
+     error : function() {  
+          alert("异常！");  
+     }  
+});
+}
+// function deltet(){
+//         $.ajax({  
+//     url:'http://localhost:8080/api/user',// 跳转到 action  
+//     data:{  
+//              username : $('#username').val(),  
+//              oldPassword :  $('#oldPassword').val(),  
+//              newPassword :  $('#newPassword').val() 
+//     },  
+//     type:'PUT',  
+//     dataType:'json',  
+//     success:function(data) {  
+//         if(data.success =="true" ){  
+//             alert("修改成功！");  
+//         }else{  
+//              alert("失败");  
+//         }  
+//      },  
+//      error : function() {  
+//           alert("异常！");  
+//      }  
+// });
+// }
+</script>
+</html>

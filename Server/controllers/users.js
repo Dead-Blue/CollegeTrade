@@ -48,7 +48,6 @@ exports.signup = function(req, res, next) {
 		var user = new User(req.body);
         user.username=user.username.toLowerCase() ;
 		var message = null;
-		console.log(user);
 		user.provider = 'local';
 		
 	user.save(function(err) {
@@ -89,7 +88,7 @@ exports.signout = function(req, res) {
 exports.requiresLogin = function(req, res, next) {
 	if (!req.isAuthenticated()) {
 		return res.status(401).send({
-			message: 'User is not logged in',
+			message: '用户未登录！',
             success: false
             
 		});
@@ -140,4 +139,46 @@ exports.userInfo = function(req,res){
         success:false,
         messages: req.flash('error')|| req.flash('info')
     });
+}
+exports.changePassword=function(req,res){
+    if (!req.isAuthenticated()) { return res.status(403).send({
+			message: '用户未登陆！',
+            success: false
+		}); }
+	    User.findOne({
+            username:req.body.username.toLowerCase()
+        },function(err,user){
+            if(err){
+				return res.send({
+			message: '查找用户失败！',
+            success: false 
+		});
+        }
+        console.log(user);
+        if (!user) { return res.send({
+			message: '用户不存在！！',
+            success: false
+		}); }
+        if(!user.authenticate(req.body.oldPassword)) {
+				return res.send({
+			message: '密码错误！！',
+            success: false
+		});
+		}
+        user.password=req.body.newPassword;
+        user.save(function(err,user){
+            if(err){
+                return res.send({
+			message: '密码修改失败，请重试！！',
+            success: false
+		});
+}
+           return res.send({
+			message: '密码成功！！',
+            success: true
+		});
+        })
+        
+        })
+ 
 }
