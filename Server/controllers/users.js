@@ -174,7 +174,7 @@ exports.changePassword=function(req,res){
 		});
 }
            return res.send({
-			message: '密码成功！！',
+			message: '密码修改成功！！',
             success: true
 		});
         })
