@@ -9,7 +9,7 @@
 //            'topbar@unSigined':{
 //                templateUrl:'/views/topbar.html'
 //            },
-//            'content@unSigined':{templateUrl:'/views/goods-list.html'
+//            'content@unSigined':{templateUrl:'/views/item-list.html'
 //            }
 //        }
 //    }).state('unSigined.singin',{
@@ -24,13 +24,13 @@
 //
 //    }).state('sigined', {
 //        views:{
-//            'content@sigined':{templateUrl:'/views/goods-list.html'
+//            'content@sigined':{templateUrl:'/views/item-list.html'
 //            }
 //        }
 //    }).state('sigined.index',{
 //        views:{
 //            "content@Sigined":{
-//                template:'/views/goods-list.html'
+//                template:'/views/item-list.html'
 //
 //
 //            }
@@ -38,11 +38,19 @@
 //
 //    });
 //});
-angular.module('clientApp',['ngRoute','ngCookies','clientServices','clientControllers','clientDirectives'])
-    .config(function ($routeProvider) {
+angular.module('clientApp',[
+    'ngRoute',
+    'ngCookies',
+    'clientServices',
+    'clientControllers',
+    'clientDirectives',
+    'tm.pagination',
+    'ui.bootstrap'
+
+]).config(function ($routeProvider) {
         $routeProvider.when('/',{
-            templateUrl: '/views/goods-list.html',
-            controller:'mainCtrl',
+            templateUrl: '/views/item-list.html',
+            controller:'getItemsCtrl',
             publicAccess: true
         });
         $routeProvider.when('/signin',{
@@ -52,7 +60,7 @@ angular.module('clientApp',['ngRoute','ngCookies','clientServices','clientContro
         });
         $routeProvider.when('/signout',{
             controller:'logoutCtrl',
-            templateUrl: '/views/goods-list.html',
+            templateUrl: '/views/item-list.html',
             publicAccess: true
         });
         $routeProvider.when('/signup',{
@@ -62,8 +70,14 @@ angular.module('clientApp',['ngRoute','ngCookies','clientServices','clientContro
         });
         $routeProvider.when('/publishItem',{
             controller:'publishItemCtrl',
-            templateUrl: '/views/publishItem.html',
+            templateUrl: '/views/publish-item.html',
             publicAccess: true
         });
+        $routeProvider.when('/itemDetails',{
+        controller:'itemDetailsCtrl',
+        templateUrl: '/views/item-details.html',
+        publicAccess: true
+    });
+
 });
 

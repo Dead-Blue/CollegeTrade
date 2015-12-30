@@ -1,0 +1,79 @@
+
+<style>
+    .page-list .pagination {
+        float: left;
+    }
+
+    .page-list .pagination span {
+        cursor: pointer;
+    }
+
+    .page-list .pagination .separate span {
+        cursor: default;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .page-list .pagination .separate span:hover {
+        background: none;
+    }
+
+    .page-list .page-total {
+        float: left;
+        margin: 25px 20px;
+    }
+
+    .page-list .page-total input, .page-list .page-total select {
+        height: 26px;
+        border: 1px solid #ddd;
+    }
+
+    .page-list .page-total input {
+        width: 40px;
+        padding-left: 3px;
+    }
+
+    .page-list .page-total select {
+        width: 50px;
+    }
+</style>
+
+<div class="row-fluid">
+    <table align="center" class="table table-striped">
+        <tbody>
+        <tr  ng-repeat="item in onShownItems">
+            <th>
+                <img src="{{item.imagesUrl[0]}}"    class="img-rounded" align="right" onerror=""/>
+            </th>
+
+            <th>
+                <h4>{{item.itemname}}</h4>
+                分　　类：{{item.itemType}}<br/>
+                定　　价：{{item.unitPrice}}￥<br/>
+                数　　量：{{item.stock}}<br/>
+                时　　间：{{item.created| date:"yyyy-MM-dd hh:mm:ss" }}
+                <br/>
+                <a href="#/itemDetails"ng-click="itemDetail($index)"class="btn btn-primary btn-small">详情</a>
+            </th>
+        </tr>
+
+        </tbody>
+
+    </table>
+
+
+</div><!--  -->
+
+<nav class="navbar navbar-default navbar-fixed-bottom">
+<div class="row clearfix">
+    <div class="col-md-2 column">
+    </div>
+    <div class="col-md-8 column">
+        <div  class="navbar-inner navbar-content-center" >
+            <tm-pagination conf="paginationConf" ></tm-pagination>
+        </div>
+    </div>
+    <div class="col-md-2 column">
+    </div>
+</div>
+</nav>

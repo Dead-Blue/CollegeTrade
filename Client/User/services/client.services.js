@@ -96,7 +96,7 @@ clientServices.service('itemService', function ($http, $q) {
             fd.append('stock',itemInfo.stock);
             fd.append('unitPrice',itemInfo.unitPrice);
             fd.append('description',itemInfo.description);
-
+            fd.append('itemType',itemInfo.itemType);
             for(var i=0;i<itemInfo.images.length;i++){
                 fd.append('img',itemInfo.images[i]);
             }
@@ -112,6 +112,22 @@ clientServices.service('itemService', function ($http, $q) {
             }).error(function (response) {
                 deferred.reject(response);
                 console.log('itemService.publishItem.error');
+            });
+            return promise;
+        },
+        /**
+         *
+         */
+        getItems:function(){
+            console.log('itemService.getItems');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            $http.get('/api/items').success(function (response) {
+                deferred.resolve(response);
+                console.log('itemService.getItems.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('itemService.getItems.error');
             });
             return promise;
         }
