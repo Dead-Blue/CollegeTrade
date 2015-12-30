@@ -72,18 +72,35 @@ exports.list = function (req, res) {
 		}
 	});
 };
-exports.orderById= function(req,res,next,id){
+exports.orderById = function (req, res, next, id) {
     Order.findById(id)
-    .populate('customer','firstName lastName fullName')
-    .populate('seller','firstName lastName fullName')
-    .populate('item','firstNaitemnameme description unitPrice')
-    .exec(function(err,order){
-        if (err)
-				return next(err);
-			if (!order) return next(new Error('载入订单信息' + id + '失败'));
-		req.order=order;
-		next();
-    })
+        .populate('customer', 'firstName lastName fullName')
+        .populate('seller', 'firstName lastName fullName')
+        .populate('item', 'firstNaitemnameme description unitPrice')
+        .exec(function (err, order) {
+            if (err)
+                return next(err);
+            if (!order) return next(new Error('载入订单信息' + id + '失败'));
+            var now = new Date();
+            if (order.expireDate.getTime() < now.getTime()) {
+                if (order.state != 'closed') {
+                    order.state = 'closed';
+                    order.save(function (err) {
+                        if (err) {
+                            return res.send({
+                                message: '载入订单信息' + id + '失败'
+                            });
+                        }
+                    });
+                }
+                return res.send({
+                    message: '订单' + id + '已过期'
+                });
+            }
+
+            req.order = order;
+            next();
+        })
 };
 exports.read = function(req, res){
 	res.json(req.order);

@@ -18,6 +18,10 @@ var OrderSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
+    expireDate:{
+      type:Date,
+      default:(Date.now()+60*60*24*5*1000)
+    },
 	unitPrice:{
 		type:Number,
 		required: '价格错误'
@@ -44,9 +48,9 @@ var OrderSchema = new Schema({
 OrderSchema.virtual('price').get(function() {
 	return this.quantity*this.unitPrice;
 });
-OrderSchema.virtual('exprieDate').get(function() {
-	return new Date(this.created.getTime()+60*60*24*5*1000);
-});
+// OrderSchema.virtual('expireDate').get(function() {
+// 	return new Date(this.created.getTime()+60*60*24*5*1000);
+// });
 OrderSchema.set('toJSON', {
 	getters:true,
 	virtuals: true

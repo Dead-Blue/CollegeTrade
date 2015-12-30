@@ -127,7 +127,6 @@ describe('订单Controller单元测试', function () {
                     done();
                 });
         });
-
         it('获得一个特定的商品', function (done) {
             var req = request.get('/api/orders/' + order.id)
             agent.attachCookies(req);
