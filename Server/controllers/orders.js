@@ -90,6 +90,7 @@ exports.read = function(req, res){
 };
 exports.update=function(req,res){
     var order = req.order;
+    if (!order) return res.send({message: '载入订单信息失败'});
     order.state=req.body.state;
     order.save(function(err){
         if(err){           

@@ -13,12 +13,12 @@ module.exports = function(){
 			
 			if(!user) {
 				return done(null, false, {
-					message: 'Unknown user'
+					message: '用户不存在！'
 				});
 			}
 			if(!user.authenticate(password)) {
 				return done(null,false, {
-					message: 'Invalid password'
+					message: '密码错误！'
 				});
 			}
 			return done(null, user);

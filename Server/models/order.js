@@ -38,11 +38,14 @@ var OrderSchema = new Schema({
 	},
 	state: {
 		type: String,
-		enum: ['selling', 'trading', 'evaluating','successCompleted','failedCompleted']
+		enum: ['selling', 'trading', 'evaluating','successCompleted','failedCompleted','closed']
 	}
 });
 OrderSchema.virtual('price').get(function() {
 	return this.quantity*this.unitPrice;
+});
+OrderSchema.virtual('exprieDate').get(function() {
+	return new Date(this.created.getTime()+60*60*24*5*1000);
 });
 OrderSchema.set('toJSON', {
 	getters:true,
