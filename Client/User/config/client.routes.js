@@ -50,7 +50,7 @@ angular.module('clientApp',[
 ]).config(function ($routeProvider) {
         $routeProvider.when('/',{
             templateUrl: '/views/item-list.html',
-            controller:'getItemsCtrl',
+            controller:'itemListCtrl',
             publicAccess: true
         });
         $routeProvider.when('/signin',{
@@ -77,7 +77,12 @@ angular.module('clientApp',[
         controller:'itemDetailsCtrl',
         templateUrl: '/views/item-details.html',
         publicAccess: true
-    });
+        });
+        $routeProvider.when('/orderList',{
+        controller:'orderListCtrl',
+        templateUrl: '/views/order-list.html',
+        publicAccess: true
+        });
 
 });
 
