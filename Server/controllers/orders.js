@@ -61,7 +61,7 @@ exports.list = function (req, res) {
 	Order.find({customer:req.user._id}).sort('-created')
     .populate('customer','firstName lastName fullName')
     .populate('seller','firstName lastName fullName')
-    .populate('item','firstNaitemnameme description unitPrice')
+    .populate('item','itemname description unitPrice')
     .exec(function (err, orders) {
 		if (err) {
 			return res.status(400).send({
@@ -76,7 +76,7 @@ exports.orderById= function(req,res,next,id){
     Order.findById(id)
     .populate('customer','firstName lastName fullName')
     .populate('seller','firstName lastName fullName')
-    .populate('item','firstNaitemnameme description unitPrice')
+    .populate('item','itemname description unitPrice')
     .exec(function(err,order){
         if (err)
 				return next(err);
