@@ -76,7 +76,7 @@ exports.orderById= function(req,res,next,id){
     Order.findById(id)
     .populate('customer','firstName lastName fullName')
     .populate('seller','firstName lastName fullName')
-    .populate('item','firstNaitemnameme description unitPrice')
+    .populate('item','itemname description unitPrice')
     .exec(function(err,order){
         if (err)
 				return next(err);
@@ -91,7 +91,10 @@ exports.read = function(req, res){
 exports.update=function(req,res){
     var order = req.order;
     if (!order) return res.send({message: '载入订单信息失败'});
-    order.state=req.body.state;
+    switch(req.body.updateType){
+        case 'rate': order.rate=req.body.rate;break;
+        case 'state': order.state=req.body.state;break;
+    }
     order.save(function(err){
         if(err){           
 			return res.status(400).send({
@@ -109,4 +112,18 @@ exports.hasAuthorization = function(req, res, next) {
 		});
 	}
 	next();
+};
+exports.addRate= function(req,res,next,id){
+   var order = req.order;
+    if (!order) return res.send({message: '载入订单信息失败'});
+    order.rate=req.body.rate;
+    order.save(function(err){
+        if(err){           
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});	
+        } else {
+			res.json(order);
+        }
+    })
 };
