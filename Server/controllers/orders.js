@@ -57,8 +57,23 @@ exports.create = function (req, res) {
        });        
 	}
 };
-exports.list = function (req, res) {
+exports.customerList = function (req, res) {
 	Order.find({customer:req.user._id}).sort('-created')
+    .populate('customer','firstName lastName fullName')
+    .populate('seller','firstName lastName fullName')
+    .populate('item','itemname description unitPrice')
+    .exec(function (err, orders) {
+		if (err) {
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});
+		} else {
+			res.json(orders);
+		}
+	});
+};
+exports.sellerList = function (req, res) {
+	Order.find({seller:req.user._id}).sort('-created')
     .populate('customer','firstName lastName fullName')
     .populate('seller','firstName lastName fullName')
     .populate('item','itemname description unitPrice')
@@ -105,12 +120,13 @@ exports.orderById = function (req, res, next, id) {
 exports.read = function(req, res){
 	res.json(req.order);
 };
-exports.update=function(req,res){
+exports.customerUpdate=function(req,res){
     var order = req.order;
     if (!order) return res.send({message: '载入订单信息失败'});
     switch(req.body.updateType){
         case 'rate': order.rate=req.body.rate;break;
         case 'state': order.state=req.body.state;break;
+        case 'rate&state': order.state=req.body.state;order.rate=req.body.rate;break;
     }
     order.save(function(err){
         if(err){           
@@ -122,8 +138,34 @@ exports.update=function(req,res){
         }
     })
 };
-exports.hasAuthorization = function(req, res, next) {
+exports.sellerUpdate=function(req,res){
+    var order = req.order;
+    if (!order) return res.send({message: '载入订单信息失败'});
+    switch(req.body.updateType){
+        case 'rate': order.rate=req.body.rate;break;
+        case 'state': order.state=req.body.state;break; 
+        case 'rate&state': order.state=req.body.state;order.rate=req.body.rate;break;
+    }
+    order.save(function(err){
+        if(err){           
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});	
+        } else {
+			res.json(order);
+        }
+    })
+};
+exports.customerHasAuthorization = function(req, res, next) {
 	if (req.order.customer.id !== req.user.id) {
+		return res.status(403).send({
+			message: '用户未授权'
+		});
+	}
+	next();
+};
+exports.sellerHasAuthorization = function(req, res, next) {
+	if (req.order.seller.id !== req.user.id) {
 		return res.status(403).send({
 			message: '用户未授权'
 		});

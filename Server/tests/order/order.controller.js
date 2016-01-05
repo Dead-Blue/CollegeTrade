@@ -114,8 +114,8 @@ describe('订单Controller单元测试', function () {
                 done();
             });
         });
-        it('获得订单列表', function (done) {
-            var req = request.get('/api/orders')
+        it('获得客户订单列表', function (done) {
+            var req = request.get('/api/orders/customer/')
             agent.attachCookies(req);
             req.set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
@@ -127,8 +127,8 @@ describe('订单Controller单元测试', function () {
                     done();
                 });
         });
-        it('获得一个特定的商品', function (done) {
-            var req = request.get('/api/orders/' + order.id)
+        it('客户获得一个特定的商品', function (done) {
+            var req = request.get('/api/orders/customer/' + order.id)
             agent.attachCookies(req);
             req.set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
@@ -161,10 +161,10 @@ describe('订单Controller单元测试', function () {
                 done();
             });
         });
-        it('修改一个特定的商品的状态', function (done) {
-            var req = request.put('/api/orders/' + order.id)
+        it('客户修改一个特定的商品的状态', function (done) {
+            var req = request.put('/api/orders/customer/' + order.id)
             agent.attachCookies(req);
-            req.send({state:'evaluating'})
+            req.send({updateType:'state',state:'evaluating'})
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
                 .expect(200)
