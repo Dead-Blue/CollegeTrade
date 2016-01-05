@@ -2,7 +2,10 @@
  * Created by sun on 2015/12/17.
  */
 var client = angular.module('clientControllers', []);
-client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieStore', 'userService', function ($rootScope, $scope, $location, $cookieStore, userService) {
+/**
+ * 登录
+ */
+client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieStore', '$window','userService', function ($rootScope, $scope, $location, $cookieStore, $window,userService) {
     console.log('loginCtrl');
     $scope.login = function (credentials) {
         console.log('clientControllers.loginCtrl.login');
@@ -17,7 +20,9 @@ client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieSto
 
         }, function (response) {
             console.log("loginFail");
+            $window.alert("登录失败");
             $scope.resposeMessage = response;
+            credentials.password=null;
             $rootScope.isSigned = false;
 //失败
         });
@@ -25,12 +30,14 @@ client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieSto
 
     };
 }]);
-
+/**
+ * 主窗口
+ */
 client.controller('mainCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, itemService) {
     console.log('mainCtrl');
     $rootScope.isSigned = false;
     $rootScope.user = $cookieStore.get('user');
-
+    $scope.itemType="";
     if ($rootScope.user != null) {
         $rootScope.isSigned = true;
     }
@@ -39,7 +46,14 @@ client.controller('mainCtrl', ['$rootScope', '$scope', '$cookieStore', '$locatio
             $rootScope.isSigned = true;
         }
     });
-
+    /**
+     * 改变商品分类
+     * @param itemType
+     */
+    $scope.changeItemType=function(itemType){
+        $scope.itemType=itemType;
+        console.log(itemType);
+    };
 
 }]);
 //
@@ -54,7 +68,6 @@ client.controller('logoutCtrl', ['$rootScope', '$scope', '$cookieStore', '$locat
         $location.path('/');
         console.log('注销成功');
     }, function (response) {
-
         $scope.resposeMessage = response;
         $rootScope.isSigned = false;
         console.log('注销失败');
@@ -120,7 +133,7 @@ client.controller('publishItemCtrl', ['$rootScope', '$scope', '$cookieStore', '$
      */
     $scope.getFiles = function () {
         console.log('publishItemCtrl.getFiles');
-
+        $scope.imageSrcs = [];
         for (var i = 0; i < $scope.files.length; i++) {
             fileReader.readAsDataUrl($scope.files[i], $scope)
                 .then(function (result) {
@@ -164,91 +177,189 @@ client.controller('publishItemCtrl', ['$rootScope', '$scope', '$cookieStore', '$
 /**
  * 获得商品列表
  */
-client.controller('getItemsCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, itemService) {
-    console.log('clientControllers.getItemsCtrl');
-    //在显示中的列表
+client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window','$filter', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, $filter,itemService) {
+    console.log('clientControllers.itemListCtrl');
+    //在显示中的商品
     $scope.onShownItems = [];
-    //所有列表
+    //所有商品
     $scope.allItems = [];
+    //将要显示商品
+    $scope.preShowItems = [];
 
-    ///刷新商品列表
-    console.log('getItemsCtrl.getItems');
-    itemService.getItems().then(function (response) {
-        console.log('getItemsCtrl.getItems.success');
-
-        console.log(response);
-
-        $scope.allItems = response;
+    /**
+     * 初始化分页函数
+     */
+    initPagination=function(){
         $scope.paginationConf = {
             currentPage: 1,
-            totalItems: $scope.allItems.length,
+            totalItems: $scope.preShowItems.length,
             itemsPerPage: 15,
             pagesLength: 15,
             perPageOptions: [10, 20, 30, 40, 50],
             onChange: function () {
+                console.log("Pagination onChange");
                 $scope.onShownItems = [];
                 for (var i = $scope.paginationConf.itemsPerPage * ( $scope.paginationConf.currentPage - 1); i < $scope.paginationConf.itemsPerPage * $scope.paginationConf.currentPage; i++) {
-                    if ($scope.allItems[i] == null) {
+                    if ($scope.preShowItems[i] == null) {
                         break;
                     }
-                    $scope.onShownItems.push($scope.allItems[i]);
+                    $scope.onShownItems.push($scope.preShowItems[i]);
                 }
-                console.log("currentPage" + $scope.paginationConf.currentPage);
-                console.log($scope.onShownItems);
+
+
             }
         };
+    };
+    console.log('itemListCtrl.getItems');
+    itemService.getItems().then(function (response) {
+        console.log('itemListCtrl.getItems.success');
+
+        $scope.allItems = response;
+        $scope.preShowItems=$scope.allItems;
+
+        initPagination();
         if ($scope.allItems.length <= 0) {
 
             $window.alert("连接失败");
         }
 
     }, function (response) {
-        console.log('getItemsCtrl.getItems.fail');
+        console.log('itemListCtrl.getItems.fail');
         console.log(response);
     });
 
-//设置分页
+//设置分页不设置会报错
     $scope.paginationConf = {
         currentPage: 1,
         totalItems: $scope.allItems.length,
         itemsPerPage: 15,
         pagesLength: 15,
-        perPageOptions: [10, 20, 30, 40, 50],
-        onChange: function () {
-            $scope.onShownItems = [];
-            for (var i = $scope.paginationConf.itemsPerPage * ( $scope.paginationConf.currentPage - 1); i < $scope.paginationConf.itemsPerPage * $scope.paginationConf.currentPage; i++) {
-                if ($scope.allItems[i] == null) {
-                    break;
-                }
-                $scope.onShownItems.push($scope.allItems[i]);
-            }
+        perPageOptions: [10, 20, 30, 40, 50]
 
-
-        }
     };
+    //点击详情后的操作
     $scope.itemDetail = function (index) {
         console.log(index);
         $cookieStore.put("item", $scope.onShownItems[index]);
-    }
-
-
+    };
+    /**
+     * 检测$scope.itemType值的变化
+     */
+    $scope.$watch("itemType",function(){
+        console.log("itemType",$scope.itemType);
+        if($scope.itemType==null){
+            $scope.preShowItems=$scope.allItems;
+        }else {
+            //根据itemType选择preShowItems
+            $scope.preShowItems = $filter('filter')($scope.allItems, {itemType: $scope.itemType});
+        }
+        console.log("preShowItems",$scope.preShowItems);
+        initPagination();
+    });
 }]);
-
+/**
+ * 详情页
+ */
 client.controller('itemDetailsCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, itemService) {
     console.log('itemDetailsCtrl');
-    $scope.txt="ssssssssssssss";
     $scope.$watch("itemDetails",function(){
 
-        console.log('.............');
+
     });
+
     $scope.itemDetails = $cookieStore.get("item");
     console.log($scope.itemDetails);
-    $scope.imageSrcs=$scope.itemDetails.imagesUrl;
-    console.log();
-    if($scope.itemDetails=null){
+
+    $scope.quantity=1;
+    $scope.unitPrice=$scope.itemDetails.unitPrice;
+
+    if($scope.itemDetails==null){
         console.log("$scope.item is null");
+    }
+    $scope.buyItem=function(itemDetails,unitPrice,quantity){
+        console.log('itemDetailsCtrl.buyItem');
+
+
+        itemService.buyItem(itemDetails,unitPrice,quantity).then(
+            function(response){
+                console.log(response);
+                $window.alert("购买成功");
+            },
+            function(response) {
+                console.log(response);
+                $window.alert(response.message);
+                if(response.message=="User is not logged in") {
+                    $location.path('/signin');
+                }
+            }
+
+        );
     }
 
 
 
 }]);
+
+client.controller('orderListCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'orderService', function ($rootScope, $scope, $cookieStore, $location, $window, orderService) {
+    console.log('clientControllers.orderListCtrl');
+    //在显示中的列表
+    $scope.onShownOrders = [];
+    //所有列表
+    $scope.allOrders = [];
+
+    ///刷新订单列表
+    orderService.getOrders().then(function(response){
+        console.log('orderListCtrl.getOrders.success');
+        console.log(response);
+        $scope.allOrders = response;
+        $scope.paginationConf = {
+            currentPage: 1,
+            totalItems: $scope.allOrders.length,
+            itemsPerPage: 15,
+            pagesLength: 15,
+            perPageOptions: [10, 20, 30, 40, 50],
+            onChange: function () {
+                $scope.onShownOrders = [];
+                for (var i = $scope.paginationConf.itemsPerPage * ( $scope.paginationConf.currentPage - 1); i < $scope.paginationConf.itemsPerPage * $scope.paginationConf.currentPage; i++) {
+                    if ($scope.allOrders[i] == null) {
+                        break;
+                    }
+                    var order={
+                        'created':$scope.allOrders[i].created,
+                        'itemname':$scope.allOrders[i].item.itemname,
+                        'state':(function(){
+                            var state=$scope.allOrders[i].state;
+                            console.log(state);
+                            if('trading'==state) return "交易中";
+                            return state;
+                        })(),
+                        'price':$scope.allOrders[i].price
+
+                    };
+
+                    $scope.onShownOrders.push(order);
+                }
+            }
+        };
+        if ($scope.allOrders.length <= 0) {
+
+            $window.alert("没有记录");
+        }
+
+    },function(response){
+        console.log('orderListCtrl.getOrders.fail');
+        $window.alert("失败");
+        console.log(response);
+    });
+
+    $scope.paginationConf = {
+        currentPage: 1,
+        totalItems: 10,
+        itemsPerPage: 15,
+        pagesLength: 15,
+        perPageOptions: [10, 20, 30, 40, 50]
+    };
+
+}]);
+
+

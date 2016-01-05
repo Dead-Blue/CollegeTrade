@@ -116,7 +116,7 @@ clientServices.service('itemService', function ($http, $q) {
             return promise;
         },
         /**
-         *
+         *获得商品列表
          */
         getItems:function(){
             console.log('itemService.getItems');
@@ -128,6 +128,45 @@ clientServices.service('itemService', function ($http, $q) {
             }).error(function (response) {
                 deferred.reject(response);
                 console.log('itemService.getItems.error');
+            });
+            return promise;
+        },
+        /**
+         * 购买商品
+         * @returns {*|promise}
+         */
+        buyItem:function(itemInfo,unitPrice,quantity){
+            console.log('itemService.buyItem');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            var data = {'item':itemInfo,'unitPrice':unitPrice,'quantity':quantity};
+            $http.post('/api/order',data).success(function (response) {
+                deferred.resolve(response);
+                console.log('itemService.buyItem.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('itemService.buyItem.error');
+            });
+            return promise;
+        }
+
+    }
+});
+clientServices.service('orderService', function ($http, $q) {
+    return {
+        /**
+         * 获得订单
+         */
+        getOrders:function(){
+            console.log('orderService.getOrders');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            $http.get('/api/orders').success(function (response) {
+                deferred.resolve(response);
+                console.log('orderService.getOrders.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('orderService.getOrders.error');
             });
             return promise;
         }

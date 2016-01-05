@@ -42,11 +42,15 @@
     <table align="center" class="table table-striped">
         <tbody>
         <tr  ng-repeat="item in onShownItems">
-            <th>
-                <img src="{{item.imagesUrl[0]}}"    class="img-rounded" align="right" onerror=""/>
+            <th class="col-md-3">
+            <th class="col-sm-4">
+                <div class="thumbnail  ">
+                <img src="{{item.imagesUrl[0]}}"  class="img-rounded" align="right" onerror=""/>
+                </div>
             </th>
 
-            <th>
+            <th class=" col-md-4">
+                <div >
                 <h4>{{item.itemname}}</h4>
                 分　　类：{{item.itemType}}<br/>
                 定　　价：{{item.unitPrice}}￥<br/>
@@ -54,7 +58,9 @@
                 时　　间：{{item.created| date:"yyyy-MM-dd hh:mm:ss" }}
                 <br/>
                 <a href="#/itemDetails"ng-click="itemDetail($index)"class="btn btn-primary btn-small">详情</a>
+                    </div>
             </th>
+            <th class="col-md-2">
         </tr>
 
         </tbody>
