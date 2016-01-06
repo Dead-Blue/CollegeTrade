@@ -173,6 +173,18 @@ describe('订单Controller单元测试', function () {
                     done();
                 });
         });
+        it('客户修改一个特定的商品的评论＋XSS攻击测试', function (done) {
+            var req = request.put('/api/orders/customer/' + order.id)
+            agent.attachCookies(req);
+            req.send({updateType:'rate',rate:'<script>不错！</script>',rateValue:4})
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .end(function (err, res) {
+                    res.body.should.have.property('rate','&lt;script>不错！&lt;/script>');
+                    done();
+                });
+        });
     });
     afterEach(function (done) {
         Order.remove().exec();

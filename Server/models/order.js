@@ -40,6 +40,15 @@ var OrderSchema = new Schema({
 		default:'',
 		trim:true
 	},
+    rateValue:{
+		type:Number,
+		validate: [
+			function(quantity){
+				return quantity>=0&&quantity<=5;
+			},
+			'购买数量必须在0到5之间'
+		]
+	},
 	state: {
 		type: String,
 		enum: ['selling', 'trading', 'evaluating','successCompleted','failedCompleted','closed']

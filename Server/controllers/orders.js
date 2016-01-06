@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var Order = mongoose.model('Order');
 var User = mongoose.model('User');
 var Item = mongoose.model('Item');
+var xssFilters = require('xss-filters');
+
 var getErrorMessage = function (err) {
 	if (err.errors) {
 		for (var errName in err.errors) {
@@ -124,9 +126,18 @@ exports.customerUpdate=function(req,res){
     var order = req.order;
     if (!order) return res.send({message: '载入订单信息失败'});
     switch(req.body.updateType){
-        case 'rate': order.rate=req.body.rate;break;
-        case 'state': order.state=req.body.state;break;
-        case 'rate&state': order.state=req.body.state;order.rate=req.body.rate;break;
+        case 'rate': 
+             order.rate=xssFilters.inHTMLData(req.body.rate);
+             order.rateValue=req.body.rateValue;
+             break;
+        case 'state':
+             order.state=xssFilters.inHTMLData(req.body.state);
+             break;
+        case 'rate&state': 
+             order.state=xssFilters.inHTMLData(req.body.state);
+             order.rate=xssFilters.inHTMLData(req.body.rate);
+             order.rateValue=req.body.rateValue;
+             break;
     }
     order.save(function(err){
         if(err){           
