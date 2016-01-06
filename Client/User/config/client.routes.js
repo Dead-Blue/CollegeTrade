@@ -45,7 +45,9 @@ angular.module('clientApp',[
     'clientControllers',
     'clientDirectives',
     'tm.pagination',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'authentication',
+    'chat'
 
 ]).config(function ($routeProvider) {
         $routeProvider.when('/',{
