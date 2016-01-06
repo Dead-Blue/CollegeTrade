@@ -1,0 +1,118 @@
+<style>
+    .page-list .pagination {
+        float: left;
+    }
+
+    .page-list .pagination span {
+        cursor: pointer;
+    }
+
+    .page-list .pagination .separate span {
+        cursor: default;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .page-list .pagination .separate span:hover {
+        background: none;
+    }
+
+    .page-list .page-total {
+        float: left;
+        margin: 25px 20px;
+    }
+
+    .page-list .page-total input, .page-list .page-total select {
+        height: 26px;
+        border: 1px solid #ddd;
+    }
+
+    .page-list .page-total input {
+        width: 40px;
+        padding-left: 3px;
+    }
+
+    .page-list .page-total select {
+        width: 50px;
+    }
+</style>
+
+<!--<uib-accordion close-others="true">-->
+
+    <!--<uib-accordion-group is-open="status.open" ng-repeat="order in onShownOrders">-->
+        <!--<div class="row">-->
+            <!--<div class="col-md-12">-->
+                <!--<uib-accordion-heading>-->
+                    <!--<i class="col-md-2 pull-left glyphicon"-->
+                       <!--ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>-->
+                    <!--<span class="col-md-2"> {{order.created| date:"yyyy-MM-dd hh:mm:ss" }}</span>&nbsp;-->
+                    <!--<span class="col-md-2">  {{order.itemname}}</span> &nbsp;-->
+                    <!--<span class="col-md-3"> {{order.price}}&yen;</span>&nbsp;-->
+                    <!--<span class="col-md-2"> {{order.state}}</span>&nbsp;-->
+
+                <!--</uib-accordion-heading>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group" ng-if="order.rate==null">-->
+
+            <!--<div class="pull-center" star-rating rating-value="5" max="max" on-change="onChange" on-hover="onHover"-->
+                 <!--on-leave="onLeave" readonly="{{readonly}}"></div>-->
+            <!--<div class="col-md-offset-3">-->
+                <!--<span class="pull-left">评价:</span>-->
+            <!--<textarea class="input-xlarge col-md-6" id="description" name="description" rows="3" cols="35" required></textarea>-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--<button class="pull-right btn btn-primary btn-sm" ng-click="">评价-->
+                <!--</button>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group" ng-if="order.rate!=null">-->
+            <!--<div star-rating rating-value="order.rate" max="max" on-change="onChange" on-hover="onHover"-->
+                 <!--on-leave="onLeave" readonly="{{readonly}}"></div>-->
+            <!--<button class="pull-right btn btn-primary btn-sm" ng-click="">评价-->
+            <!--</button>-->
+        <!--</div>-->
+
+
+    <!--</uib-accordion-group>-->
+
+
+<!--</uib-accordion>-->
+
+<table align="center" class="table table-striped">
+
+<tr>
+<th>时间</th>
+<th>商品名</th>
+<th>价格</th>
+ <th>数量</th>
+<th>状态</th>
+<th>评价</th>
+</tr>
+<tr  ng-repeat="order in onShownOrders">
+<td>{{order.created| date:"yyyy-MM-dd hh:mm:ss" }}</td>
+<td>{{order.itemname}}</td>
+<td>{{order.price}}</td>
+ <td>{{order.quantity}}</td>
+<td>{{order.state}}</td>
+ <td>{{order.rate}}</td>
+<!--<td> <a href="#/itemDetails"ng-click="itemDetail($index)"class="btn btn-primary btn-small">详情</a></td>-->
+
+
+</table>
+
+
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+        </div>
+        <div class="col-md-8 column">
+            <div class="navbar-inner navbar-content-center">
+                <tm-pagination conf="paginationConf"></tm-pagination>
+            </div>
+        </div>
+        <div class="col-md-2 column">
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,41 @@
+<div class="col-md-12 column">
+    <div class="col-md-4 column">
+
+        <carousel interval="1000">
+            <slide ng-repeat="image in itemDetails.imagesUrl">
+                <div >
+                <img ng-src="{{image}}" class=" carousel-inner img-responsive img-rounded" style="margin:auto;" >
+                </div>
+
+                <div class="carousel-caption">
+                </div>
+            </slide>
+        </carousel>
+    </div>
+    <div class="col-md-8 summary entry-summary">
+        <h3>单价：</h3>
+        <p >{{itemDetails.unitPrice}}</p>
+        <h3>类别：</h3>
+        <p>{{itemDetails.itemType}}</p>
+        <h3>发布日期：</h3>
+        {{itemDetails.created| date:"yyyy-MM-dd hh:mm:ss" }}
+        <br>
+        <h3>发布人</h3>
+        <p>{{itemDetails.seller.fullName}}</p>
+        <br>
+        <h3>库存：</h3>
+        <p>{{itemDetails.stock}}</p>
+        <br>
+        <br>
+        <h3>描述：</h3>
+        <p>{{itemDetails.description}}</p>
+        <hr>
+        <input type="number"size="4"  ng-model="quantity" step="1">
+
+        <input type="submit" class="btn btn-primary btn-lg"  value="购买"
+               ng-click="buyItem(itemDetails,unitPrice,quantity)">
+
+    </div>
+
+    </div>
+
