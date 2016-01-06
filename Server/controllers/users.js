@@ -132,7 +132,6 @@ exports.userInfo = function(req,res){
     return res.send({
         success:true,
         user:req.user,
-        session:req.session,
         messages: req.flash('error')|| req.flash('info')
     });
     else

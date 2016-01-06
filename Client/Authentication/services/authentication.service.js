@@ -1,6 +1,6 @@
-angular.module('users').factory('Authentication', [
-	function() {
-		this.user = window.user;
+angular.module('authentication').factory('Authentication', ['$rootScope',
+	function($rootScope) {
+		this.user = $rootScope.user;
 		
 		return {
 			user: this.user

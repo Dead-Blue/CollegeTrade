@@ -21,6 +21,8 @@ module.exports = function(){
 					message: '密码错误！'
 				});
 			}
+           user.password="";
+           user.salt="";
 			return done(null, user);
 		});
 	}));

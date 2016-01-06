@@ -2,7 +2,7 @@ angular.module('chat').service('Socket', ['Authentication', '$location', '$timeo
   if (Authentication) {
     this.socket = io();
   } else {
-    $location.path('/');
+    $location.path('/signin');
   }
 
   this.on = function(eventName, callback) {

@@ -13,7 +13,7 @@ var MongoStore = require('connect-mongo')({session: session});
 module.exports = function(db){
 	var app =express();
 	var server = http.createServer(app);
-	// var io = socketio.listen(server);
+    var io = socketio.listen(server);
 	if (process.env.NODE_ENV==='development'){
 		app.use(morgan('dev'));
 	} else if (process.env.NODE_ENV==='production') {
@@ -25,15 +25,15 @@ module.exports = function(db){
 	app.use(bodyParser.json());
 	app.use(methodOverride());
 	
-
+    var mongoStore = new MongoStore({
+		db: db.connection.db,
+		collection: 'sessions'
+	});
 	app.use(session({
 		saveUninitialized: true,
 		resave: true,
 		secret: config.sessionSecret,
-		store: new MongoStore({
-		db: db.connection.db,
-		collection: 'sessions'
-	})
+		store: mongoStore
 	}));
 	app.set('views', './Client/views');
 	app.engine('.html', require('ejs').__express);
@@ -45,7 +45,7 @@ module.exports = function(db){
 	require('../Server/routes/users.js')(app);
 	require('../Server/routes/items.js')(app);
     require('../Server/routes/orders.js')(app);
-	// require('./socketio')(server,io,mongoStore);
+	require('./socketio')(server,io,mongoStore);
 	app.use(express.static('./Client'));
 	return server;
 }

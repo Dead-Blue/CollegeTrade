@@ -17,3 +17,12 @@ angular.module('chat').controller('ChatController', ['$scope', 'Socket', functio
     Socket.removeListener('chatMessage');
   })
 }]);
+angular.module('chat').filter('chatName',function(){
+    return function(input,messageName,userName,fullName){
+        var out = fullName;
+        if(messageName==userName){
+            out="我";
+        }
+        return out;
+    }
+});
