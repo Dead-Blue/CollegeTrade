@@ -155,21 +155,56 @@ clientServices.service('itemService', function ($http, $q) {
 clientServices.service('orderService', function ($http, $q) {
     return {
         /**
-         * 获得订单
+         * 以消费者身份查看订单
          */
-        getOrders:function(){
-            console.log('orderService.getOrders');
+        getOrdersAsCustomer:function(){
+            console.log('orderService.getOrdersAsCustomer');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            $http.get('/api/orders').success(function (response) {
+            $http.get('/api/orders/customer').success(function (response) {
                 deferred.resolve(response);
-                console.log('orderService.getOrders.success');
+                console.log('orderService.getOrdersAsCustomer.success');
             }).error(function (response) {
                 deferred.reject(response);
-                console.log('orderService.getOrders.error');
+                console.log('orderService.getOrdersAsCustomer.error');
+            });
+            return promise;
+        },
+        /**
+         * 以管理者销售者身份查看订单
+         * @returns {*|promise}
+         */
+        getOrdersAsSeller:function(){
+            console.log('orderService.getOrdersAsSeller');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            $http.get('/api/orders/seller').success(function (response) {
+                deferred.resolve(response);
+                console.log('orderService.getOrdersAsSeller.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('orderService.getOrdersAsSeller.error');
+            });
+            return promise;
+        },
+        /**
+         * 以消费者身份评价
+         */
+        rateOrderAsCustomer:function(orderId,rate,ratingMessage){
+            console.log('orderService.rateOrderAsCustomer');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            var data = {'updateType':'rate&state','rate':rate,'state':'successCompleted'};
+            $http.put('/api/orders/customer/'+orderId,data).success(function (response) {
+                deferred.resolve(response);
+                console.log('orderService.rateOrderAsCustomer.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('orderService.rateOrderAsCustomer.error');
             });
             return promise;
         }
+
     }
 });
 /**

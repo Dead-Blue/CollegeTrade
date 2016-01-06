@@ -7,6 +7,11 @@ var client = angular.module('clientControllers', []);
  */
 client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieStore', '$window','userService', function ($rootScope, $scope, $location, $cookieStore, $window,userService) {
     console.log('loginCtrl');
+    $rootScope.user=$rootScope.user = $cookieStore.get('user');
+    if($rootScope.user!=null){
+        $location.path('/');
+        return;
+    }
     $scope.login = function (credentials) {
         console.log('clientControllers.loginCtrl.login');
         userService.login(credentials).then(function (response) {
@@ -35,7 +40,6 @@ client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieSto
  */
 client.controller('mainCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, itemService) {
     console.log('mainCtrl');
-    $rootScope.isSigned = false;
     $rootScope.user = $cookieStore.get('user');
     $scope.itemType="";
     if ($rootScope.user != null) {
@@ -51,8 +55,11 @@ client.controller('mainCtrl', ['$rootScope', '$scope', '$cookieStore', '$locatio
      * @param itemType
      */
     $scope.changeItemType=function(itemType){
+
+        $location.path('/');
         $scope.itemType=itemType;
         console.log(itemType);
+
     };
 
 }]);
@@ -211,6 +218,7 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
         };
     };
     console.log('itemListCtrl.getItems');
+
     itemService.getItems().then(function (response) {
         console.log('itemListCtrl.getItems.success');
 
@@ -299,19 +307,125 @@ client.controller('itemDetailsCtrl', ['$rootScope', '$scope', '$cookieStore', '$
 
 
 }]);
+/**
+ * 以消费者身份查看订单
+ */
+client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'orderService', function ($rootScope, $scope, $cookieStore, $location, $window, orderService) {
+    console.log('clientControllers.orderListOfCustomerCtrl');
+    //在显示中的列表
+    $scope.onShownOrders = [];
+    //所有列表
+    $scope.allOrders = [];
 
-client.controller('orderListCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'orderService', function ($rootScope, $scope, $cookieStore, $location, $window, orderService) {
-    console.log('clientControllers.orderListCtrl');
+    ///初始化分页
+    initPagination=function(){
+        $scope.paginationConf = {
+            currentPage: 1,
+            totalItems: $scope.allOrders.length,
+            itemsPerPage: 15,
+            pagesLength: 15,
+            perPageOptions: [10, 20, 30, 40, 50],
+            onChange: function () {
+                $scope.onShownOrders = [];
+                for (var i = $scope.paginationConf.itemsPerPage * ( $scope.paginationConf.currentPage - 1); i < $scope.paginationConf.itemsPerPage * $scope.paginationConf.currentPage; i++) {
+                    if ($scope.allOrders[i] == null) {
+                        break;
+                    }
+                    var order={
+                        'id':$scope.allOrders[i].id,
+                        'created':$scope.allOrders[i].created,
+                        'itemname':$scope.allOrders[i].item.itemname,
+                        'state':(function(){
+                            var state=$scope.allOrders[i].state;
+                            console.log(state);
+                            if('trading'==state) return "交易中";
+                            if('successCompleted'==state) return "交易完成";
+                            return state;
+                        })(),
+                        'price':$scope.allOrders[i].price,
+                        'rate':$scope.allOrders[i].rate
+                    };
+
+                    $scope.onShownOrders.push(order);
+                }
+            }
+        };
+    };
+    orderService.getOrdersAsCustomer().then(function(response){
+        console.log('orderListOfCustomerCtrl.getOrdersAsCustomer.success');
+        console.log(response);
+        $scope.allOrders = response;
+        if ($scope.allOrders.length <= 0) {
+            $window.alert("没有记录");
+            return;
+        }
+        initPagination();
+
+
+    },function(response){
+        console.log('orderListCtrl.getOrdersAsCustomer.fail');
+        $window.alert("失败");
+        console.log(response);
+    });
+    /**
+     * 评价
+     * @param index
+     */
+    $scope.rateOrder=function(index){
+        console.log("rateId",$scope.onShownOrders[index].id);
+        console.log("rateVal",$scope.ratingVal);
+        orderService.rateOrderAsCustomer($scope.onShownOrders[index].id,$scope.ratingVal,"").
+            then(function(response) {
+                console.log(response);
+                $window.alert("评价成功");
+                //刷新页面
+                $location.path("/orderListOfCustomer")
+            },function(response){
+                console.log(response);
+                $window.alert("评价失败");
+                $location.path("/orderListOfCustomer")
+            });
+        //每评一次分就重置
+        $scope.ratingVal=5;
+    };
+//不写会报错
+    $scope.paginationConf = {
+        currentPage: 1,
+        totalItems: 10,
+        itemsPerPage: 15,
+        pagesLength: 15,
+        perPageOptions: [10, 20, 30, 40, 50]
+    };
+
+    $scope.max = 5;
+    $scope.ratingVal = 5;
+    $scope.readonly = false;
+    $scope.onHover = function(val){
+        $scope.hoverVal = val;
+
+    };
+    $scope.onLeave = function(){
+
+
+    };
+    $scope.onChange = function(val){
+        $scope.ratingVal = val;
+        console.log('onChange',val)
+    };
+}]);
+
+/**
+ * 以销售者身份查看订单
+ */
+client.controller('orderListOfSellerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'orderService', function ($rootScope, $scope, $cookieStore, $location, $window, orderService) {
+    console.log('clientControllers.orderListOfSellerCtrl');
     //在显示中的列表
     $scope.onShownOrders = [];
     //所有列表
     $scope.allOrders = [];
 
     ///刷新订单列表
-    orderService.getOrders().then(function(response){
-        console.log('orderListCtrl.getOrders.success');
-        console.log(response);
-        $scope.allOrders = response;
+    initPagination=function(){
         $scope.paginationConf = {
             currentPage: 1,
             totalItems: $scope.allOrders.length,
@@ -331,23 +445,37 @@ client.controller('orderListCtrl', ['$rootScope', '$scope', '$cookieStore', '$lo
                             var state=$scope.allOrders[i].state;
                             console.log(state);
                             if('trading'==state) return "交易中";
+                            if('successCompleted'==state) return "交易完成";
                             return state;
                         })(),
-                        'price':$scope.allOrders[i].price
-
+                        'price':$scope.allOrders[i].price,
+                        'quantity':$scope.allOrders[i].quantity,
+                        'rate':(function(){
+                            if($scope.allOrders[i].rate==""){
+                                return "---"
+                            }else{
+                                return $scope.allOrders[i].rate;
+                            }
+                        })()
                     };
 
                     $scope.onShownOrders.push(order);
                 }
+                console.log($scope.onShownOrders);
             }
         };
+    };
+    orderService.getOrdersAsSeller().then(function(response){
+        console.log('orderListOfSellerCtrl.getOrdersAsSeller.success');
+        console.log(response);
+        $scope.allOrders = response;
         if ($scope.allOrders.length <= 0) {
-
             $window.alert("没有记录");
+            return;
         }
-
+        initPagination();
     },function(response){
-        console.log('orderListCtrl.getOrders.fail');
+        console.log('orderListCtrl.getOrdersAsSeller.fail');
         $window.alert("失败");
         console.log(response);
     });
@@ -360,6 +488,6 @@ client.controller('orderListCtrl', ['$rootScope', '$scope', '$cookieStore', '$lo
         perPageOptions: [10, 20, 30, 40, 50]
     };
 
-}]);
 
+}]);
 

@@ -78,11 +78,16 @@ angular.module('clientApp',[
         templateUrl: '/views/item-details.html',
         publicAccess: true
         });
-        $routeProvider.when('/orderList',{
-        controller:'orderListCtrl',
-        templateUrl: '/views/order-list.html',
+        $routeProvider.when('/orderListOfCustomer',{
+        controller:'orderListOfCustomerCtrl',
+        templateUrl: '/views/order-list-of-customer.html',
         publicAccess: true
         });
+        $routeProvider.when('/orderListOfSeller',{
+        controller:'orderListOfSellerCtrl',
+        templateUrl: '/views/order-list-of-seller.html',
+        publicAccess: true
+    });
 
 });
 
