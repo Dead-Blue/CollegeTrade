@@ -53,6 +53,33 @@ exports.itemByID = function (req, res, next, id) {
         });
 };
 
+exports.itemByType = function (req, res, next, type) {
+    var itemType='';
+    switch(type){
+        case 'life': itemType='生活用品';break;
+        case 'study': itemType='学习用品';break;
+        case 'book': itemType='图书';break;
+        case 'computer': itemType='电脑配件';break;
+        case 'electronic': itemType='电子产品';break;
+        case 'others': itemType='其他';break;
+    }
+            req.itemType=itemType
+            next();
+
+};
+exports.showlist = function (req, res) {
+    Item.find({ itemType: req.itemType }).find().sort('-created').populate('seller', 'firstName lastName fullName').exec(function (err, items) {
+        if (err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        } else {
+             res.json(items);
+        }
+    });
+   
+};
+
 exports.renderPublish = function (req, res, next) {
     if (req.user) {
         res.render('item', {
@@ -95,7 +122,8 @@ exports.parseForm = function (req, res, next) {
     });
 };
 function setImageUrl(path){
-    var index=path.indexOf("\\uploadImages\\");
-    
-    return '/uploadImages/'+path.substring(index+14);
+    var index=path.indexOf("uploadImages");
+    console.log(path);
+    console.log(index);
+    return '/uploadImages/'+path.substring(index+13);
 }

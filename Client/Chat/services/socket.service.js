@@ -1,6 +1,6 @@
 angular.module('chat').service('Socket', ['Authentication', '$location', '$timeout', function(Authentication, $location, $timeout) {
   if (Authentication) {
-    this.socket = io();
+    this.socket = io('/market');
   } else {
     $location.path('/signin');
   }

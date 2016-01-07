@@ -9,11 +9,13 @@ passport = require('passport'),
 flash = require('connect-flash'),
 http = require('http'),
 socketio= require('socket.io');
+// var redis = require('redis');
 var MongoStore = require('connect-mongo')({session: session});
 module.exports = function(db){
 	var app =express();
 	var server = http.createServer(app);
     var io = socketio.listen(server);
+    // var redisClient=redis.createClient(config.redis.RDS_PORT,config.redis.RDS_HOST,config.redis.RDS_OPTS);
 	if (process.env.NODE_ENV==='development'){
 		app.use(morgan('dev'));
 	} else if (process.env.NODE_ENV==='production') {
@@ -45,7 +47,10 @@ module.exports = function(db){
 	require('../Server/routes/users.js')(app);
 	require('../Server/routes/items.js')(app);
     require('../Server/routes/orders.js')(app);
-	require('./socketio')(server,io,mongoStore);
+    // require('../Server/routes/chat.js')(app);
+    require('./socketio')(server,io,mongoStore);
+
+
 	app.use(express.static('./Client'));
 	return server;
-}
+};

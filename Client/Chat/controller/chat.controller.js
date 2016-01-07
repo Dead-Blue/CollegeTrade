@@ -1,27 +1,46 @@
-angular.module('chat').controller('ChatController', ['$scope', 'Socket', function($scope, Socket) {
-  $scope.messages = [];
-  Socket.on('chatMessage', function(message) {
-    $scope.messages.push(message);
-  });
-  $scope.sendMessage = function() {
-    var message = {
-      text: this.messageText,
-    };
+angular.module('chat').controller('ChatController', ['$scope', 'Socket', '$http', function ($scope, Socket, $http) {
+    $scope.messages = [];
 
-    Socket.emit('chatMessage', message);
+    //     $http({
+    //     url: '/api/chat/roomMember',
+    //     method: 'GET'
+    // }).success(function (data, header, config, status) {
+    //     $scope.onlineMember=data.onlineMember;
 
-    this.messageText = '';
-    this.visible = !this.visible;
-  }
-  $scope.$on('$destory', function() {
-    Socket.removeListener('chatMessage');
-  })
+    // }).error(function (data, header, config, status) {
+    //    $scope.onlineMember=-1;
+    // });
+        
+    Socket.on('chatMessage', function (message) {
+        $scope.messages.push(message);
+    });
+    Socket.on('newMember', function (message) {
+        $scope.onlineMember= message.clientlist.length;
+        $scope.messages.push(message);
+    });
+    Socket.on('leaveMember', function (message) {
+        $scope.onlineMember= message.clientlist.length;
+        $scope.messages.push(message);
+    });
+    $scope.sendMessage = function () {
+        var message = {
+            text: this.messageText,
+        };
+
+        Socket.emit('chatMessage', message);
+
+        this.messageText = '';
+        this.visible = !this.visible;
+    }
+    $scope.$on('$destory', function () {
+        Socket.removeListener('chatMessage');
+    })
 }]);
-angular.module('chat').filter('chatName',function(){
-    return function(input,messageName,userName,fullName){
+angular.module('chat').filter('chatName', function () {
+    return function (input, messageName, userName, fullName) {
         var out = fullName;
-        if(messageName==userName){
-            out="我";
+        if (messageName == userName) {
+            out = "我";
         }
         return out;
     }

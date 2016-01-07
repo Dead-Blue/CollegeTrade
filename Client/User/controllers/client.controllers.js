@@ -226,7 +226,7 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
         $scope.preShowItems=$scope.allItems;
 
         initPagination();
-        if ($scope.allItems.length <= 0) {
+        if ($scope.allItems.length < 0) {
 
             $window.alert("连接失败");
         }

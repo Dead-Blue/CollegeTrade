@@ -18,4 +18,4 @@ var passport = require('passport'),
 			});
 		});
 		require('./strategies/local.js')();
-	}
+	};

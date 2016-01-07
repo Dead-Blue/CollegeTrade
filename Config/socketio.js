@@ -1,7 +1,6 @@
 var config = require('./config');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
-
 module.exports = function(server, io, mongoStore) {
 	io.use(function(socket, next) {
 		cookieParser(config.sessionSecret)(socket.request, {}, function(err) {
@@ -22,7 +21,8 @@ module.exports = function(server, io, mongoStore) {
 			});
 		});
 	});
-	io.on('connection', function(socket) {
-		require('../Server/controllers/chat')(io, socket);
+	var nsp = io.of('/market');
+    nsp.on('connection', function(socket) {  
+         require('../Server/controllers/chat.market')(nsp, socket);
 	});
 };

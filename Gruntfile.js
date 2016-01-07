@@ -92,7 +92,7 @@ module.exports= function(grunt){
 	grunt.loadNpmTasks('grunt-concurrent');
 	grunt.loadNpmTasks('grunt-node-inspector');
 	
-	grunt.registerTask('default',['env:dev','lint','concurrent:dev']);
+	grunt.registerTask('default',['env:dev','concurrent:dev']);
 	grunt.registerTask('debug',['env:dev','lint','concurrent:debug']);
 	// grunt.registerTask('test',['env:test','mocha','karma','protractor']);
 	grunt.registerTask('test',['env:test','mochaTest']);

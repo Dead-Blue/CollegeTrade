@@ -171,7 +171,7 @@ clientServices.service('orderService', function ($http, $q) {
             return promise;
         },
         /**
-         * 以管理者销售者身份查看订单
+         * 以销售者身份查看订单
          * @returns {*|promise}
          */
         getOrdersAsSeller:function(){

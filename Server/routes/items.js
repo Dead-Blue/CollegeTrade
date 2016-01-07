@@ -7,7 +7,12 @@ module.exports = function(app){
 
 	   app.route('/api/items')
 	   .get(items.list);
-
+       
+       app.route('/api/itemlist/:itemType')
+	   .get(items.showlist);
+       
+       app.param('itemType',items.itemByType);
+       
 	   app.route('/api/items/:itemId')
 	   .get(items.read);
 
