@@ -15,7 +15,14 @@ module.exports = function(nsp, socket) {
 	});
 });
 	
-	
+	socket.on('sayToSomeone', function(msg){
+        msg.type = 'message';
+		msg.created = Date.now();
+		msg.username = socket.request.user.username;
+        msg.fullName = socket.request.user.fullName;
+        msg.socketId = socket.id;
+    socket.broadcast.to(msg.targetSocketId).emit('privateMessage', msg);
+    });
 	socket.on('chatMessage', function(message) {
 		message.type = 'message';
 		message.created = Date.now();
