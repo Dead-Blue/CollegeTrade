@@ -159,8 +159,7 @@ exports.updateAvatar = function(req,res){
 			message: '用户不存在！！',
             success: false
 		}); }
-        user.avatar=req.body.filepaths;
-        user.save(function(err,user){
+        user.update({$set:{avatar:req.body.filepaths}},function(err,user){
             if(err){
                 return res.send({
 			message: '上传头像失败，请重试！！',
