@@ -8,6 +8,9 @@ module.exports = function(app) {
 	.post(users.signup)
     .put(users.changePassword);
 	
+    app.route('/api/user/avatar')
+    .post(users.requiresLogin,users.parseForm,users.updateAvatar)
+    
 	app.route('/api/authentication')
     .get(users.isLogin)
     .post(users.signin)

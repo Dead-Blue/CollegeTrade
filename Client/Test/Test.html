@@ -15,6 +15,13 @@
       <a href="/signout">注销</a>
 </body>
 <button type="button" onclick='submit2()'>提交</button>
+
+ <form action="http://localhost:8080/api/user/avatar" method="POST" enctype="multipart/form-data">
+      <input type="text" name="username" placeholder="gengxiachen">
+      头像： <input id="uploadFile" type="file" name="avatar" />
+      <input type="submit">
+ </form> 
+<button type="button" onclick="submit3()">提交</button>
 <script>
     function submit(){
         $.ajax({  
@@ -48,6 +55,24 @@ function submit2(){
     },  
     type:'POST',  
     dataType:'json',  
+    success:function(data) {  
+        alert(date);  
+     },  
+     error : function() {  
+          alert("异常！");  
+     }  
+});
+}
+function submit3(){
+    var fd = new FormData();
+	fd.append("avatar", $("#uploadFile").get(0).files[0]);
+        $.ajax({  
+    url:'http://localhost:8080/api/user/avatar',// 跳转到 action  
+    data:fd,  
+    type:'POST',  
+    dataType:'json',  
+    processData: false,
+	contentType: false,
     success:function(data) {  
         alert(date);  
      },  

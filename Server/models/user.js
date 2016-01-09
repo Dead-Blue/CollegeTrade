@@ -36,6 +36,10 @@ var UserSchema = new Schema({
 		type: String,
 		match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]   
 	},
+    avatar:{
+		type:String,
+		default:'views/Images/user_avatar.png'
+	},
 	college: {
 		type: String,
 		required: '需要填写学校信息'

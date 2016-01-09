@@ -123,7 +123,5 @@ exports.parseForm = function (req, res, next) {
 };
 function setImageUrl(path){
     var index=path.indexOf("uploadImages");
-    console.log(path);
-    console.log(index);
     return '/uploadImages/'+path.substring(index+13);
 }

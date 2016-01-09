@@ -2,6 +2,7 @@
 /* global _this */
 var User = require('mongoose').model('User');
 var passport = require('passport');
+var formidable = require('formidable');
 var getErrorMessage = function(err) {
 	var message = '';
 	if (err.code) {
@@ -140,15 +141,41 @@ exports.userInfo = function(req,res){
         messages: req.flash('error')|| req.flash('info')
     });
 }
-// exports.update = function(req,res,next){
-//     User.findByIdAndUpdate(req.user.id,req.body,function(err,user){
-//         if(err){
-//             return next(err);
-//         } else {
-//             res.json(user);
-//         }
-//     });
-// };
+exports.updateAvatar = function(req,res){
+     if (!req.isAuthenticated()) { return res.status(403).send({
+			message: '用户未登陆！',
+            success: false
+		}); }
+	    User.findOne({
+            username:req.body.username.toLowerCase()
+        },function(err,user){
+            if(err){
+				return res.send({
+			message: '查找用户失败！',
+            success: false 
+		});
+        }
+        if (!user) { return res.send({
+			message: '用户不存在！！',
+            success: false
+		}); }
+        user.avatar=req.body.filepaths;
+        user.save(function(err,user){
+            if(err){
+                return res.send({
+			message: '上传头像失败，请重试！！',
+            success: false
+		});
+}
+           return res.send({
+			message: '上传头像成功！！',
+            success: true
+		});
+        })
+        
+        })
+ 
+};
 exports.userByID = function(req,res,next,id) {
     User.findOne({
         _id:id
@@ -207,4 +234,26 @@ exports.changePassword=function(req,res){
         
         })
  
+}
+
+exports.parseForm = function (req, res, next) {
+    var form = new formidable.IncomingForm();
+    form.uploadDir = __dirname + "../../../Client/uploadAvatars/";
+    form.encoding = 'utf-8';
+    form.maxFieldsSize = 2 * 1024 * 1024;
+    form.maxFields = 1000;
+    form.multiples = true;
+    form.keepExtensions = true;
+    form.parse(req, function (err, fields, files) {
+        if (err)
+            return next(err);
+        req.body = fields;
+        req.body.filepaths =setImageUrl((files.avatar.path))
+        next();
+    });
+};
+
+function setImageUrl(path){
+    var index=path.indexOf("uploadAvatars");
+    return '/uploadAvatars/'+path.substring(index+14);
 }
