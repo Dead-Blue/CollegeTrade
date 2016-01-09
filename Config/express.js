@@ -40,6 +40,7 @@ module.exports = function(db){
 	app.set('views', './Client/views');
 	app.engine('.html', require('ejs').__express);
 	app.set('view engine', 'html');
+        
 	app.use(flash());
 	app.use(passport.initialize());
 	app.use(passport.session());
@@ -47,10 +48,20 @@ module.exports = function(db){
 	require('../Server/routes/users.js')(app);
 	require('../Server/routes/items.js')(app);
     require('../Server/routes/orders.js')(app);
+    require('../Server/routes/manage.js')(app);
     // require('../Server/routes/chat.js')(app);
     require('./socketio')(server,io,mongoStore);
 
 
 	app.use(express.static('./Client'));
+          // Handle 404
+  app.use(function(req, res) {
+     res.render('404');
+  });
+  
+  // Handle 500
+  app.use(function(error, req, res, next) {
+     res.send('500: Internal Server Error', 500);
+  });
 	return server;
 };

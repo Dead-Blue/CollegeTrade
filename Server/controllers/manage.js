@@ -1,6 +1,6 @@
 /* global res */
 /* global _this */
-var User = require('mongoose').model('User');
+var Manage = require('mongoose').model('Manage');
 var passport = require('passport');
 var getErrorMessage = function(err) {
 	var message = '';
@@ -22,10 +22,8 @@ var getErrorMessage = function(err) {
 };
 
 exports.renderSignin = function (req, res, next) {
-	if (!req.user) {
-		res.render('signin', {
-			title: 'Sign-in Form',
-			messages: req.flash('error') || req.flash('info')
+	if (!req.manage) {
+		res.render('../manage/Login', {
 		});
 	} else {
 		return res.redirect('/');
@@ -43,12 +41,12 @@ exports.renderSignup = function(req, res, next) {
 	}
 };
 
-exports.signup = function(req, res, next) {
+exports.addManager = function(req, res, next) {
 	if(!req.user) {
-		var user = new User(req.body);
+		var user = new Manage(req.body);
         user.username=user.username.toLowerCase() ;
 		var message = null;
-		user.provider = 'local';
+		user.provider = 'local-manage';
 		
 	user.save(function(err) {
 		if(err) {
@@ -140,38 +138,12 @@ exports.userInfo = function(req,res){
         messages: req.flash('error')|| req.flash('info')
     });
 }
-// exports.update = function(req,res,next){
-//     User.findByIdAndUpdate(req.user.id,req.body,function(err,user){
-//         if(err){
-//             return next(err);
-//         } else {
-//             res.json(user);
-//         }
-//     });
-// };
-exports.userByID = function(req,res,next,id) {
-    User.findOne({
-        _id:id
-    },function(err,user){
-        if(err)
-        return next(err);
-        else {
-            user.passport="";
-            user.salt="";
-        req.user=user;
-        next();
-    }
-    });
-}
-exports.read = function(req,res){
-    res.json(req.user);
-};
 exports.changePassword=function(req,res){
     if (!req.isAuthenticated()) { return res.status(403).send({
 			message: '用户未登陆！',
             success: false
 		}); }
-	    User.findOne({
+	    Manage.findOne({
             username:req.body.username.toLowerCase()
         },function(err,user){
             if(err){
