@@ -29,6 +29,18 @@ var ManageSchema = new Schema({
 		type: String,
 		required: '需要填写学校信息'
 	},
+    phone:{
+        type:Number,
+        validate: [  
+		function(password) {
+			return password && password.length ==11;
+		},
+	'请输入正确长度的手机号码'
+	]},
+    email: {
+		type: String,
+		match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]   
+	},
     role: {
 		type: String,
 		required: '需要填写管理员身份',

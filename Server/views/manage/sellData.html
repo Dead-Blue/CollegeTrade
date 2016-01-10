@@ -63,7 +63,7 @@
 		<div class="wrapper">
 			<div class="user">
 				<img src="../manage/Images/user_avatar.png" alt="user_avatar" class="user_avatar" />
-				<span class="label">John Alex</span>
+				<span class="label" id="fullName">用户名</span>
 				<!-- Top Tooltip -->
 				<div class="top_tooltip">
 					<div>
@@ -212,7 +212,7 @@
 		<ul class="menu_small_buttons">
 			<li><a title="General Info" class="i_22_dashboard" href="index.html"></a></li>
 			<li><a title="Your Messages" class="i_22_inbox" href="inbox.html"></a></li>
-			<li><a title="Visual Data" class="i_22_charts smActive" href="charts.html"></a></li>
+			<li><a title="Visual Data" class="i_22_charts smActive" href="/manage/sellData"></a></li>
 			<li><a title="Kit elements" class="i_22_ui" href="ui.html"></a></li>
 			<li><a title="Some Rows" class="i_22_tables" href="tables.html"></a></li>
 			<li><a title="Some Fields" class="i_22_forms" href="forms.html"></a></li>
@@ -360,13 +360,62 @@
 					</div>
 				</div>
 			</div>
+            <div class="g_12">
+					<div class="widget_header">
+						<h4 class="widget_header_title wwIcon i_16_pie">产品销售情况</h4>
+					</div>
+					<div class="widget_contents">
+						<div class="pie_charts" id="itemType_charts"></div>
+					</div>
+	       </div>
 		</div>
 	</div>
-   
+     <script>
+        window.selldata=<%- selldata || 'null' %>;
+         window.manage=<%- manage || 'null' %>;
+         $(document).ready(function() { 
+$('#fullName').text(window.manage.fullName);
+// Pie Charts
+	if(!!$("#itemType_charts").offset()){
+		$.plot($("#itemType_charts"), [ 
+        { label: "学习用品", data: window.selldata[3] }, 
+        { label: "生活用品", data: window.selldata[1] }, 
+        { label: "电脑配件", data: window.selldata[5] },
+        { label: "图书", data: window.selldata[4] },
+        { label: "电子产品", data: window.selldata[2] },
+        { label: "其它", data: window.selldata[6] },
+        ],
+			{
+				colors: ["#F7810C", "#00AADD", "#E82E36","#DD09E8","#14E809","#0910E8"],
+
+				series: {
+					pie: {
+		                show: true,
+		                tilt: 0.6,
+		                label: {
+	                    	show: true,
+	                	}
+		            },
+				},
+
+				grid: {
+					show: false,
+				},
+
+				legend: {
+					show: true,
+					margin: [0,-24],
+					noColumns: 1,
+					labelBoxBorderColor: null,
+				},
+			});
+    }
+}); 
+    </script>
 	<footer>
 		<div class="wrapper">
 			<span class="copyright">
-				&copy; Copyright &copy; 2013.Company name All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+				&copy; Copyright &copy; 2013.Company name All rights reserved.
 			</span>
 		</div>
 	</footer>

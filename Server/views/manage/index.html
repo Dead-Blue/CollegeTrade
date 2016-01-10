@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Kanrisha - A Premium HTML5 Responsive Admin Template</title>
+	<title>管理员首页</title>
 	<!--[if lt IE 9]>
 		<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -63,7 +63,7 @@
 		<div class="wrapper">
 			<div class="user">
 				<img src="../manage/Images/user_avatar.png" alt="user_avatar" class="user_avatar" />
-				<span class="label">John Alex</span>
+				<span class="label" id="fullName">用户名</span>
 				<!-- Top Tooltip -->
 				<div class="top_tooltip">
 					<div>
@@ -469,7 +469,12 @@
 		</div>
 
 	</div>
-
+<script type="text/javascript">
+    window.manage = <%- manage || 'null' %>;
+   $(document).ready(function() { 
+$('#fullName').text(window.manage.fullName);
+}); 
+</script>
 	<footer>
 		<div class="wrapper">
 			<span class="copyright">

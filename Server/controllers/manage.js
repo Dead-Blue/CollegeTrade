@@ -1,6 +1,9 @@
 /* global res */
 /* global _this */
 var Manage = require('mongoose').model('Manage');
+var User = require('mongoose').model('User');
+var Item = require('mongoose').model('Item');
+var Order = require('mongoose').model('Order');
 var passport = require('passport');
 var getErrorMessage = function(err) {
 	var message = '';
@@ -26,16 +29,14 @@ exports.renderSignin = function (req, res) {
 	return 	res.render('manage/Login', {
 		});
 	} else {
-		return res.redirect('/');
+		req.session.error= '用户已登录'
+       return res.redirect('/manage/manageIndex');
 	}
 };
 
 exports.renderAddmanage = function(req, res, next) {
 	if (!req.session.manage) {
-		res.render('signup', {
-			title: 'Sign-up Form',
-			messages: req.flash('error')
-		});
+		return 	res.render('manage/addManage');
 	} else {
 		return res.redirect('/');
 	}
@@ -44,7 +45,9 @@ exports.renderAddmanage = function(req, res, next) {
 exports.renderIndex=function(req,res){
     console.log(req.session.error);
     if(req.session.manage){
-      return res.render('/manage/index');
+      return res.render('manage/index',{
+          manage:JSON.stringify(req.session.manage)
+      });
     } else {
             req.session.error='用户未登录！';
             return  res.status(403).redirect('/manage/login');    
@@ -67,7 +70,7 @@ exports.addManager = function(req, res) {
         manage.passowrd="";
         manage.salt="";
         req.session.manage= manage;
-        res.redirect('/manage/manageIndex')
+       return res.redirect('/manage/manageIndex')
 		// req.login(manage, function(err) {
 		// 	if (err) return next(err);
 		// 	return res.send({
@@ -79,7 +82,7 @@ exports.addManager = function(req, res) {
 	});
 	} else {
         req.session.error='用户已登录';
-        res.redirect('/manage/manageIndex');
+        return res.redirect('/manage/manageIndex');
 	}
 };
 
@@ -93,12 +96,9 @@ exports.signout = function(req, res) {
 };
 
 exports.requiresLogin = function(req, res, next) {
-	if (!req.isAuthenticated()) {
-		return res.status(401).send({
-			message: '用户未登录！',
-            success: false
-            
-		});
+	if (!req.session.manage) {
+		req.session.error='用户未登录';
+        return res.redirect('/manage/login');
 	}
 	next();
 };
@@ -123,7 +123,7 @@ exports.signin=function(req, res) {
 if(req.session.manage)
    return function(){
        res.session.error= '用户已登录'
-       res.redirect('/manage/manageHome');
+       res.redirect('/manage/manageIndex');
    }
 Manage.findOne({
     username:req.body.username
@@ -145,7 +145,7 @@ Manage.findOne({
      manage.password="";
      manage.salt="";
      req.session.manage=manage;
-     res.redirect('/manage/manageIndex');
+     return res.redirect('/manage/manageIndex');
 })
 };
 
@@ -216,3 +216,102 @@ exports.changePassword=function(req,res){
         })
  
 }
+
+exports.getSellData=function(req,res){
+    var usernumbers=0;
+    var life=0, study=0, book=0, computer=0 , electronic =0,others=0;
+    var trading=0;var successCompleted =0; 
+    User.count({}, function (err, usercounts) {
+        if (err) {
+            req.session.error = '服务器错误'
+            return res.status(500).redirect('/manage/login')
+        }
+        usernumbers = usercounts;
+        Item.count({
+            itemType: '生活用品'
+        }, function (err, lifecounts) {
+            if (err) {
+                req.session.error = '服务器错误'
+                return res.status(500).redirect('/manage/login')
+            }
+            life = lifecounts;
+            Item.count({
+                itemType: '电子产品'
+            }, function (err, electroniccounts) {
+                if (err) {
+                    req.session.error = '服务器错误'
+                    return res.status(500).redirect('/manage/login')
+                }
+                electronic = electroniccounts;
+                Item.count({
+                    itemType: '学习用品'
+                }, function (err, studycounts) {
+                    if (err) {
+                        req.session.error = '服务器错误'
+                        return res.status(500).redirect('/manage/login')
+                    }
+                    study = studycounts;
+                    Item.count({
+                        itemType: '图书'
+                    }, function (err, bookcounts) {
+                        if (err) {
+                            req.session.error = '服务器错误'
+                            return res.status(500).redirect('/manage/login')
+                        }
+                        book = bookcounts;
+                        Item.count({
+                            itemType: '电脑配件'
+                        }, function (err, computercounts) {
+                            if (err) {
+                                req.session.error = '服务器错误'
+                                return res.status(500).redirect('/manage/login')
+                            }
+                            computer = computercounts;
+                            Item.count({
+                                itemType: '其它'
+                            }, function (err, otherscounts) {
+                                if (err) {
+                                    req.session.error = '服务器错误'
+                                    return res.status(500).redirect('/manage/login')
+                                }
+                                others = otherscounts;
+                                Order.count({
+                                    state: 'trading'
+                                }, function (err, tradingcounts) {
+                                    if (err) {
+                                        req.session.error = '服务器错误'
+                                        return res.status(500).redirect('/manage/login')
+                                    }
+                                    trading = tradingcounts;
+                                    Order.count({
+                                        state: 'successCompleted'
+                                    }, function (err, successCompletedcounts) {
+                                        if (err) {
+                                            req.session.error = '服务器错误'
+                                            return res.status(500).redirect('/manage/login')
+                                        }
+                                        successCompleted = successCompletedcounts;
+                                        var data=[];
+                                        data.push(usernumbers);
+                                        data.push(life);
+                                        data.push(electronic);
+                                        data.push(study);
+                                        data.push(book);
+                                        data.push(computer);
+                                        data.push(others);
+                                        data.push(trading);
+                                        data.push(successCompleted);
+                                        return res.render('manage/sellData',{
+                                            manage:JSON.stringify(req.session.manage),
+                                            selldata:JSON.stringify(data)
+                                        });
+                                    });//successCompleted
+                                });//trading
+                            });//others
+                        });//computer
+                    });//book
+                });//study
+            });//electronic
+        });//life
+    });//user
+};

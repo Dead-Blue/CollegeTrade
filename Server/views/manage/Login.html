@@ -75,30 +75,32 @@
 				<h4 class="widget_header_title wwIcon i_16_login">Login</h4>
 			</div>
 			<div class="widget_contents lgNoPadding">
-				<form action="index.html">
+				<form action="http://localhost:8080/manage/login" method="POST">
 				<div class="line_grid">
 					<div class="g_2 g_2M"><span class="label">用户名</span></div>
 					<div class="g_10 g_10M">
-						<input class="simple_field tooltip" title="Your Username" type="text" placeholder="Username"></div>
+						<input class="simple_field tooltip" name="username" title="Your Username" type="text" placeholder="Username"></div>
 					<div class="clear"></div>
 				</div>
 				<div class="line_grid">
 					<div class="g_2 g_2M"><span class="label">Pass</span></div>
 					<div class="g_10 g_10M">
-						<input class="simple_field tooltip" title="Your Password" type="password" value="password">
+						<input class="simple_field tooltip" name="password" title="Your Password" type="password" >
 					</div>
 					<div class="clear"></div>
 				</div>
 				<div class="line_grid">
-					<div class="g_6"><input class="submitIt simple_buttons" value="Log In" type="submit">
+					<div class="g_6"><input class="submitIt simple_buttons"  type="submit">
 					</div>
 					<div class="clear"></div>
 				</div>
 				</form>
 			</div>
 		</div>
-
 	</div>
 <!--<div style="display:none"><script src='http://v7.cnzz.com/stat.php?id=155540&web_id=155540' language='JavaScript' charset='gb2312'></script></div>-->
 </body>
+<script type="text/javascript">
+     
+</script>
 </html>

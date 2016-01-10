@@ -36,6 +36,15 @@ var UserSchema = new Schema({
 		type: String,
 		match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]   
 	},
+    phone:{
+        type:Number,
+        validate: [  
+		function(password) {
+			return password && password.length ==11;
+		},
+	'请输入正确长度的手机号码'
+	] 
+    },
     avatar:{
 		type:String,
 		default:'views/Images/user_avatar.png'

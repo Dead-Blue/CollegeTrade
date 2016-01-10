@@ -5,10 +5,11 @@ module.exports = function(app) {
     .post(manage.signin)
     
     app.route('/manage/addManager')
-    .get(manage.userInfo)
+    .get(manage.renderAddmanage)
 	.post(manage.addManager)
     .put(manage.changePassword);
-    
+    app.route('/manage/sellData')
+    .get(manage.requiresLogin,manage.getSellData)
      app.route('/manage/manageIndex')
      .get(manage.renderIndex)
 };
