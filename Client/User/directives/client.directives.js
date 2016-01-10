@@ -23,6 +23,7 @@ clientDirectives .directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
+//评价
 clientDirectives.directive('starRating', function () {
     return {
         template: '<style type="text/css">'+
@@ -83,6 +84,25 @@ clientDirectives.directive('starRating', function () {
                     updateStars();
                 }
             });
+        }
+    };
+});
+
+//手机号码验证
+clientDirectives.directive('phone', function () {
+    return {
+        require: "ngModel",
+        link: function (scope, element, attr, ngModel) {
+            if (ngModel) {
+                var phoneRegexp =/^1[3|4|5|8][0-9]\d{8}$/g;
+            }
+            var phoneValidator = function (value) {
+                var validity = ngModel.$isEmpty(value) || phoneRegexp.test(value);
+                ngModel.$setValidity("phone", validity);
+                return validity ? value : undefined;
+            };
+            ngModel.$formatters.push(phoneValidator);
+            ngModel.$parsers.push(phoneValidator);
         }
     };
 });

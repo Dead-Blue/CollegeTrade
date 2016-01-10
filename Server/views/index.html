@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../lib/ng-dialog/css/ngDialog.css">
     <link rel="stylesheet" href="../lib/ng-dialog/css/ngDialog-theme-default.css">
+	<link rel="stylesheet" href="../lib/sweetalert/dist/sweetalert.css">
 </head>
 
 <body	ng-app="clientApp" >
@@ -126,9 +127,20 @@
 								</li>
 								<li>
 
-								<li >
-									<a href="" ng-show="isSigned">你好！{{user.firstName+user.lastName}}</a>
-								</li >
+								<!--<li >-->
+									<!--<a href="" ng-show="isSigned">你好！{{user.firstName+user.lastName}}</a>-->
+								<!--</li >-->
+
+								<li class="dropdown" ng-show="isSigned">
+									<a href="" class="dropdown-toggle" data-toggle="dropdown">你好！{{user.firstName+user.lastName}}<strong class="caret"></strong></a>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="#/changePassword">修改密码</a>
+										</li>
+
+									</ul>
+								</li>
+
 								<li >
 									<a href="#/publishItem" ng-show="isSigned">发布商品</a>
 								</li >
@@ -136,26 +148,26 @@
 									<a href="#/signout" ng-show="isSigned">注销</a>
 								</li>
 
-								</li>
+
 
 
 								<li class="dropdown">
 									<a href="" class="dropdown-toggle" data-toggle="dropdown">联系客服<strong class="caret"></strong></a>
-									<ul class="dropdown-menu">
-										<li>
-											<a href="#">Action</a>
-										</li>
-										<li>
-											<a href="#">Another action</a>
-										</li>
-										<li>
-											<a href="#">Something else here</a>
-										</li>
-										<li class="divider">
-										</li>
-										<li>
-											<a href="#">Separated link</a>
-										</li>
+									<!--<ul class="dropdown-menu">-->
+										<!--<li>-->
+											<!--<a href="#"></a>-->
+										<!--</li>-->
+										<!--<li>-->
+											<!--<a href="#">Another action</a>-->
+										<!--</li>-->
+										<!--<li>-->
+											<!--<a href="#">Something else here</a>-->
+										<!--</li>-->
+										<!--<li class="divider">-->
+										<!--</li>-->
+										<!--<li>-->
+											<!--<a href="#">Separated link</a>-->
+										<!--</li>-->
 									</ul>
 								</li>
 							</ul>
@@ -198,6 +210,8 @@
 <script src="../Chat/controller/chat.controller.js"></script>
 <script src="../Chat/config/chat.routes.js"></script>
 
+<script src="../lib/sweetalert/dist/sweetalert.min.js"></script>
+<script src="../lib/ng-sweet-alert/ng-sweet-alert.js"></script>
 
 
 </html>
