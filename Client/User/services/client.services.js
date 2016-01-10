@@ -2,6 +2,7 @@
  * Created by sun on 2015/12/17.
  */
 clientServices = angular.module('clientServices', []);
+
 /**
  * 用户服务
  */
@@ -74,6 +75,23 @@ clientServices.service('userService', function ($http, $q) {
                 deferred.reject(response);
             });
             return promise;
+        },
+        /**
+         * 修改密码
+         * @param password
+         * @returns {*|promise}
+         */
+        changePassword:function (username,oldPassword,newPassword) {
+            console.log('userService.changePassword');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            data={'username':username,'oldPassword':oldPassword,'newPassword':newPassword}
+            $http.put('/api/user',data).success(function (response) {
+                deferred.resolve(response);
+            }).error(function (response) {
+                deferred.reject(response);
+            });
+            return promise;
         }
 
 
@@ -128,6 +146,24 @@ clientServices.service('itemService', function ($http, $q) {
             }).error(function (response) {
                 deferred.reject(response);
                 console.log('itemService.getItems.error');
+            });
+            return promise;
+        },
+        /**
+         *
+         * @param id
+         * @returns {*|promise}
+         */
+        getItemsById:function(id){
+            console.log('itemService.getItemsById');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            $http.get('/api/items/'+id).success(function (response) {
+                deferred.resolve(response);
+                console.log('itemService.getItemsById.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('itemService.getItemsById.error');
             });
             return promise;
         },

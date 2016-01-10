@@ -2,13 +2,15 @@
  * Created by sun on 2015/12/17.
  */
 var client = angular.module('clientControllers', []);
+
+
 /**
  * 登录
  */
-client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieStore', '$window','userService', function ($rootScope, $scope, $location, $cookieStore, $window,userService) {
+client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieStore', '$window', 'userService', function ($rootScope, $scope, $location, $cookieStore, $window, userService) {
     console.log('loginCtrl');
-    $rootScope.user=$rootScope.user = $cookieStore.get('user');
-    if($rootScope.user!=null){
+    $rootScope.user = $rootScope.user = $cookieStore.get('user');
+    if ($rootScope.user != null) {
         $location.path('/');
         return;
     }
@@ -25,9 +27,10 @@ client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieSto
 
         }, function (response) {
             console.log("loginFail");
-            $window.alert("登录失败");
+            swal("登录失败!", "请确认用户名与密码", "error");
+
             $scope.resposeMessage = response;
-            credentials.password=null;
+            credentials.password = null;
             $rootScope.isSigned = false;
 //失败
         });
@@ -35,13 +38,46 @@ client.controller('loginCtrl', ['$rootScope', '$scope', '$location', '$cookieSto
 
     };
 }]);
+
+/**
+ * 修改密码
+ */
+client.controller('changePasswordCtrl', ['$rootScope', '$scope', '$location', '$cookieStore', '$window', 'userService', function ($rootScope, $scope, $location, $cookieStore, $window, userService) {
+    console.log('changePasswordCtrl');
+    $rootScope.user = $rootScope.user = $cookieStore.get('user');
+    if ($rootScope.user == null) {
+        swal("请先登录");
+        $location.path('/');
+        return;
+    }
+    $scope.changePassword = function (username,oldPassword,newPassword) {
+        console.log('clientControllers.changePasswordCtrl.changePassword');
+        userService.changePassword(username,oldPassword,newPassword).then(function (response) {
+            console.log("changePassword.success");
+            console.log(response);
+            if(response.success){
+                swal("修改成功!", "", "success");
+                $location.path('/');
+            }
+            else{
+                swal("修改失败!", response.message, "error");
+            }
+        }, function (response) {
+            console.log("loginFail");
+            swal("修改失败!", response, "error");
+        });
+
+
+    };
+}]);
+
 /**
  * 主窗口
  */
 client.controller('mainCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, itemService) {
     console.log('mainCtrl');
     $rootScope.user = $cookieStore.get('user');
-    $scope.itemType="";
+    $scope.itemType = "";
     if ($rootScope.user != null) {
         $rootScope.isSigned = true;
     }
@@ -54,10 +90,10 @@ client.controller('mainCtrl', ['$rootScope', '$scope', '$cookieStore', '$locatio
      * 改变商品分类
      * @param itemType
      */
-    $scope.changeItemType=function(itemType){
+    $scope.changeItemType = function (itemType) {
 
         $location.path('/');
-        $scope.itemType=itemType;
+        $scope.itemType = itemType;
         console.log(itemType);
 
     };
@@ -98,10 +134,13 @@ client.controller('registerCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
 
             console.log(response);
             if (response.success) {//注册成功直接跳转
+
                 console.log('registerSuccess');
+                swal("注册成功!", "", "success");
                 $location.path('/');
                 $cookieStore.put('user', response.user);
             } else {
+                swal("注册失败!", "", "error");
                 console.log('registerFail');
             }
 
@@ -160,31 +199,68 @@ client.controller('publishItemCtrl', ['$rootScope', '$scope', '$cookieStore', '$
     $scope.publishItem = function (itemInfo) {
         console.log('publishItemCtrl.publishItem');
         itemInfo.itemType = $scope.typeSelected.name;
-        var result = $window.confirm(
-            "          " + "商品详情" + "           " + "\n" +
+        /**
+         * 设置弹出框
+         */
+        $scope.sweet={};
+        $scope.sweet.option = {
+            "title": "你确认发布吗？",
+            "text": "           " + "商品详情" + "           " + "\n" +
             "商品名：" + itemInfo.itemname + "\n"
             + "库存：" + itemInfo.stock + "\n"
             + "单价：" + itemInfo.unitPrice + "\n"
-            + "分类：" + itemInfo.itemType + "\n"
-        );
-        if (!result) return;
-        itemService.publishItem(itemInfo).then(
-            function (response) {
+            + "分类：" + itemInfo.itemType + "\n",
 
-                console.log('publishItemCtrl.publishItem');
-                $scope.resposeMessage = response;
-                console.log(response);
-                $window.alert('发布成功');
-                $location.path('/');
-            }, function (response) {
+            "type": "info",
+            "showCancelButton": true,
+            "confirmButtonColor": "#DD6B55",
+            "confirmButtonText": "是",
+            "cancelButtonText": "否",
+            "closeOnConfirm": false,
+            "closeOnCancel": true
+        };
 
-            });
+
+        swal($scope.sweet.option, function (isConfirm) {//弹出提示框
+            if (isConfirm) {
+                itemService.publishItem(itemInfo).then(
+                    function (response) {
+                        $scope.resposeMessage = response;
+                        console.log(response);
+                        swal("发布成功!", "", "success");
+                        $location.path('/');
+                    }, function (response) {
+                        swal("发布失败!", "", "success");
+                    });
+            }
+
+        });
+        //var result = $window.confirm(
+        //    "          " + "商品详情" + "           " + "\n" +
+        //    "商品名：" + itemInfo.itemname + "\n"
+        //    + "库存：" + itemInfo.stock + "\n"
+        //    + "单价：" + itemInfo.unitPrice + "\n"
+        //    + "分类：" + itemInfo.itemType + "\n"
+        //);
+        //if (!result) return;
+        //itemService.publishItem(itemInfo).then(
+        //    function (response) {
+        //
+        //        console.log('publishItemCtrl.publishItem');
+        //        $scope.resposeMessage = response;
+        //        console.log(response);
+        //        $window.alert('发布成功');
+        //
+        //        $location.path('/');
+        //    }, function (response) {
+        //
+        //    });
     }
 }]);
 /**
  * 获得商品列表
  */
-client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window','$filter', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, $filter,itemService) {
+client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', '$filter', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, $filter, itemService) {
     console.log('clientControllers.itemListCtrl');
     //在显示中的商品
     $scope.onShownItems = [];
@@ -196,7 +272,7 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
     /**
      * 初始化分页函数
      */
-    initPagination=function(){
+    initPagination = function () {
         $scope.paginationConf = {
             currentPage: 1,
             totalItems: $scope.preShowItems.length,
@@ -223,12 +299,13 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
         console.log('itemListCtrl.getItems.success');
 
         $scope.allItems = response;
-        $scope.preShowItems=$scope.allItems;
+        $scope.preShowItems = $scope.allItems;
 
         initPagination();
         if ($scope.allItems.length < 0) {
 
-            $window.alert("连接失败");
+            //$window.alert("连接失败");
+            swal("获取数据失败!", "", "error");
         }
 
     }, function (response) {
@@ -236,7 +313,7 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
         console.log(response);
     });
 
-//设置分页不设置会报错
+//分页不设置会报错
     $scope.paginationConf = {
         currentPage: 1,
         totalItems: $scope.allItems.length,
@@ -253,15 +330,15 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
     /**
      * 检测$scope.itemType值的变化
      */
-    $scope.$watch("itemType",function(){
-        console.log("itemType",$scope.itemType);
-        if($scope.itemType==null){
-            $scope.preShowItems=$scope.allItems;
-        }else {
+    $scope.$watch("itemType", function () {
+        console.log("itemType", $scope.itemType);
+        if ($scope.itemType == null) {
+            $scope.preShowItems = $scope.allItems;
+        } else {
             //根据itemType选择preShowItems
             $scope.preShowItems = $filter('filter')($scope.allItems, {itemType: $scope.itemType});
         }
-        console.log("preShowItems",$scope.preShowItems);
+        console.log("preShowItems", $scope.preShowItems);
         initPagination();
     });
 }]);
@@ -270,41 +347,63 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
  */
 client.controller('itemDetailsCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, itemService) {
     console.log('itemDetailsCtrl');
-    $scope.$watch("itemDetails",function(){
 
+    $scope.quantity = 1;
 
-    });
-
+    //
     $scope.itemDetails = $cookieStore.get("item");
     console.log($scope.itemDetails);
 
-    $scope.quantity=1;
-    $scope.unitPrice=$scope.itemDetails.unitPrice;
 
-    if($scope.itemDetails==null){
+    $scope.unitPrice = $scope.itemDetails.unitPrice;
+
+    if ($scope.itemDetails == null) {
         console.log("$scope.item is null");
     }
-    $scope.buyItem=function(itemDetails,unitPrice,quantity){
+
+    $scope.buyItem = function (itemDetails, unitPrice, quantity) {
         console.log('itemDetailsCtrl.buyItem');
-
-
-        itemService.buyItem(itemDetails,unitPrice,quantity).then(
-            function(response){
-                console.log(response);
-                $window.alert("购买成功");
-            },
-            function(response) {
-                console.log(response);
-                $window.alert(response.message);
-                if(response.message=="User is not logged in") {
-                    $location.path('/signin');
-                }
+//配置Alert
+        $scope.sweet = {};
+        $scope.sweet.option = {
+            title: "购买",
+            text: "你确定要购买此产品吗？数量为：" + $scope.quantity,
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "是",
+            cancelButtonText: "否",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        };
+        swal($scope.sweet.option, function (isConfirm) {//弹出提示框
+            if (isConfirm) {//确认购买
+                itemService.buyItem(itemDetails, unitPrice, quantity).then(
+                    function (response) {
+                        console.log(response);
+                        swal("购买成功!", "", "success");
+                        //更新视图
+                        itemService.getItemsById($scope.itemDetails.id).then(
+                            function (response) {
+                                console.log("getItemsById");
+                                $scope.itemDetails = response;
+                                $cookieStore.put("item", $scope.itemDetails);
+                            }
+                            , function (response) {
+                            });
+                    },
+                    function (response) {
+                        console.log(response);
+                        swal("购买失败!", "", "error");
+                        if (response.message == "User is not logged in") {
+                            $location.path('/signin');
+                        }
+                    }
+                );
             }
+        });
 
-        );
     }
-
-
 
 }]);
 /**
@@ -318,7 +417,7 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
     $scope.allOrders = [];
 
     ///初始化分页
-    initPagination=function(){
+    initPagination = function () {
         $scope.paginationConf = {
             currentPage: 1,
             totalItems: $scope.allOrders.length,
@@ -331,19 +430,19 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
                     if ($scope.allOrders[i] == null) {
                         break;
                     }
-                    var order={
-                        'id':$scope.allOrders[i].id,
-                        'created':$scope.allOrders[i].created,
-                        'itemname':$scope.allOrders[i].item.itemname,
-                        'state':(function(){
-                            var state=$scope.allOrders[i].state;
+                    var order = {
+                        'id': $scope.allOrders[i].id,
+                        'created': $scope.allOrders[i].created,
+                        'itemname': $scope.allOrders[i].item.itemname,
+                        'state': (function () {
+                            var state = $scope.allOrders[i].state;
                             console.log(state);
-                            if('trading'==state) return "交易中";
-                            if('successCompleted'==state) return "交易完成";
+                            if ('trading' == state) return "交易中";
+                            if ('successCompleted' == state) return "交易完成";
                             return state;
                         })(),
-                        'price':$scope.allOrders[i].price,
-                        'rate':$scope.allOrders[i].rate
+                        'price': $scope.allOrders[i].price,
+                        'rate': $scope.allOrders[i].rate
                     };
 
                     $scope.onShownOrders.push(order);
@@ -351,42 +450,44 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
             }
         };
     };
-    orderService.getOrdersAsCustomer().then(function(response){
+    orderService.getOrdersAsCustomer().then(function (response) {
         console.log('orderListOfCustomerCtrl.getOrdersAsCustomer.success');
         console.log(response);
         $scope.allOrders = response;
         if ($scope.allOrders.length <= 0) {
-            $window.alert("没有记录");
+            //$window.alert("没有记录");
+            swal("没有记录!");
             return;
         }
         initPagination();
 
 
-    },function(response){
+    }, function (response) {
         console.log('orderListCtrl.getOrdersAsCustomer.fail');
-        $window.alert("失败");
+        swal("获取数据失败!", "", "error");
         console.log(response);
     });
     /**
      * 评价
      * @param index
      */
-    $scope.rateOrder=function(index){
-        console.log("rateId",$scope.onShownOrders[index].id);
-        console.log("rateVal",$scope.ratingVal);
-        orderService.rateOrderAsCustomer($scope.onShownOrders[index].id,$scope.ratingVal,"").
-            then(function(response) {
+    $scope.rateOrder = function (index) {
+        console.log("rateId", $scope.onShownOrders[index].id);
+        console.log("rateVal", $scope.ratingVal);
+        orderService.rateOrderAsCustomer($scope.onShownOrders[index].id, $scope.ratingVal, "").
+            then(function (response) {
                 console.log(response);
-                $window.alert("评价成功");
+                //$window.alert("评价成功");
+                swal("评价成功!", "", "success");
                 //刷新页面
                 $location.path("/orderListOfCustomer")
-            },function(response){
+            }, function (response) {
                 console.log(response);
-                $window.alert("评价失败");
+                swal("评价失败!");
                 $location.path("/orderListOfCustomer")
             });
         //每评一次分就重置
-        $scope.ratingVal=5;
+        $scope.ratingVal = 5;
     };
 //不写会报错
     $scope.paginationConf = {
@@ -400,17 +501,17 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
     $scope.max = 5;
     $scope.ratingVal = 5;
     $scope.readonly = false;
-    $scope.onHover = function(val){
+    $scope.onHover = function (val) {
         $scope.hoverVal = val;
 
     };
-    $scope.onLeave = function(){
+    $scope.onLeave = function () {
 
 
     };
-    $scope.onChange = function(val){
+    $scope.onChange = function (val) {
         $scope.ratingVal = val;
-        console.log('onChange',val)
+        console.log('onChange', val)
     };
 }]);
 
@@ -425,7 +526,7 @@ client.controller('orderListOfSellerCtrl', ['$rootScope', '$scope', '$cookieStor
     $scope.allOrders = [];
 
     ///刷新订单列表
-    initPagination=function(){
+    initPagination = function () {
         $scope.paginationConf = {
             currentPage: 1,
             totalItems: $scope.allOrders.length,
@@ -438,22 +539,22 @@ client.controller('orderListOfSellerCtrl', ['$rootScope', '$scope', '$cookieStor
                     if ($scope.allOrders[i] == null) {
                         break;
                     }
-                    var order={
-                        'created':$scope.allOrders[i].created,
-                        'itemname':$scope.allOrders[i].item.itemname,
-                        'state':(function(){
-                            var state=$scope.allOrders[i].state;
+                    var order = {
+                        'created': $scope.allOrders[i].created,
+                        'itemname': $scope.allOrders[i].item.itemname,
+                        'state': (function () {
+                            var state = $scope.allOrders[i].state;
                             console.log(state);
-                            if('trading'==state) return "交易中";
-                            if('successCompleted'==state) return "交易完成";
+                            if ('trading' == state) return "交易中";
+                            if ('successCompleted' == state) return "交易完成";
                             return state;
                         })(),
-                        'price':$scope.allOrders[i].price,
-                        'quantity':$scope.allOrders[i].quantity,
-                        'rate':(function(){
-                            if($scope.allOrders[i].rate==""){
+                        'price': $scope.allOrders[i].price,
+                        'quantity': $scope.allOrders[i].quantity,
+                        'rate': (function () {
+                            if ($scope.allOrders[i].rate == "") {
                                 return "---"
-                            }else{
+                            } else {
                                 return $scope.allOrders[i].rate;
                             }
                         })()
@@ -465,18 +566,19 @@ client.controller('orderListOfSellerCtrl', ['$rootScope', '$scope', '$cookieStor
             }
         };
     };
-    orderService.getOrdersAsSeller().then(function(response){
+    orderService.getOrdersAsSeller().then(function (response) {
         console.log('orderListOfSellerCtrl.getOrdersAsSeller.success');
         console.log(response);
         $scope.allOrders = response;
         if ($scope.allOrders.length <= 0) {
-            $window.alert("没有记录");
+            swal("没有记录!");
             return;
         }
         initPagination();
-    },function(response){
+    }, function (response) {
         console.log('orderListCtrl.getOrdersAsSeller.fail');
-        $window.alert("失败");
+        //$window.alert("失败");
+        swal("获取数据失败!", "", "error");
         console.log(response);
     });
 

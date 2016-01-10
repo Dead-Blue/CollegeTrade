@@ -47,7 +47,8 @@ angular.module('clientApp',[
     'tm.pagination',
     'ui.bootstrap',
     'authentication',
-    'chat'
+    'chat',
+    'ng-sweet-alert'
 
 ]).config(function ($routeProvider) {
         $routeProvider.when('/',{
@@ -88,6 +89,12 @@ angular.module('clientApp',[
         $routeProvider.when('/orderListOfSeller',{
         controller:'orderListOfSellerCtrl',
         templateUrl: '/views/order-list-of-seller.html',
+        publicAccess: true
+    });
+
+     $routeProvider.when('/changePassword',{
+        controller:'changePasswordCtrl',
+        templateUrl: '/views/change-password.html',
         publicAccess: true
     });
 
