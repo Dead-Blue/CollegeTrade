@@ -21,17 +21,17 @@ var getErrorMessage = function(err) {
 	return message;
 };
 
-exports.renderSignin = function (req, res, next) {
-	if (!req.manage) {
-		res.render('../manage/Login', {
+exports.renderSignin = function (req, res) {
+	if (!req.session.manage) {
+	return 	res.render('manage/Login', {
 		});
 	} else {
 		return res.redirect('/');
 	}
 };
 
-exports.renderSignup = function(req, res, next) {
-	if (!req.user) {
+exports.renderAddmanage = function(req, res, next) {
+	if (!req.session.manage) {
 		res.render('signup', {
 			title: 'Sign-up Form',
 			messages: req.flash('error')
@@ -41,36 +41,45 @@ exports.renderSignup = function(req, res, next) {
 	}
 };
 
-exports.addManager = function(req, res, next) {
-	if(!req.user) {
-		var user = new Manage(req.body);
-        user.username=user.username.toLowerCase() ;
+exports.renderIndex=function(req,res){
+    console.log(req.session.error);
+    if(req.session.manage){
+      return res.render('/manage/index');
+    } else {
+            req.session.error='用户未登录！';
+            return  res.status(403).redirect('/manage/login');    
+    }
+}
+
+exports.addManager = function(req, res) {
+	if(!req.session.manage) {
+		var manage = new Manage(req.body);
+        manage.username=manage.username.toLowerCase() ;
 		var message = null;
-		user.provider = 'local-manage';
 		
-	user.save(function(err) {
+	manage.save(function(err,manage) {
 		if(err) {
 			var message = getErrorMessage(err);
 			req.flash('error', message);
-			return res.send({
-			message: '注册失败'+message,
-            success: false
-		});
+			req.session.error = '服务器错误'
+            return    res.status(500).redirect('/manage/login')
 		}
-		req.login(user, function(err) {
-			if (err) return next(err);
-			return res.send({
-			message: '登录成功',
-            success: true,
-            user:user
-		});
-		});
+        manage.passowrd="";
+        manage.salt="";
+        req.session.manage= manage;
+        res.redirect('/manage/manageIndex')
+		// req.login(manage, function(err) {
+		// 	if (err) return next(err);
+		// 	return res.send({
+		// 	message: '登录成功',
+        //     success: true,
+        //     user:manage
+		// });
+		// });
 	});
 	} else {
-		return res.send({
-			message: '用户已登录',
-            success: false
-		});
+        req.session.error='用户已登录';
+        res.redirect('/manage/manageIndex');
 	}
 };
 
@@ -93,24 +102,51 @@ exports.requiresLogin = function(req, res, next) {
 	}
 	next();
 };
-exports.signin=function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
-    if (err) { return next(err); }
-    if (!user) { return res.status(401).send({
-			message: '登陆失败',
-            info:info,
-            success: false
-		}); }
-    req.logIn(user, function(err) {
-      if (err) { return next(err); }
-      return res.send({
-			message: '登陆成功',
-            user:user,
-			id:user._id,
-            success: true
-		});
-    });
-  })(req, res, next);
+exports.signin=function(req, res) {
+//   passport.authenticate('local', function(err, user, info) {
+//     if (err) { return next(err); }
+//     if (!user) { return res.status(401).send({
+// 			message: '登陆失败',
+//             info:info,
+//             success: false
+// 		}); }
+//     req.logIn(user, function(err) {
+//       if (err) { return next(err); }
+//       return res.send({
+// 			message: '登陆成功',
+//             user:user,
+// 			id:user._id,
+//             success: true
+// 		});
+//     });
+//   })(req, res, next);
+if(req.session.manage)
+   return function(){
+       res.session.error= '用户已登录'
+       res.redirect('/manage/manageHome');
+   }
+Manage.findOne({
+    username:req.body.username
+}, function(err,manage){
+    if(err){
+     
+            req.session.error = '服务器错误'
+         return    res.status(500).redirect('/manage/login')
+
+    }
+    if(!manage)
+    {
+         req.session.error = '用户不存在！'
+        return   res.status(403).redirect('/manage/login')
+     }
+     if(!manage.authenticate(req.body.password)){
+          return res.status(403).redirect('/manage/login')
+     }
+     manage.password="";
+     manage.salt="";
+     req.session.manage=manage;
+     res.redirect('/manage/manageIndex');
+})
 };
 
 exports.isLogin = function(req,res){
