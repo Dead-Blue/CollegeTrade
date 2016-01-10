@@ -21,19 +21,9 @@ var ManageSchema = new Schema({
 	salt: {
 		type: String
 	},
-	provider: {
-		type: String,
-		required: 'Provider is required'		
-	},
-	providerId: String,
-	providerData: {},
 	created: {   //定义默认值
 		type: Date,
 		default: Date.now
-	},
-	email: {
-		type: String,
-		match: [/.+\@.+\..+/, "Please fill a valid e-mail address"]   
 	},
 	college: {
 		type: String,

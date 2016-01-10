@@ -37,7 +37,7 @@ module.exports = function(db){
 		secret: config.sessionSecret,
 		store: mongoStore
 	}));
-	app.set('views', './Client/views');
+	app.set('views', './Server/views');
 	app.engine('.html', require('ejs').__express);
 	app.set('view engine', 'html');
         
