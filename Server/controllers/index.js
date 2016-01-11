@@ -7,7 +7,7 @@ exports.render = function(req,res) {
 	});
 };
 exports.test = function(req,res) {
-	res.render('../Test/test', {
+	res.render('Test/test', {
 	});
 };
 exports.recentVisitNumber = function(req,res){

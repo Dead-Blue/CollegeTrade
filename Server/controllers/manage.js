@@ -320,4 +320,25 @@ exports.renderGetSellData=function(req,res){
     res.render('manage/sellData', {
         manage: JSON.stringify(req.session.manage),
     });
-}
+};
+exports.renderDataTable = function(req,res){
+    res.render('manage/dataTable',{
+       manage:JSON.stringify(req.session.manage) 
+    });
+};
+
+exports.getOrderList = function(req,res){
+	Order.find({}).sort('-created')
+    .populate('customer','firstName lastName fullName')
+    .populate('seller','firstName lastName fullName')
+    .populate('item','itemname description unitPrice')
+    .exec(function (err, orders) {
+		if (err) {
+			return res.status(400).send({
+				message: getErrorMessage(err)
+			});
+		} else {
+			res.json(orders);
+		}
+	});
+};

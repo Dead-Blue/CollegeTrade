@@ -7,5 +7,6 @@ module.exports = function() {
 	require('../Server/models/order.js');
     require('../Server/models/manage.js');
     require('../Server/models/article.js');
+     require('../Server/models/message.js');
 	return db;
 };

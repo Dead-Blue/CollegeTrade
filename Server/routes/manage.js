@@ -16,4 +16,10 @@ module.exports = function(app) {
     
      app.route('/manage/manageIndex')
      .get(manage.renderIndex)
+     
+     app.route('/manage/dataTable')
+     .get(manage.renderDataTable)
+     
+     app.route('/manage/orderData')
+     .get(manage.requiresLogin,manage.getOrderList)
 };

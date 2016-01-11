@@ -21,7 +21,12 @@
       头像： <input id="uploadFile" type="file" name="avatar" />
       <input type="submit">
  </form> 
-<button type="button" onclick="submit3()">提交</button>
+ 
+ <span>TEST MESSAGES:</span>
+ <form action="http://localhost:8080/api/user/message/56906d5aa4b01fac56caa75d" method="POST">
+<span>内容：</span> <textarea name="content" id="" cols="30" rows="10"></textarea>
+<input type="submit" />
+</form>
 <script>
     function submit(){
         $.ajax({  

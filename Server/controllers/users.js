@@ -3,6 +3,7 @@
 var User = require('mongoose').model('User');
 var passport = require('passport');
 var formidable = require('formidable');
+var Message = require('mongoose').model('Message');
 var getErrorMessage = function(err) {
 	var message = '';
 	if (err.code) {
@@ -184,7 +185,7 @@ exports.userByID = function(req,res,next,id) {
         else {
             user.passport="";
             user.salt="";
-        req.user=user;
+        req.targetUser=user;
         next();
     }
     });
@@ -255,4 +256,44 @@ exports.parseForm = function (req, res, next) {
 function setImageUrl(path){
     var index=path.indexOf("uploadAvatars");
     return '/uploadAvatars/'+path.substring(index+14);
+}
+
+exports.sendMessageToUser = function(req,res){
+    var target = req.targetUser;
+    req.targetUser=undefined;
+    var creator = req.user;
+    var content = req.body.content;
+    var message = new Message({
+        user:target,
+        creator:creator,
+        content:content
+    });
+    message.save(function(err) {
+        if(err) {
+            return res.status(500).send({
+                message: getErrorMessage(err)
+            });
+        } else {
+            res.json({
+                success:true,
+                message:'发送消息成功'
+                });
+        }
+    });
+};
+
+exports.getMessages = function(req,res){
+     Message.find({user:req.user._id}).sort('-created').populate('user','firstName lastName fullName').populate('creator', 'firstName lastName fullName').
+    exec(function(err, messages) {
+        if(err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        } else {
+            res.json({
+                success:true,
+                message:messages
+                });
+        }
+    });
 }

@@ -346,17 +346,17 @@
 						<h4 class="widget_header_title wwIcon i_16_pie">Pie Charts</h4>
 					</div>
 					<div class="widget_contents">
-						<div class="pie_charts"></div>
+						<div class="pie_charts" id="orderState_pie"></div>
 					</div>
 				</div>
 
 				<!-- Donut Charts -->
 				<div class="g_6">
 					<div class="widget_header">
-						<h4 class="widget_header_title wwIcon i_16_pie">Donut Charts</h4>
+						<h4 class="widget_header_title wwIcon i_16_pie">订单完成情况</h4>
 					</div>
 					<div class="widget_contents">
-						<div class="donut_charts"></div>
+						<div class="donut_charts" id="orderState"></div>
 					</div>
 				</div>
 			</div>
@@ -416,6 +416,62 @@ $.ajax({
 				},
 			});
     }
+     // Pie Charts
+	if(!!$("#orderState_pie").offset()){
+		$.plot($("#orderState_pie"), [ 
+        { label: "销售中", data: data.selldata.trading }, { label: "已完成", data: data.selldata.successCompleted }
+        ],
+			{
+				colors: ["#F7810C", "#00AADD"],
+
+				series: {
+					pie: {
+		                show: true,
+		                tilt: 0.6,
+		                label: {
+	                    	show: true,
+	                	}
+		            },
+				},
+
+				grid: {
+					show: false,
+				},
+
+				legend: {
+					show: true,
+					margin: [0,-24],
+					noColumns: 1,
+					labelBoxBorderColor: null,
+				},
+			});
+    }
+    //销售情况
+    // Donut Charts
+		if(!!$("#orderState").offset()){
+			$.plot($("#orderState"), [ { label: "销售中", data: data.selldata.trading }, { label: "已完成", data: data.selldata.successCompleted }],
+			{
+				colors: ["#00AADD", "#F7810C"],
+
+				series: {
+					pie: {
+		                show: true,
+		                innerRadius: 0.4,
+		            },
+				},
+
+				grid: {
+					show: false,
+				},
+
+				legend: {
+					show: true,
+					margin: [0,-24],
+					noColumns: 1,
+					labelBoxBorderColor: null,
+				},
+			});
+		}
    }
 });
 

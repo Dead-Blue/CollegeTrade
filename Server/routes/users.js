@@ -11,6 +11,14 @@ module.exports = function(app) {
     app.route('/api/user/avatar')
     .post(users.requiresLogin,users.parseForm,users.updateAvatar)
     
+
+    app.route('/api/user/message')
+    .get(users.requiresLogin,users.getMessages)
+    
+app.route('/api/user/message/:userId')
+    .post(users.requiresLogin,users.sendMessageToUser)
+app.param('userId', users.userByID);
+     
 	app.route('/api/authentication')
     .get(users.isLogin)
     .post(users.signin)
