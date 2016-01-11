@@ -303,26 +303,26 @@
 
 				<!-- Quick Statistics -->
 				<div class="g_3 quick_stats">
-					<div class="big_stats visitor_stats">
-						9827
+					<div class="big_stats visitor_stats" id="recentVisit">
+						NAN
 					</div>
 					<h5 class="stats_info">New Visitor</h5>
 				</div>
 				<div class="g_3 quick_stats">
-					<div class="big_stats tickets_stats">
-						23
+					<div class="big_stats tickets_stats" id="itemStats">
+						NAN
 					</div>
-					<h5 class="stats_info">Open Tickets</h5>
+					<h5 class="stats_info">Items</h5>
 				</div>
 				<div class="g_3 quick_stats">
-					<div class="big_stats users_stats">
-						982
+					<div class="big_stats users_stats" id="users_stats">
+						NAN
 					</div>
 					<h5 class="stats_info">Users</h5>
 				</div>
 				<div class="g_3 quick_stats">
-					<div class="big_stats orders_stats">
-						2045
+					<div class="big_stats orders_stats" id="orderStats">
+						NAN
 					</div>
 					<h5 class="stats_info">Orders</h5>
 				</div>
@@ -341,7 +341,7 @@
 				<!-- Separator -->
 				<div class="g_12 separator"><span></span></div>
 				<!-- Chats -->
-				<div class="g_6">
+				<!--<div class="g_6">
 					<div class="widget_header">
 						<h4 class="widget_header_title wwIcon i_16_chats">Chats</h4>
 					</div>
@@ -392,17 +392,17 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div>-->
 				<!-- Pie Charts -->
-				<div class="g_6">
+				<!--<div class="g_12">
 					<div class="widget_header">
-						<h4 class="widget_header_title wwIcon i_16_pie">Pie Charts</h4>
+						<h4 class="widget_header_title wwIcon i_16_pie">商品分类情况</h4>
 					</div>
 					<div class="widget_contents">
-						<div class="pie_charts"></div>
+						<div class="pie_charts" id="itemType_charts"></div>
 					</div>
-				</div>
-				<div class="g_6">
+				</div>-->
+				<!--<div class="g_6">
 					<div class="widget_header">
 						<h4 class="widget_header_title wwIcon i_16_add">Upload New</h4>
 					</div>
@@ -419,8 +419,17 @@
 							</div>
 						</div>
 					</div>
+				</div>-->
+                <!-- Donut Charts -->
+				<div class="g_6">
+					<div class="widget_header">
+						<h4 class="widget_header_title wwIcon i_16_pie">订单完成情况</h4>
+					</div>
+					<div class="widget_contents">
+						<div class="donut_charts" id="orderState"></div>
+					</div>
 				</div>
-				<div class="g_12">
+				<!--<div class="g_12">
 					<div class="widget_header">
 						<h4 class="widget_header_title wwIcon i_16_add">New Article</h4>
 					</div>
@@ -431,6 +440,33 @@
 								<div class="field_notice">What You See Is What You Get ;)</div>
 							</div>
 						</div>
+					</div>
+				</div>-->
+                <div class="g_12">
+					<div class="widget_header">
+						<h4 class="widget_header_title wwIcon i_16_valid">发布新公告</h4>
+					</div>
+					<div class="widget_contents noPadding">
+						<form action="http://localhost:8080/api/articles" method="POST" />
+							<div class="line_grid">
+								<div class="g_3"><span class="label">标题 <span class="must">*</span></span></div>
+								<div class="g_9">
+									<input type="text" placeholder="标题" class="simple_field" name="title" required />
+								</div>
+							</div>
+                            <div class="line_grid">
+							<div class="g_3"><span class="label">内容<span class="must">*</span></span></div>
+							<div class="g_9">
+								<textarea class="simple_field" name="content"   required ></textarea>
+							</div>
+						    </div>
+							<div class="line_grid">
+								<div class="g_3"><span class="label">提交</span></div>
+								<div class="g_9">
+									<input type="submit" value="提交" class="submitIt simple_buttons" />
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
 				<!-- Separator -->
@@ -473,6 +509,88 @@
     window.manage = <%- manage || 'null' %>;
    $(document).ready(function() { 
 $('#fullName').text(window.manage.fullName);
+$.ajax({
+   type:'GET',
+   url:'http://localhost:8080/api/recentVisitNumber',
+   dataType:'JSON',
+   success:function(data){
+      $('#recentVisit').text(data.recentVisitNumber);
+      $.ajax({
+   type:'GET',
+   url:'http://localhost:8080/api/sellData',
+   dataType:'JSON',
+   success:function(data){
+     window.selldata = data.selldata;
+     // Pie Charts
+     $('#orderStats').text(data.selldata.trading+data.selldata.successCompleted);
+     $('#users_stats').text(data.selldata.usernumbers);
+     $('#itemStats').text(data.selldata.study+data.selldata.life+ data.selldata.computer+data.selldata.book+data.selldata.electronic+data.selldata.others );
+     //商品类型
+	if(!!$("#itemType_charts").offset()){
+		$.plot($("#itemType_charts"), [ 
+        { label: "学习用品", data: data.selldata.study }, 
+        { label: "生活用品", data: data.selldata.life }, 
+        { label: "电脑配件", data: data.selldata.computer },
+        { label: "图书", data: data.selldata.book },
+        { label: "电子产品", data: data.selldata.electronic},
+        { label: "其它", data: data.selldata.others },
+        ],
+			{
+				colors: ["#F7810C", "#00AADD", "#E82E36","#DD09E8","#14E809","#0910E8"],
+
+				series: {
+					pie: {
+		                show: true,
+		                tilt: 0.6,
+		                label: {
+	                    	show: true,
+	                	}
+		            },
+				},
+
+				grid: {
+					show: false,
+				},
+
+				legend: {
+					show: true,
+					margin: [0,-24],
+					noColumns: 1,
+					labelBoxBorderColor: null,
+				},
+			});
+    }
+    //销售情况
+    // Donut Charts
+		if(!!$("#orderState").offset()){
+			$.plot($("#orderState"), [ { label: "销售中", data: data.selldata.trading }, { label: "已完成", data: data.selldata.successCompleted }],
+			{
+				colors: ["#00AADD", "#F7810C"],
+
+				series: {
+					pie: {
+		                show: true,
+		                innerRadius: 0.4,
+		            },
+				},
+
+				grid: {
+					show: false,
+				},
+
+				legend: {
+					show: true,
+					margin: [0,-24],
+					noColumns: 1,
+					labelBoxBorderColor: null,
+				},
+			});
+		}
+   }
+});
+   }
+});
+
 }); 
 </script>
 	<footer>

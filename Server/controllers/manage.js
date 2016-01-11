@@ -291,19 +291,19 @@ exports.getSellData=function(req,res){
                                             return res.status(500).redirect('/manage/login')
                                         }
                                         successCompleted = successCompletedcounts;
-                                        var data=[];
-                                        data.push(usernumbers);
-                                        data.push(life);
-                                        data.push(electronic);
-                                        data.push(study);
-                                        data.push(book);
-                                        data.push(computer);
-                                        data.push(others);
-                                        data.push(trading);
-                                        data.push(successCompleted);
-                                        return res.render('manage/sellData',{
-                                            manage:JSON.stringify(req.session.manage),
-                                            selldata:JSON.stringify(data)
+                                        var data={
+                                            usernumbers:usernumbers,
+                                            life:life,
+                                            electronic:electronic,
+                                            study:study,
+                                            book:book,
+                                            computer:computer,
+                                            others:others,
+                                            trading:trading,
+                                            successCompleted:successCompleted
+                                        };
+                                        return res.send({
+                                            selldata:data
                                         });
                                     });//successCompleted
                                 });//trading
@@ -315,3 +315,9 @@ exports.getSellData=function(req,res){
         });//life
     });//user
 };
+
+exports.renderGetSellData=function(req,res){
+    res.render('manage/sellData', {
+        manage: JSON.stringify(req.session.manage),
+    });
+}

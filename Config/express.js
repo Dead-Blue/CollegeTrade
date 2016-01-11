@@ -49,6 +49,7 @@ module.exports = function(db){
 	require('../Server/routes/items.js')(app);
     require('../Server/routes/orders.js')(app);
     require('../Server/routes/manage.js')(app);
+    require('../Server/routes/articles.js')(app);
     // require('../Server/routes/chat.js')(app);
     require('./socketio')(server,io,mongoStore);
 

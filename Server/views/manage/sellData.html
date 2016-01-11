@@ -371,19 +371,25 @@
 		</div>
 	</div>
      <script>
-        window.selldata=<%- selldata || 'null' %>;
          window.manage=<%- manage || 'null' %>;
          $(document).ready(function() { 
 $('#fullName').text(window.manage.fullName);
-// Pie Charts
+
+$.ajax({
+   type:'GET',
+   url:'http://localhost:8080/api/sellData',
+   dataType:'JSON',
+   success:function(data){
+     window.selldata = data.selldata;
+     // Pie Charts
 	if(!!$("#itemType_charts").offset()){
 		$.plot($("#itemType_charts"), [ 
-        { label: "学习用品", data: window.selldata[3] }, 
-        { label: "生活用品", data: window.selldata[1] }, 
-        { label: "电脑配件", data: window.selldata[5] },
-        { label: "图书", data: window.selldata[4] },
-        { label: "电子产品", data: window.selldata[2] },
-        { label: "其它", data: window.selldata[6] },
+        { label: "学习用品", data: window.selldata.study }, 
+        { label: "生活用品", data: window.selldata.life }, 
+        { label: "电脑配件", data: window.selldata.computer },
+        { label: "图书", data: window.selldata.book },
+        { label: "电子产品", data: window.selldata.electronic},
+        { label: "其它", data: window.selldata.others },
         ],
 			{
 				colors: ["#F7810C", "#00AADD", "#E82E36","#DD09E8","#14E809","#0910E8"],
@@ -410,6 +416,10 @@ $('#fullName').text(window.manage.fullName);
 				},
 			});
     }
+   }
+});
+
+
 }); 
     </script>
 	<footer>

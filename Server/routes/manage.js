@@ -9,7 +9,11 @@ module.exports = function(app) {
 	.post(manage.addManager)
     .put(manage.changePassword);
     app.route('/manage/sellData')
-    .get(manage.requiresLogin,manage.getSellData)
+    .get(manage.requiresLogin,manage.renderGetSellData)
+    
+    app.route('/api/sellData')
+    .get(manage.getSellData)
+    
      app.route('/manage/manageIndex')
      .get(manage.renderIndex)
 };
