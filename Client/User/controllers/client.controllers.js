@@ -50,16 +50,16 @@ client.controller('changePasswordCtrl', ['$rootScope', '$scope', '$location', '$
         $location.path('/');
         return;
     }
-    $scope.changePassword = function (username,oldPassword,newPassword) {
+    $scope.changePassword = function (username, oldPassword, newPassword) {
         console.log('clientControllers.changePasswordCtrl.changePassword');
-        userService.changePassword(username,oldPassword,newPassword).then(function (response) {
+        userService.changePassword(username, oldPassword, newPassword).then(function (response) {
             console.log("changePassword.success");
             console.log(response);
-            if(response.success){
+            if (response.success) {
                 swal("修改成功!", "", "success");
                 $location.path('/');
             }
-            else{
+            else {
                 swal("修改失败!", response.message, "error");
             }
         }, function (response) {
@@ -81,9 +81,11 @@ client.controller('mainCtrl', ['$rootScope', '$scope', '$cookieStore', '$locatio
     if ($rootScope.user != null) {
         $rootScope.isSigned = true;
     }
-    $rootScope.$watchCollection('user', function () {
+    $rootScope.$watch('user', function () {
+        console.log("userChange");
         if ($rootScope.user != null) {
             $rootScope.isSigned = true;
+            console.log('user', $rootScope.user);
         }
     });
     /**
@@ -121,25 +123,25 @@ client.controller('logoutCtrl', ['$rootScope', '$scope', '$cookieStore', '$locat
 /**
  * 注册
  */
-client.controller('registerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', 'userService','fileReader', function ($rootScope, $scope, $cookieStore, $location, userService,fileReader) {
+client.controller('registerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', 'userService', 'fileReader', function ($rootScope, $scope, $cookieStore, $location, userService, fileReader) {
     console.log('clientControllers.registerCtrl');
-    $scope.userInfo={};
-    /**
-     * 预览显示图片
-     */
-    $scope.getFiles = function () {
-        console.log('publishItemCtrl.getFiles');
-        $scope.imageSrc = null;
-        for (var i = 0; i < $scope.files.length; i++) {
-            fileReader.readAsDataUrl($scope.files[i], $scope)
-                .then(function (result) {
-                    $scope.imageSrc=result;
-
-                });
-        }
-        //头像
-        $scope.userInfo.avatar = $scope.images[0];
-    };
+    $scope.userInfo = {};
+    ///**
+    // * 预览显示图片
+    // */
+    //$scope.getFiles = function () {
+    //    console.log('publishItemCtrl.getFiles');
+    //    $scope.imageSrc = null;
+    //    for (var i = 0; i < $scope.files.length; i++) {
+    //        fileReader.readAsDataUrl($scope.files[i], $scope)
+    //            .then(function (result) {
+    //                $scope.imageSrc=result;
+    //
+    //            });
+    //    }
+    //    //头像
+    //    $scope.userInfo.avatar = $scope.images[0];
+    //};
     $scope.register = function (userInfo) {
         console.log('registerCtrl.register');
 
@@ -149,17 +151,13 @@ client.controller('registerCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
             $scope.resposeMessage = response;
             console.log(response);
             if (response.success) {//注册成功直接跳转
-                //上传头像
-                                userService.updateAvatar(userInfo.username,userInfo.avatar).then(
-                    function (response) {
-                        console.log('registerSuccess');
-                        swal("注册成功!", "", "success");
-                        $location.path('/');
-                        $cookieStore.put('user', response.user);
-                    },function(response){
-                        swal("注册失败!", response.message, "error");
-                        console.log('registerFailOnUpdateAvatar');
-                    });
+
+                console.log('registerSuccess');
+                swal("注册成功!", "", "success");
+                $rootScope.user = response.user;
+                console.log($rootScope.user);
+                $cookieStore.put('user', response.user);
+                $location.path('/');
 
             } else {
                 swal("注册失败!", response.message, "error");
@@ -224,7 +222,7 @@ client.controller('publishItemCtrl', ['$rootScope', '$scope', '$cookieStore', '$
         /**
          * 设置弹出框
          */
-        $scope.sweet={};
+        $scope.sweet = {};
         $scope.sweet.option = {
             "title": "你确认发布吗？",
             "text": "           " + "商品详情" + "           " + "\n" +
@@ -322,7 +320,7 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
 
         $scope.allItems = response;
         $scope.preShowItems = $scope.allItems;
-
+        console.log(response);
         initPagination();
         if ($scope.allItems.length < 0) {
 
@@ -363,6 +361,22 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
         console.log("preShowItems", $scope.preShowItems);
         initPagination();
     });
+
+
+    $scope.findItem = function (searchName) {
+        console.log('itemListCtrl.findItem');
+        console.log(searchName);
+        $scope.preShowItems = [];
+        for (var i in  $scope.allItems) {
+            if($scope.allItems[i].itemname.indexOf(searchName)>=0||
+                searchName.indexOf($scope.allItems[i].itemname)>=0){
+                $scope.preShowItems.push($scope.allItems[i]);
+            }
+
+        }
+        console.log('searchResult',$scope.preShowItems)
+        initPagination();
+    }
 }]);
 /**
  * 详情页
@@ -489,27 +503,68 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
         swal("获取数据失败!", "", "error");
         console.log(response);
     });
+    $rootScope.$watch('rateMessage', function () {
+        console.log('rateMessage', $rootScope.rateMessage);
+    });
     /**
      * 评价
      * @param index
      */
     $scope.rateOrder = function (index) {
         console.log("rateId", $scope.onShownOrders[index].id);
-        console.log("rateVal", $scope.ratingVal);
-        orderService.rateOrderAsCustomer($scope.onShownOrders[index].id, $scope.ratingVal, "").
-            then(function (response) {
-                console.log(response);
-                //$window.alert("评价成功");
-                swal("评价成功!", "", "success");
-                //刷新页面
-                $location.path("/orderListOfCustomer")
-            }, function (response) {
-                console.log(response);
-                swal("评价失败!");
-                $location.path("/orderListOfCustomer")
-            });
-        //每评一次分就重置
-        $scope.ratingVal = 5;
+        console.log("rateVal", $scope.rating.rateVal);
+        console.log("rateMessage", $scope.rating.rateMessage);
+
+
+        $scope.sweet = {};
+        $scope.sweet.option = {
+            title: "确认收货",
+            text: "你确定要确认收货吗？",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "是",
+            cancelButtonText: "否",
+            closeOnConfirm: false,
+            closeOnCancel: true
+        };
+
+        swal($scope.sweet.option, function (isConfirm) {//弹出提示框
+            if (isConfirm) {//确认收货
+                orderService.rateOrderAsCustomer($scope.onShownOrders[index].id, $scope.rating.rateVal, $scope.rating.rateMessage).
+                    then(function (response) {
+                        console.log(response);
+                        //$window.alert("评价成功");
+                        swal("确认收货成功!", "", "success");
+                        //刷新页面
+                        $location.path("/");
+                    }, function (response) {
+                        console.log(response);
+                        swal("确认收货失败!", "", "error");
+                        $location.path("/");
+                    });
+                //每评一次分就重置
+                $scope.rateVal = 5;
+                $scope.rating.rateMessage = '';
+            }
+        });
+
+
+        //orderService.rateOrderAsCustomer($scope.onShownOrders[index].id, $scope.rating.rateVal, $scope.rating.rateMessage).
+        //    then(function (response) {
+        //        console.log(response);
+        //        //$window.alert("评价成功");
+        //        swal("确认收货成功!", "", "success");
+        //        //刷新页面
+        //        $location.path("/orderListOfCustomer")
+        //    }, function (response) {
+        //        console.log(response);
+        //        swal("确认收货成功!");
+        //        $location.path("/orderListOfCustomer")
+        //    });
+        ////每评一次分就重置
+        //$scope.rateVal = 5;
+        //$rootScope.rating.rateMessage='';
     };
 //不写会报错
     $scope.paginationConf = {
@@ -521,8 +576,10 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
     };
 
     $scope.max = 5;
-    $scope.ratingVal = 5;
-    $scope.readonly = false;
+    $scope.rateVal = 5;
+    $scope.rating = {};
+    $scope.rating.rateVal = 5;
+    $scope.rating.rateMessage = "";
     $scope.onHover = function (val) {
         $scope.hoverVal = val;
 
@@ -532,7 +589,7 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
 
     };
     $scope.onChange = function (val) {
-        $scope.ratingVal = val;
+        $scope.rating.rateVal = val;
         console.log('onChange', val)
     };
 }]);
@@ -614,4 +671,48 @@ client.controller('orderListOfSellerCtrl', ['$rootScope', '$scope', '$cookieStor
 
 
 }]);
+
+
+client.controller('changeAvatarCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'userService', 'fileReader', function ($rootScope, $scope, $cookieStore, $location, $window, userService, fileReader) {
+    console.log('clientControllers.changeAvatarCtrl');
+    $scope.userInfo = {};
+    /**
+     * 预览显示图片
+     */
+    $scope.getFiles = function () {
+        console.log('changeAvatarCtrl.getFiles');
+        $scope.imageSrc = null;
+        for (var i = 0; i < $scope.files.length; i++) {
+            fileReader.readAsDataUrl($scope.files[i], $scope)
+                .then(function (result) {
+                    $scope.imageSrc = result;
+
+                });
+        }
+        //头像
+        $scope.avatar = $scope.images[0];
+    };
+    $scope.changeAvatar = function () {
+
+        userService.updateAvatar($rootScope.user.id, $scope.avatar).then(
+            function (response) {
+                console.log('changeAvatarCtrl.changeAvatar.success');
+                swal("修改成功!", "", "success");
+            },
+            function (response) {
+                console.log('changeAvatarCtrl.changeAvatar.fail');
+                swal("修改失败!", "", "error");
+            })
+    };
+}]);
+
+
+//client.controller('messageCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'messageService', function ($rootScope, $scope, $cookieStore, $location, $window, messageService) {
+//    console.log('clientControllers.messageCtrl');
+//    messageService.getMessage().then(function(response){
+//        console.log(response);
+//    },function(response){
+//        console.log(response);
+//    });
+//}]);
 

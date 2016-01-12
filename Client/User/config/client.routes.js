@@ -98,5 +98,14 @@ angular.module('clientApp',[
         publicAccess: true
     });
 
+    $routeProvider.when('/changeAvatar',{
+        controller:'changeAvatarCtrl',
+        templateUrl: '/views/change-avatar.html',
+        publicAccess: true
+    });
+
+
+
+
 });
 

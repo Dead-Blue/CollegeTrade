@@ -38,7 +38,18 @@
     }
 </style>
 
-<div class="row-fluid">
+<div class="row col-md-12">
+    <div class="input-group  " role="search" >
+        <div class="form-group col-md-8">
+            <input type="text" class="form-control  col-md-12" ng-model="searchName"/>
+        </div>
+        <div class="form-group col-md-4">
+            <button type="submit" class="btn btn-default col-md-12"  ng-click="findItem(searchName)">
+                查找
+            </button>
+        </div>
+
+    </div>
     <table align="center" class="table table-striped">
         <tbody>
         <tr  ng-repeat="item in onShownItems">

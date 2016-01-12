@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="row clearfix">
+                <div class="col-md-2 column">
+                </div>
+                <div class="col-md-8 column">
+
+                    <form role="form" name="registerForm" class="form-horizontal" novalidate>
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-4"/>
+                            <div class="col-md-4">
+                                <h1>修改头像</h1>
+                            </div>
+                            <div class="col-md-4"/>
+                        </div>
+                        <hr/>
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-2"/>
+                            <div class="col-md-2">
+                                <label>用户名：</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input class="form-control" id="username" name="username"
+                                       ng-model='user.username' ng-disabled="true" required/>
+
+                                <div class="col-md-2"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group  has-feedback">
+                            <div class="col-md-2"/>
+                            <div class="col-md-2">
+                                <label >头像：</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input accept="image/*" type="file" file-model="images"/>
+                                <div class="col-md-4">
+                                <img class=" carousel-inner img-responsive img-rounded thumbnail" ng-src="{{imageSrc}}" />
+                                    </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-group  has-feedback">
+                            <input type="submit" value="修改"
+
+                                   class="col-md-offset-4 btn btn-primary" ng-click="changeAvatar()"/>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="col-md-2 column">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

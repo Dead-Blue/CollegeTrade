@@ -70,22 +70,34 @@ clientServices.service('userService', function ($http, $q) {
 
             var deferred = $q.defer();
             var promise = deferred.promise;
-            data={
-                'firstName':userInfo.firstName,
-                'lastName':userInfo.lastName,
-                'college':userInfo.college,
-                'email':userInfo.email,
-                'username':userInfo.username,
-                'password':userInfo.password,
-                'phone':userInfo.phone
+            data = {
+                'firstName': userInfo.firstName,
+                'lastName': userInfo.lastName,
+                'college': userInfo.college,
+                'email': userInfo.email,
+                'username': userInfo.username,
+                'password': userInfo.password,
+                'phone': userInfo.phone
             };
             console.log(data);
-            $http.post('/api/user',data).success(function (response) {
+            $http.post('/api/user', data).success(function (response) {
                 deferred.resolve(response);
+                ////立即上传头像
+                //data = {'username': userInfo.username, 'avatar': userInfo.avatar};
+                //$http.post('/api/user/avatar', data, {
+                //    headers: {
+                //        'Content-Type': undefined
+                //    }
+                //}).success(function (response) {
+                //    deferred.resolve(response);
+                //}).error(function (response) {
+                //    deferred.reject(response);
+                //});
+
             }).error(function (response) {
                 deferred.reject(response);
             });
-          return promise;
+            return promise;
 
         },
         /**
@@ -93,12 +105,12 @@ clientServices.service('userService', function ($http, $q) {
          * @param password
          * @returns {*|promise}
          */
-        changePassword:function (username,oldPassword,newPassword) {
+        changePassword: function (username, oldPassword, newPassword) {
             console.log('userService.changePassword');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            data={'username':username,'oldPassword':oldPassword,'newPassword':newPassword}
-            $http.put('/api/user',data).success(function (response) {
+            data = {'username': username, 'oldPassword': oldPassword, 'newPassword': newPassword}
+            $http.put('/api/user', data).success(function (response) {
                 deferred.resolve(response);
             }).error(function (response) {
                 deferred.reject(response);
@@ -111,9 +123,13 @@ clientServices.service('userService', function ($http, $q) {
          * @param avatar
          * @returns {*}
          */
-        updateAvatar:function(username,avatar){
-            data={'username':username,'avatar':avatar};
-            $http.post('/api/user/avatar',data,{
+        updateAvatar: function (username, avatar) {
+            console.log('userService.updateAvatar');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            data = {'username': username, 'avatar': avatar};
+            console.log(data);
+            $http.post('/api/user/avatar', data, {
                 headers: {
                     'Content-Type': undefined
                 }
@@ -137,21 +153,21 @@ clientServices.service('itemService', function ($http, $q) {
          * 发布商品信息
          * @param itemInfo
          */
-        publishItem:function(itemInfo){
+        publishItem: function (itemInfo) {
             console.log('itemService.publishItem');
             var deferred = $q.defer();
             var fd = new FormData();
-            fd.append('itemname',itemInfo.itemname);
-            fd.append('stock',itemInfo.stock);
-            fd.append('unitPrice',itemInfo.unitPrice);
-            fd.append('description',itemInfo.description);
-            fd.append('itemType',itemInfo.itemType);
-            for(var i=0;i<itemInfo.images.length;i++){
-                fd.append('img',itemInfo.images[i]);
+            fd.append('itemname', itemInfo.itemname);
+            fd.append('stock', itemInfo.stock);
+            fd.append('unitPrice', itemInfo.unitPrice);
+            fd.append('description', itemInfo.description);
+            fd.append('itemType', itemInfo.itemType);
+            for (var i = 0; i < itemInfo.images.length; i++) {
+                fd.append('img', itemInfo.images[i]);
             }
 
             var promise = deferred.promise;
-            $http.post('/api/item',fd, {
+            $http.post('/api/item', fd, {
                 headers: {
                     'Content-Type': undefined
                 }
@@ -167,7 +183,7 @@ clientServices.service('itemService', function ($http, $q) {
         /**
          *获得商品列表
          */
-        getItems:function(){
+        getItems: function () {
             console.log('itemService.getItems');
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -185,11 +201,11 @@ clientServices.service('itemService', function ($http, $q) {
          * @param id
          * @returns {*|promise}
          */
-        getItemsById:function(id){
+        getItemsById: function (id) {
             console.log('itemService.getItemsById');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            $http.get('/api/items/'+id).success(function (response) {
+            $http.get('/api/items/' + id).success(function (response) {
                 deferred.resolve(response);
                 console.log('itemService.getItemsById.success');
             }).error(function (response) {
@@ -202,12 +218,12 @@ clientServices.service('itemService', function ($http, $q) {
          * 购买商品
          * @returns {*|promise}
          */
-        buyItem:function(itemInfo,unitPrice,quantity){
+        buyItem: function (itemInfo, unitPrice, quantity) {
             console.log('itemService.buyItem');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            var data = {'item':itemInfo,'unitPrice':unitPrice,'quantity':quantity};
-            $http.post('/api/order',data).success(function (response) {
+            var data = {'item': itemInfo, 'unitPrice': unitPrice, 'quantity': quantity};
+            $http.post('/api/order', data).success(function (response) {
                 deferred.resolve(response);
                 console.log('itemService.buyItem.success');
             }).error(function (response) {
@@ -224,7 +240,7 @@ clientServices.service('orderService', function ($http, $q) {
         /**
          * 以消费者身份查看订单
          */
-        getOrdersAsCustomer:function(){
+        getOrdersAsCustomer: function () {
             console.log('orderService.getOrdersAsCustomer');
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -241,7 +257,7 @@ clientServices.service('orderService', function ($http, $q) {
          * 以销售者身份查看订单
          * @returns {*|promise}
          */
-        getOrdersAsSeller:function(){
+        getOrdersAsSeller: function () {
             console.log('orderService.getOrdersAsSeller');
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -257,12 +273,12 @@ clientServices.service('orderService', function ($http, $q) {
         /**
          * 以消费者身份评价
          */
-        rateOrderAsCustomer:function(orderId,rate,ratingMessage){
+        rateOrderAsCustomer: function (orderId, rateVal, rate) {
             console.log('orderService.rateOrderAsCustomer');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            var data = {'updateType':'rate&state','rate':rate,'state':'successCompleted'};
-            $http.put('/api/orders/customer/'+orderId,data).success(function (response) {
+            var data = {'updateType': 'rate&state', 'rate': rateVal, 'state': 'successCompleted', 'rate': rate};
+            $http.put('/api/orders/customer/' + orderId, data).success(function (response) {
                 deferred.resolve(response);
                 console.log('orderService.rateOrderAsCustomer.success');
             }).error(function (response) {
@@ -274,11 +290,53 @@ clientServices.service('orderService', function ($http, $q) {
 
     }
 });
+
+clientServices.service('messageService', function ($http, $q) {
+    return {
+        /**
+         * 获得消息
+         */
+        getMessage:function(){
+            console.log('messageService.getMessage');
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            $http.get('/api/user/message').success(function (response) {
+                deferred.resolve(response);
+                console.log('itemService.getMessage.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('itemService.getMessage.error');
+            });
+            return promise;
+        },
+        /**
+         *
+         * @param id 对方id
+         * @param content
+         * @returns {*|promise}
+         */
+        postMessage:function(id,content){
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+            var data = {'content': content};
+            $http.post('/api/user/message/'+id, data).success(function (response) {
+                deferred.resolve(response);
+                console.log('messageService.postMessage.success');
+            }).error(function (response) {
+                deferred.reject(response);
+                console.log('messageService.postMessage.error');
+            });
+            return promise;
+        }
+
+    };
+});
+
 /**
  * 读文件
  */
-clientServices.factory('fileReader', ["$q", "$log", function($q, $log){
-    var onLoad = function(reader, deferred, scope) {
+clientServices.factory('fileReader', ["$q", "$log", function ($q, $log) {
+    var onLoad = function (reader, deferred, scope) {
         return function () {
             scope.$apply(function () {
                 deferred.resolve(reader.result);
@@ -294,7 +352,7 @@ clientServices.factory('fileReader', ["$q", "$log", function($q, $log){
         };
     };
 
-    var getReader = function(deferred, scope) {
+    var getReader = function (deferred, scope) {
         var reader = new FileReader();
         reader.onload = onLoad(reader, deferred, scope);
         reader.onerror = onError(reader, deferred, scope);
