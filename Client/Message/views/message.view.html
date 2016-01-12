@@ -65,7 +65,7 @@
              <script>
 $.ajax({
    type:'GET',
-   url:'http://localhost:8080/api/user/messages',
+   url:'/api/user/messages',
    dataType:'JSON',
    async:false,
    success:function(data){
@@ -73,8 +73,8 @@ $.ajax({
         var messageDate = new Date(data.message[i].created);
         var messageData='<tr class="status_open">'+'<td><input type="checkbox" class="simple_form">'+i+'</td>'+'<td>'+data.message[i].user.fullName+'</td>'
         +'<td>'+data.message[i].creator.fullName+'</td>'+'<td>'+(messageDate).toLocaleDateString() + " " + (messageDate).toLocaleTimeString()+'</td>'
-        +'<td>'+'<a data-ng-click=clickToOpen("'+data.message[i]._id+'")>查看&nbsp;&nbsp;&nbsp;&nbsp;</a>'
-         +'<a data-ng-click=clickToSend("'+data.message[i].creator._id+'"'+',"'+data.message[i].creator.fullName+'")>回复消息</a>'+'</td>'
+        +'<td>'+'<a class="btn btn-primary" data-ng-click=clickToOpen("'+data.message[i]._id+'")>查看&nbsp;&nbsp;&nbsp;&nbsp;</a>'
+         +'<a class="btn btn-primary" data-ng-click=clickToSend("'+data.message[i].creator._id+'"'+',"'+data.message[i].creator.fullName+'")>回复消息</a>'+'</td>'
         +'</tr>'
         $('#messageDataBody').append(messageData);
     }

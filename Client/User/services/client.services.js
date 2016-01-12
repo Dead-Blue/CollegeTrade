@@ -277,7 +277,7 @@ clientServices.service('orderService', function ($http, $q) {
             console.log('orderService.rateOrderAsCustomer');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            var data = {'updateType': 'rate&state', 'rate': rateVal, 'state': 'successCompleted', 'rate': rate};
+            var data = {'updateType': 'rate&state', 'rateValue': rateVal, 'state': 'successCompleted', 'rate': rate};
             $http.put('/api/orders/customer/' + orderId, data).success(function (response) {
                 deferred.resolve(response);
                 console.log('orderService.rateOrderAsCustomer.success');

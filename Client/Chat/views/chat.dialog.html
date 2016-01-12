@@ -48,7 +48,7 @@
      function sendAMessage() {
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:8080/api/user/' + $('#targetID').text() + '/message',
+        url: '/api/user/' + $('#targetID').text() + '/message',
         data: {
             content: $('#messageContent').val()
         },

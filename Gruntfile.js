@@ -10,10 +10,10 @@ module.exports= function(grunt){
 		},
 		nodemon: {
 			dev: {
-				script: 'server.js',
+				script: 'Server.js',
 				options: {
 					ext: 'js,html',
-					watch: ['server.js','Config/**/*.js','Server/**/*.js']
+					watch: ['Server.js','Config/**/*.js','Server/**/*.js']
 				}
 			},
 			debug: {
