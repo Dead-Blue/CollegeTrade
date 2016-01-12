@@ -3,7 +3,6 @@
 <head>
 	<meta charset="UTF-8">
 	<title><%= title%></title>
-
 	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css">
 	<link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="../lib/ng-dialog/css/ngDialog.css">
@@ -61,7 +60,7 @@
 										<li class="divider">
 										</li>
 										<li>
-											<a href="#/message">信息</a>
+											<a href="#">信息</a>
 										</li>
 
 									</ul>
@@ -136,7 +135,11 @@
 									<a href="" class="dropdown-toggle" data-toggle="dropdown">你好！{{user.firstName+user.lastName}}<strong class="caret"></strong></a>
 									<ul class="dropdown-menu">
 										<li>
-											<a href="#/changePassword">修改密码</a>
+											<div class="thumbnail  ">
+												<img ng-src="{{user.avatar}}"  class="img-rounded" align="right" onerror=""/>
+											</div>
+											<small><a href="#/changePassword">修改密码</a></small>
+											<small><a href="#/changeAvatar">修改头像</a></small>
 										</li>
 
 									</ul>
@@ -204,16 +207,17 @@
 
 <script src="../Authentication/authenticarion.module.js"></script>
 <script src="../Authentication/services/authentication.service.js"></script>
+
 <script src="../Chat/javascript/socket.io.js" type="text/javascript" charset="utf-8"></script>
 <script src="../Chat/chat.module.js"></script>
 <script src="../Chat/services/socket.service.js"></script>
 <script src="../Chat/controller/chat.controller.js"></script>
 <script src="../Chat/config/chat.routes.js"></script>
-
 <script src="../Message/message.module.js"></script>
 <script src="../Message/controller/message.controller.js"></script>
 <script src="../Message/config/message.routes.js"></script>
 <script src="../Message/services/message.service.js"></script>
+
 <script src="../lib/sweetalert/dist/sweetalert.min.js"></script>
 <script src="../lib/ng-sweet-alert/ng-sweet-alert.js"></script>
 
