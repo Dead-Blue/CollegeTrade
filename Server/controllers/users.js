@@ -169,6 +169,7 @@ exports.updateAvatar = function(req,res){
 }
            return res.send({
 			message: '上传头像成功！！',
+            avatarPath:req.body.filepaths,
             success: true
 		});
         })
