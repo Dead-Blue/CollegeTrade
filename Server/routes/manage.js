@@ -5,8 +5,8 @@ module.exports = function(app) {
     .post(manage.signin)
     
     app.route('/manage/addManager')
-    .get(manage.renderAddmanage)
-	.post(manage.addManager)
+    .get(manage.requiresLogin,manage.renderAddmanage)
+	.post(manage.requiresLogin,manage.addManager)
     .put(manage.requiresLogin,manage.changePassword);
     app.route('/manage/sellData')
     .get(manage.requiresLogin,manage.renderGetSellData)
