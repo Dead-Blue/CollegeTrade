@@ -35,7 +35,7 @@ exports.renderSignin = function (req, res) {
 };
 
 exports.renderAddmanage = function(req, res, next) {
-	if (req.session.manage) {
+	if (!req.session.manage) {
 		return 	res.render('manage/addManage');
 	} else {
 		return res.redirect('/');
