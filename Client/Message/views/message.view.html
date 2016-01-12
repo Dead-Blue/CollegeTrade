@@ -1,0 +1,84 @@
+    <!-- The Fonts -->
+	<link href="http://fonts.useso.com/css?family=Oswald|Droid+Sans:400,700" rel="stylesheet" />
+	<!-- The Main CSS File -->
+	<link rel="stylesheet" href="../manage/CSS/style.css" />
+
+<section data-ng-controller="MessageController">
+    		<div class="grid_wrapper">
+            <div class="g_12">
+					<div class="widget_header">
+						<h4 class="widget_header_title wwIcon i_16_tooltip"></br>消息列表</h4>
+					</div>
+					<div class="widget_contents noPadding twCheckbox">
+						<table class="tables datatable noObOLine">
+							<thead>
+								<tr>
+									<th>
+										<input type="checkbox" class="simple_form tMainC">
+									</th>
+									<th>收信人</th>
+									<th>发信人</th>
+									<th>时间</th>
+                                    <th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="messageDataBody">
+							</tbody>
+						</table>
+					</div>
+				</div>
+    		</div>
+    <!-- jQuery -->
+    <script src="../manage/Javascript/jQuery/jquery-1.7.2.min.js"></script>
+	<!-- Flot -->
+	<!--<script src="../manage/Javascript/Flot/jquery.flot.js"></script>
+	<script src="../manage/Javascript/Flot/jquery.flot.resize.js"></script>
+	<script src="../manage/Javascript/Flot/jquery.flot.pie.js"></script>-->
+	<!-- DataTables -->
+    <script src="../manage/Javascript/DataTables/jquery.dataTables.min.js"></script>
+	<!-- ColResizable -->
+	<script src="../manage/Javascript/ColResizable/colResizable-1.3.js"></script>
+	<!-- jQuryUI -->
+	<script src="../manage/Javascript/jQueryUI/jquery-ui-1.8.21.min.js"></script>
+	<!-- Uniform -->
+	<script src="../manage/Javascript/Uniform/jquery.uniform.js"></script>
+	<!-- Tipsy -->
+	<!--<script src="../manage/Javascript/Tipsy/jquery.tipsy.js"></script>-->
+	<!-- Elastic -->
+	<!--<script src="../manage/Javascript/Elastic/jquery.elastic.js"></script>-->
+	<!-- ColorPicker -->
+	<!--<script src="../manage/Javascript/ColorPicker/colorpicker.js"></script>-->
+	<!-- SuperTextarea -->
+	<!--<script src="../manage/Javascript/SuperTextarea/jquery.supertextarea.min.js"></script>-->
+	<!-- UISpinner -->
+	<!--<script src="../manage/Javascript/UISpinner/ui.spinner.js"></script>-->
+	<!-- MaskedInput -->
+	<!--<script src="../manage/Javascript/MaskedInput/jquery.maskedinput-1.3.js"></script>-->
+	<!-- ClEditor -->
+	<!--<script src="../manage/Javascript/ClEditor/jquery.cleditor.js"></script>-->
+	<!-- Full Calendar -->
+	<!--<script src="../manage/Javascript/FullCalendar/fullcalendar.js"></script>-->
+	<!-- Color Box -->
+	<script src="../manage/Javascript/ColorBox/jquery.colorbox.js"></script>
+	<!-- Kanrisha Script -->
+    <script src="../manage/Javascript/kanrisha.js"></script>
+             <script>
+$.ajax({
+   type:'GET',
+   url:'http://localhost:8080/api/user/messages',
+   dataType:'JSON',
+   async:false,
+   success:function(data){
+    for(var i in data.message){
+        var messageDate = new Date(data.message[i].created);
+        var messageData='<tr class="status_open">'+'<td><input type="checkbox" class="simple_form">'+i+'</td>'+'<td>'+data.message[i].user.fullName+'</td>'
+        +'<td>'+data.message[i].creator.fullName+'</td>'+'<td>'+(messageDate).toLocaleDateString() + " " + (messageDate).toLocaleTimeString()+'</td>'
+        +'<td>'+'<a data-ng-click=clickToOpen("'+data.message[i]._id+'")>查看&nbsp;&nbsp;&nbsp;&nbsp;</a>'
+         +'<a data-ng-click=clickToSend("'+data.message[i].creator._id+'"'+',"'+data.message[i].creator.fullName+'")>回复消息</a>'+'</td>'
+        +'</tr>'
+        $('#messageDataBody').append(messageData);
+    }
+   }
+});
+             </script>
+</section>

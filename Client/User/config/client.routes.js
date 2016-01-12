@@ -48,6 +48,7 @@ angular.module('clientApp',[
     'ui.bootstrap',
     'authentication',
     'chat',
+    'message',
     'ng-sweet-alert'
 
 ]).config(function ($routeProvider) {

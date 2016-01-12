@@ -22,7 +22,7 @@
   </strong>
   <span data-ng-switch-default>
   <span data-ng-bind ="message.created | date:'mediumTime'"></span>
-  <span><a class="btn btn-link"  ng-click="clickToOpen(message.username,message.fullName,message.socketId)" data-ng-bind = "message.username | chatName:message.username:user.username:message.fullName"></a></span>
+  <span><a class="btn btn-link"  ng-click="clickToOpen(message.username,message.fullName,message.socketId,message.userId)" data-ng-bind = "message.username | chatName:message.username:user.username:message.fullName"></a></span>
   <span>:</span>
  <span data-ng-bind="message.text"></span>
   </span>

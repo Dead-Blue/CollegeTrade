@@ -1,0 +1,32 @@
+<div id="sendMessageBody">
+    <div class="widget_header">
+        <h4 class="widget_header_title wwIcon i_16_chats"> <br>发送给<span data-ng-bind="targetName"></span></h4><span data-ng-bind="targetID" style="display:none" id='targetID'></span>
+    </div>
+    <div class="widget_contents noPadding">
+        <div class="line_grid">
+            <div class="g_12">
+                <textarea class="simple_field twMaxChars" id='messageContent'></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="sendAMessage();">发送</button>
+        </div>
+    </div>
+</div>
+ <script>
+     function sendAMessage() {
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:8080/api/user/' + $('#targetID').text() + '/message',
+        data: {
+            content: $('#messageContent').val()
+        },
+        dataType: 'JSON',
+        success: function (data) {
+            if (data.success == true) {
+                alert('发送成功！');
+            } else {
+                alert('发送失败，请重试！');
+            }
+        }
+    })
+}
+    </script>

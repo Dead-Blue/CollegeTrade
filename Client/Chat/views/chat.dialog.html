@@ -31,8 +31,37 @@
     <label for="SendMessage">发送消息</label>
     <input type="text" class="form-control" data-ng-model="messageText">
     <button type="submit" class="btn btn-default">发送</button>
+    <br>
+    <button type="button" onclick="$('#sendOfflineMessage').show()" class="btn btn-default">发送离线消息</button>
+  <div id="targetID" data-ng-bind="targetUserId" style="display:none"></div>
+   <div id="sendOfflineMessage"  style="display:none">
+    <textarea id="messageContent" cols="30" rows="10">
+        
+    </textarea>
+    <br>
+   <span>发送给{{targetFullname}}</span> <button type="button" onclick="sendAMessage();" class="btn btn-primary">发送</button>
+   </div>
     </div>
 </form>
   </span>
+   <script>
+     function sendAMessage() {
+    $.ajax({
+        type: 'POST',
+        url: 'http://localhost:8080/api/user/' + $('#targetID').text() + '/message',
+        data: {
+            content: $('#messageContent').val()
+        },
+        dataType: 'JSON',
+        success: function (data) {
+            if (data.success == true) {
+                alert('发送成功！');
+            } else {
+                alert('发送失败，请重试！');
+            }
+        }
+    })
+}
+    </script>
 </div>
 
