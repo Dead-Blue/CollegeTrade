@@ -35,7 +35,7 @@ exports.renderSignin = function (req, res) {
 };
 
 exports.renderAddmanage = function(req, res, next) {
-	if (!req.session.manage) {
+	if (req.session.manage) {
 		return 	res.render('manage/addManage');
 	} else {
 		return res.redirect('/');
@@ -55,7 +55,7 @@ exports.renderIndex=function(req,res){
 }
 
 exports.addManager = function(req, res) {
-	if(!req.session.manage) {
+	if(req.session.manage) {
 		var manage = new Manage(req.body);
         manage.username=manage.username.toLowerCase() ;
 		var message = null;
@@ -81,7 +81,7 @@ exports.addManager = function(req, res) {
 		// });
 	});
 	} else {
-        req.session.error='用户已登录';
+        req.session.error='用户未授权';
         return res.redirect('/manage/manageIndex');
 	}
 };

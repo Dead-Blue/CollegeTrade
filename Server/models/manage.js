@@ -30,10 +30,10 @@ var ManageSchema = new Schema({
 		required: '需要填写学校信息'
 	},
     phone:{
-        type:Number,
+        type:String,
         validate: [  
-		function(password) {
-			return password && password.length ==11;
+		function(phone) {
+			return phone && phone.length ==11;
 		},
 	'请输入正确长度的手机号码'
 	]},

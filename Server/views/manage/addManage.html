@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Kanrisha - A Premium HTML5 Responsive Admin Template</title>
+	<title>添加管理员</title>
 	<!--[if lt IE 9]>
 		<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -143,52 +143,40 @@
 		</ul>
 	</div>-->
 
-	<!--<div class="wrapper contents_wrapper">
+	<div class="wrapper contents_wrapper">
 		
 		<aside class="sidebar">
 			<ul class="tab_nav">
 				<li class="i_32_dashboard">
-					<a href="index.html" title="General Info">
+					<a href="manageIndex" title="General Info">
 						<span class="tab_label">Dashboard</span>
-						<span class="tab_info">General Info</span>
-					</a>
-				</li>
-				<li class="i_32_inbox">
-					<a href="inbox.html" title="Your Messages">
-						<span class="tab_label">Inbox</span>
-						<span class="tab_info">Your Messages</span>
+						<span class="tab_info">总体信息</span>
 					</a>
 				</li>
 				<li class="i_32_charts">
-					<a href="charts.html" title="Visual Data">
-						<span class="tab_label">Charts</span>
-						<span class="tab_info">Visual Data</span>
-					</a>
-				</li>
-				<li class="i_32_ui">
-					<a href="ui.html" title="Kit elements">
-						<span class="tab_label">UI</span>
-						<span class="tab_info">Kit elements</span>
+					<a href="sellData" title="Visual Data">
+						<span class="tab_label">图表</span>
+						<span class="tab_info">销售信息</span>
 					</a>
 				</li>
 				<li class="i_32_tables">
-					<a href="tables.html" title="Some Rows">
-						<span class="tab_label">Tables</span>
-						<span class="tab_info">Some Rows</span>
+					<a href="dataTable" title="Some Rows">
+						<span class="tab_label">表格</span>
+						<span class="tab_info">销售信息</span>
 					</a>
 				</li>
 				<li class="active_tab i_32_forms">
-					<a href="forms.html" title="Some Fields">
-						<span class="tab_label">Forms</span>
-						<span class="tab_info">Some Fields</span>
+					<a href="addManager" title="Some Fields">
+						<span class="tab_label">管理员</span>
+						<span class="tab_info">添加管理员</span>
 					</a>
 				</li>
 			</ul>
-		</aside>-->
-		<div class="wrapper contents_wrapper">
+		</aside>
+		<div class="contents">
 			<div class="grid_wrapper">
 
-				<div class="g——12 contents_header">
+				<div class="g_12 contents_header">
 					<h3 class="i_16_forms tab_label">添加管理员</h3>
 					<div><span class="label">添加系统下属管理员</span></div>
 				</div>
@@ -199,7 +187,7 @@
 						<h4 class="widget_header_title wwIcon i_16_valid">添加管理员</h4>
 					</div>
 					<div class="widget_contents noPadding">
-						<form action="http://localhost:8080/manage/addManager" method="POST" />
+						<form action="/manage/addManager" method="POST" />
 							<div class="line_grid">
 								<div class="g_3"><span class="label">姓名 <span class="must">*</span></span></div>
 								<div class="g_9">
@@ -219,12 +207,6 @@
 									<div class="field_notice">至少为7位</div>
 								</div>
 							</div>
-							<!--<div class="line_grid">
-								<div class="g_3"><span class="label">Birthday Date <span class="must">*</span></span></div>
-								<div class="g_9">
-									<input class="simple_field pick_date" type="text" required />
-								</div>
-							</div>-->
 							<div class="line_grid">
 								<div class="g_3"><span class="label">Email <span class="must">*</span></span></div>
 								<div class="g_9">
@@ -232,13 +214,6 @@
 									<div class="field_notice">请输入正确的email格式</div>
 								</div>
 							</div>
-							<!--<div class="line_grid">
-								<div class="g_3"><span class="label">Website <span class="must">*</span></span></div>
-								<div class="g_9">
-									<input class="simple_field" type="Url" required />
-									<div class="field_notice">Try typing a wrong Url ..</div>
-								</div>
-							</div>-->
 							<div class="line_grid">
 								<div class="g_3"><span class="label">学校 <span class="must">*</span></span></div>
 								<div class="g_9">
@@ -252,13 +227,6 @@
 									<div class="field_notice">请输入11位手机号</div>
 								</div>
 							</div>
-							<!--<div class="line_grid">
-								<div class="g_3"><span class="label">Budget <span class="must">*</span></span></div>
-								<div class="g_9">
-									<input class="simple_field spinner3" type="text" required />
-									<div class="field_notice">Min 0$ | Ps: Try focus and using Up and Down Key ..</div>
-								</div>
-							</div>-->
 							<div class="line_grid">
 								<div class="g_3"><span class="label">身份 <span class="must">*</span></span></div>
 								<div class="g_9">
@@ -267,30 +235,6 @@
                                     <input class="simple_form" type="radio" name="role" value="others" /><span class="label ilC">其它</span>
 								</div>
 							</div>
-							<!--<div class="line_grid">
-								<div class="g_3"><span class="label">Preferred Color <span class="must">*</span></span></div>
-								<div class="g_9">
-									<input type="text" class="simple_field fwColorpicker" required />
-								</div>
-							</div>-->
-							<!--<div class="line_grid">
-								<div class="g_3"><span class="label"> Term of Use </span></div>
-								<div class="g_9">
-										<textarea class="simple_field" readonly>
-Term Of use:
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas semper sagittis dui, nec tempor lorem ultrices vel. Quisque et nisl velit, vitae ullamcorper nisi. Sed feugiat sollicitudin rhoncus. Quisque ac euismod velit. Phasellus accumsan laoreet mi, at suscipit arcu sagittis at. Aenean quis enim sed mauris posuere dignissim nec ut sem. Proin pulvinar arcu vitae mi mollis interdum. Mauris laoreet mollis dapibus. Proin fermentum molestie sapien, non molestie enim fringilla ac.
-										</textarea>
-										<div class="field_notice">Read-Only</div>
-								</div>
-							</div>-->
-							<!--<div class="line_grid">
-								<div class="g_3"><span class="label">Are you agree? <span class="must">*</span></span></div>
-								<div class="g_9">
-										<input type="checkbox" class="simple_form" required />
-										<span class="label ilC">同意</span>
-								</div>
-							</div>-->
 							<div class="line_grid">
 								<div class="g_3"><span class="label">提交</span></div>
 								<div class="g_9">
