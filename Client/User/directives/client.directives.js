@@ -32,7 +32,7 @@ clientDirectives.directive('starRating', function () {
     '.rating li {list-style-type: none;display: inline-block;padding: 1px;text-align: center;font-weight: bold;cursor: pointer;}'+
     '.rating .filled {color: #ffee33;}'+
         '</style>' +
-        '等级：<ul class="rating" ng-mouseleave="leave()">' +
+        '满意度：<ul class="rating" ng-mouseleave="leave()">' +
         '<li ng-repeat="star in stars" ng-class="star" ng-click="click($index + 1)" ng-mouseover="over($index + 1)">' +
         '\u2605' +
         '</li>' +

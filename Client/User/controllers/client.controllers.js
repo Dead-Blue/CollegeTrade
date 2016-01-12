@@ -121,34 +121,56 @@ client.controller('logoutCtrl', ['$rootScope', '$scope', '$cookieStore', '$locat
 /**
  * 注册
  */
-client.controller('registerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', 'userService', function ($rootScope, $scope, $cookieStore, $location, userService) {
+client.controller('registerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', 'userService','fileReader', function ($rootScope, $scope, $cookieStore, $location, userService,fileReader) {
     console.log('clientControllers.registerCtrl');
+    $scope.userInfo={};
+    /**
+     * 预览显示图片
+     */
+    $scope.getFiles = function () {
+        console.log('publishItemCtrl.getFiles');
+        $scope.imageSrc = null;
+        for (var i = 0; i < $scope.files.length; i++) {
+            fileReader.readAsDataUrl($scope.files[i], $scope)
+                .then(function (result) {
+                    $scope.imageSrc=result;
+
+                });
+        }
+        //头像
+        $scope.userInfo.avatar = $scope.images[0];
+    };
     $scope.register = function (userInfo) {
         console.log('registerCtrl.register');
 
         userService.register(userInfo).then(function (response) {
-            //注册成功
-
+            //连接没问题
             console.log(userInfo);
             $scope.resposeMessage = response;
-
             console.log(response);
             if (response.success) {//注册成功直接跳转
+                //上传头像
+                                userService.updateAvatar(userInfo.username,userInfo.avatar).then(
+                    function (response) {
+                        console.log('registerSuccess');
+                        swal("注册成功!", "", "success");
+                        $location.path('/');
+                        $cookieStore.put('user', response.user);
+                    },function(response){
+                        swal("注册失败!", response.message, "error");
+                        console.log('registerFailOnUpdateAvatar');
+                    });
 
-                console.log('registerSuccess');
-                swal("注册成功!", "", "success");
-                $location.path('/');
-                $cookieStore.put('user', response.user);
             } else {
-                swal("注册失败!", "", "error");
-                console.log('registerFail');
+                swal("注册失败!", response.message, "error");
+                console.log('registerFailOnRegister');
             }
 
 
         }, function (response) {
             console.log('registerFail');
             console.log(userInfo);
-            $scope.resposeMessage = response;
+            swal("注册失败!", response.message, "error");
             console.log(response);
 //失败
         });

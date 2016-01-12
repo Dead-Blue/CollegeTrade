@@ -60,7 +60,7 @@
                  on-leave="onLeave" readonly="false"></div>
             <div class="col-md-offset-3">
                 <span class="pull-left">评价:{{order.rate}}</span>
-            <textarea class="input-xlarge col-md-6" id="description" name="description" rows="3" cols="35" required></textarea>
+            <textarea class="input-xlarge col-md-6" id="description" name="description" rows="3" cols="35" ng-model="" required></textarea>
             </div>
             <div>
                 <button class="pull-right btn btn-primary btn-sm" ng-click="rateOrder($index)">评价

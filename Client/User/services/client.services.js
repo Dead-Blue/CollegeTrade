@@ -67,14 +67,26 @@ clientServices.service('userService', function ($http, $q) {
          */
         register: function (userInfo) {
             console.log('userService.register');
+
             var deferred = $q.defer();
             var promise = deferred.promise;
-            $http.post('/api/user',userInfo).success(function (response) {
+            data={
+                'firstName':userInfo.firstName,
+                'lastName':userInfo.lastName,
+                'college':userInfo.college,
+                'email':userInfo.email,
+                'username':userInfo.username,
+                'password':userInfo.password,
+                'phone':userInfo.phone
+            };
+            console.log(data);
+            $http.post('/api/user',data).success(function (response) {
                 deferred.resolve(response);
             }).error(function (response) {
                 deferred.reject(response);
             });
-            return promise;
+          return promise;
+
         },
         /**
          * 修改密码
@@ -87,6 +99,25 @@ clientServices.service('userService', function ($http, $q) {
             var promise = deferred.promise;
             data={'username':username,'oldPassword':oldPassword,'newPassword':newPassword}
             $http.put('/api/user',data).success(function (response) {
+                deferred.resolve(response);
+            }).error(function (response) {
+                deferred.reject(response);
+            });
+            return promise;
+        },
+        /**
+         * 上传头像
+         * @param username
+         * @param avatar
+         * @returns {*}
+         */
+        updateAvatar:function(username,avatar){
+            data={'username':username,'avatar':avatar};
+            $http.post('/api/user/avatar',data,{
+                headers: {
+                    'Content-Type': undefined
+                }
+            }).success(function (response) {
                 deferred.resolve(response);
             }).error(function (response) {
                 deferred.reject(response);
