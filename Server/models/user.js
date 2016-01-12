@@ -39,8 +39,8 @@ var UserSchema = new Schema({
     phone:{
         type:Number,
         validate: [  
-		function(password) {
-			return password && password.length ==11;
+		function(phone) {
+			return phone && phone.length ==11;
 		},
 	'请输入正确长度的手机号码'
 	] 
