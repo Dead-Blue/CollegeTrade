@@ -42,7 +42,7 @@ exports.list = function(req, res) {
 exports.articleByID = function(req, res, next, id) {
     Article.findById(id).populate('creator', 'fullName').exec(function(err, article) {
         if (err) return next(err);
-        if (!article) return next(new Error('Failed ti load atricle' + id));
+        if (!article) return next(new Error('载入公告失败' + id));
         req.article = article;
         next();
     });
@@ -79,7 +79,7 @@ exports.delete = function(req, res) {
 exports.hasAuthorization = function(req, res, next) {
     if (req.article.creator.id !== req.session.manage.id) {
         return res.status(403).send({
-            message: 'User is not authorized'
+            message: '用户未授权'
         });
     }
     next();

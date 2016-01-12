@@ -66,10 +66,11 @@ angular.module('chat').controller('ChatController', ['$scope', 'Socket', '$http'
         Socket.removeListener('chatMessage');
     })
     
-    $scope.clickToOpen = function (username,fullName,socketId) {
+    $scope.clickToOpen = function (username,fullName,socketId,targetUserId) {
         $scope.targetFullname=fullName
          $scope.targetUsername=username
          $scope.targetSocketId=socketId
+         $scope.targetUserId=targetUserId
         ngDialog.open({ 
             className: 'ngdialog-theme-default',  
             scope:$scope,  

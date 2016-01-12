@@ -1,0 +1,15 @@
+<div>
+    <div  data-ng-bind="message.error"></div>
+    			<!-- Chats -->
+
+					<div class="widget_header">
+						<h4 class="widget_header_title wwIcon i_16_chats">发件人：<span data-ng-bind="message.creator.fullName"></span> <br>发送时间：<span data-ng-bind="message.created"></span></h4>
+					</div>
+					<div class="widget_contents noPadding">
+						<div class="line_grid">
+								<div class="message" data-ng-bind="message.content">
+
+								</div>
+						</div>
+					</div>
+</div>

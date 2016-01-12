@@ -12,10 +12,15 @@ module.exports = function(app) {
     .post(users.requiresLogin,users.parseForm,users.updateAvatar)
     
 
-    app.route('/api/user/message')
+    app.route('/api/user/messages')
     .get(users.requiresLogin,users.getMessages)
     
-app.route('/api/user/message/:userId')
+    app.route('/api/user/messages/:messageId')
+    .get(users.readMessage)
+    .delete(users.requiresLogin,users.messageAuthorization,users.deleteMessage)
+    app.param('messageId', users.messageByID);
+    
+app.route('/api/user/:userId/message')
     .post(users.requiresLogin,users.sendMessageToUser)
 app.param('userId', users.userByID);
      

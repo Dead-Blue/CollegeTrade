@@ -2,7 +2,7 @@
 <div data-ng-repeat="message in privateMessages ">
   <div data-ng-if="message.username!=user.username">
       <span data-ng-bind ="message.created | date:'mediumTime'"></span>
-   <span><a class="btn btn-link"  ng-click="clickToOpen(message.username,message.fullName,message.socketId)" data-ng-bind = "message.username | chatName:message.username:user.username:message.fullName"></a></span>
+   <span><a class="btn btn-link"  ng-click="clickToOpen(message.username,message.fullName,message.socketId,message.targetUserId)" data-ng-bind = "message.username | chatName:message.username:user.username:message.fullName"></a></span>
   <span>:</span>
   <span data-ng-bind="message.text"></span>
   </div>

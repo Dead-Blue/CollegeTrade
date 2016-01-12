@@ -21,6 +21,7 @@ module.exports = function(nsp, socket) {
 		msg.username = socket.request.user.username;
         msg.fullName = socket.request.user.fullName;
         msg.socketId = socket.id;
+        msg.userId = socket.request.user._id
     socket.broadcast.to(msg.targetSocketId).emit('privateMessage', msg);
     });
 	socket.on('chatMessage', function(message) {
@@ -29,6 +30,7 @@ module.exports = function(nsp, socket) {
 		message.username = socket.request.user.username;
         message.fullName = socket.request.user.fullName;
         message.socketId = socket.id;
+        message.userId = socket.request.user._id
 		nsp.to('defaultRoom').emit('chatMessage', message);
 	});
 	

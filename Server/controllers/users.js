@@ -271,6 +271,7 @@ exports.sendMessageToUser = function(req,res){
     message.save(function(err) {
         if(err) {
             return res.status(500).send({
+                success:false,
                 message: getErrorMessage(err)
             });
         } else {
@@ -296,4 +297,42 @@ exports.getMessages = function(req,res){
                 });
         }
     });
-}
+};
+
+exports.messageAuthorization = function(req,res,next){
+    if(req.message.user._id!=req.user._id){
+     return res.status(403).send({
+            success:false,
+            message: '用户未授权'
+        });
+    }
+    next();
+};
+
+exports.deleteMessage = function(req,res){
+    var message = req.message;
+    message.remove(function(err) {
+        if(err) {
+            return res.status(400).send({
+                message: getErrorMessage(err)
+            });
+        } else {
+            res.json({
+                success:true,
+                });
+        }
+    });
+};
+
+exports.messageByID = function(req,res,next,id){
+     Message.findById(id).populate('creator', 'firstName lastName fullName').exec(function(err, message) {
+        if (err) return next(err);
+        if (!message) return next(new Error('载入信息失败' + id));
+        req.message = message;
+        next();
+    });
+};
+
+exports.readMessage = function(req,res){
+    res.json(req.message);
+};
