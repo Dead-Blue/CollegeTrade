@@ -92,6 +92,12 @@ angular.module('clientApp',[
         templateUrl: '/views/order-list-of-seller.html',
         publicAccess: true
     });
+    $routeProvider.when('/myItems',{
+        controller:'myItemsCtrl',
+        templateUrl: '/views/my-items.html',
+        publicAccess: true
+    });
+
 
      $routeProvider.when('/changePassword',{
         controller:'changePasswordCtrl',

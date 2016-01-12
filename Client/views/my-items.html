@@ -1,0 +1,75 @@
+
+<style>
+    .page-list .pagination {
+        float: left;
+    }
+
+    .page-list .pagination span {
+        cursor: pointer;
+    }
+
+    .page-list .pagination .separate span {
+        cursor: default;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .page-list .pagination .separate span:hover {
+        background: none;
+    }
+
+    .page-list .page-total {
+        float: left;
+        margin: 25px 20px;
+    }
+
+    .page-list .page-total input, .page-list .page-total select {
+        height: 26px;
+        border: 1px solid #ddd;
+    }
+
+    .page-list .page-total input {
+        width: 40px;
+        padding-left: 3px;
+    }
+
+    .page-list .page-total select {
+        width: 50px;
+    }
+</style>
+
+<div class="row col-md-12">
+
+    <table align="center" class="table table-striped">
+
+        <tr>
+            <th>时间</th>
+            <th>商品名</th>
+            <th>商品类型</th>
+            <th>价格</th>
+            <th>数量</th>
+        </tr>
+        <tr  ng-repeat="item in onShownItems">
+
+            <td>{{item.created| date:"yyyy-MM-dd hh:mm:ss" }}</td>
+            <td> {{item.itemname}}</td>
+            <td> {{item.itemType}}</td>
+            <td>  {{item.unitPrice}}￥</td>
+            <td>  {{item.stock}}</td>
+        </tr>
+
+    </table>
+
+<nav class="navbar navbar-default navbar-fixed-bottom">
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+        </div>
+        <div class="col-md-8 column">
+            <div  class="navbar-inner navbar-content-center" >
+                <tm-pagination conf="paginationConf" ></tm-pagination>
+            </div>
+        </div>
+        <div class="col-md-2 column">
+        </div>
+    </div>
+</nav>

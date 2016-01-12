@@ -27,13 +27,23 @@
 		<span id="fullName"></span>
 		<span id="college"></span>
 	</div>
-
+	<div class="col-md-12    text-center">
+		<img  src="/views/img/main.png " class=" col-md-12 thumbnail"/>
+	</div>
 <section ui-view="topbar"></section>
 	<section ui-view="content"></section>
 
 <div class="container" ng-controller="mainCtrl">
 
 	<div class="row clearfix">
+
+		<div class="alert alert-info" >
+			<div class="text-center">
+			<h4>公告{{articles[0].title}}</h4>
+				</div>
+
+			<span>时　　间：{{articles[0].create| date:"yyyy-MM-dd hh:mm:ss" }}<br/>{{articles[0].content}}</span>
+		</div>
 		<div class="col-md-12 column">
 			<div class="row clearfix">
 				<div class="col-md-12 column">
@@ -56,6 +66,11 @@
 										</li>
 										<li>
 											<a href="#/orderListOfSeller">销售记录</a>
+										</li>
+										<li class="divider">
+										</li>
+										<li>
+											<a href="#/myItems">我的货品</a>
 										</li>
 										<li class="divider">
 										</li>
@@ -108,15 +123,6 @@
 									</ul>
 								</li>
 							</ul>
-							<form class="navbar-form navbar-left" role="search" action="" >
-								<div class="form-group">
-									<input type="text" class="form-control" />
-
-								</div>
-								<button type="submit" class="btn btn-default" >
-									查找
-								</button>
-							</form>
 							<ul class="nav navbar-nav navbar-right" ng-model="user">
 								
 								<li >

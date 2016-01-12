@@ -118,7 +118,7 @@ clientServices.service('userService', function ($http, $q) {
             return promise;
         },
         /**
-         * 上传头像
+         * 修改头像
          * @param username
          * @param avatar
          * @returns {*}
@@ -127,9 +127,11 @@ clientServices.service('userService', function ($http, $q) {
             console.log('userService.updateAvatar');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            data = {'username': username, 'avatar': avatar};
-            console.log(data);
-            $http.post('/api/user/avatar', data, {
+            var fd = new FormData();
+
+            fd.append('username', username);
+            fd.append('avatar', avatar);
+            $http.post('/api/user/avatar', fd, {
                 headers: {
                     'Content-Type': undefined
                 }
@@ -277,7 +279,7 @@ clientServices.service('orderService', function ($http, $q) {
             console.log('orderService.rateOrderAsCustomer');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            var data = {'updateType': 'rate&state', 'rate': rateVal, 'state': 'successCompleted', 'rate': rate};
+            var data = {'updateType': 'rate&state', 'rateVal': rateVal, 'state': 'successCompleted', 'rate': rate};
             $http.put('/api/orders/customer/' + orderId, data).success(function (response) {
                 deferred.resolve(response);
                 console.log('orderService.rateOrderAsCustomer.success');
@@ -296,7 +298,7 @@ clientServices.service('messageService', function ($http, $q) {
         /**
          * 获得消息
          */
-        getMessage:function(){
+        getMessage: function () {
             console.log('messageService.getMessage');
             var deferred = $q.defer();
             var promise = deferred.promise;
@@ -315,11 +317,11 @@ clientServices.service('messageService', function ($http, $q) {
          * @param content
          * @returns {*|promise}
          */
-        postMessage:function(id,content){
+        postMessage: function (id, content) {
             var deferred = $q.defer();
             var promise = deferred.promise;
             var data = {'content': content};
-            $http.post('/api/user/message/'+id, data).success(function (response) {
+            $http.post('/api/user/message/' + id, data).success(function (response) {
                 deferred.resolve(response);
                 console.log('messageService.postMessage.success');
             }).error(function (response) {
@@ -331,7 +333,27 @@ clientServices.service('messageService', function ($http, $q) {
 
     };
 });
-
+/**
+ * 公告服务
+ */
+clientServices.service('articleService', function ($http, $q) {
+        return {
+            getArticles:function(){
+                console.log('articleService.getArticles');
+                var deferred = $q.defer();
+                var promise = deferred.promise;
+                $http.get('/api/articles').success(function (response) {
+                    deferred.resolve(response);
+                    console.log('articleService.getArticles.success');
+                }).error(function (response) {
+                    deferred.reject(response);
+                    console.log('articleService.getArticles.error');
+                });
+                return promise;
+            }
+        }
+    }
+);
 /**
  * 读文件
  */
@@ -369,4 +391,4 @@ clientServices.factory('fileReader', ["$q", "$log", function ($q, $log) {
     return {
         readAsDataUrl: readAsDataURL
     };
-}])
+}]);
