@@ -136,7 +136,7 @@ exports.customerUpdate=function(req,res){
         case 'rate&state': 
              order.state=xssFilters.inHTMLData(req.body.state);
              order.rate=xssFilters.inHTMLData(req.body.rate);
-             order.rateValue=xssFilters.inHTMLData(req.body.rateValue);
+             order.rateValue=req.body.rateValue;
              break;
     }
     order.save(function(err){
