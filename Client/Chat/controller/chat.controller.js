@@ -14,7 +14,7 @@ angular.module('chat').controller('ChatController', ['$scope', 'Socket', '$http'
    $scope.dynamicPopover = {
     content: '暂无消息',
     scope:$scope, 
-    templateUrl: 'chat/views/chat.messageBox.html',
+    templateUrl: 'Chat/views/chat.messageBox.html',
     title: '消息列表'
   };
         
@@ -74,7 +74,7 @@ angular.module('chat').controller('ChatController', ['$scope', 'Socket', '$http'
         ngDialog.open({ 
             className: 'ngdialog-theme-default',  
             scope:$scope,  
-            template: 'chat/views/chat.dialog.html'
+            template: 'Chat/views/chat.dialog.html'
              });
     };
 }]);

@@ -7,7 +7,7 @@ angular.module('message').controller('MessageController', ['$scope', 'MessageInf
             ngDialog.open({ 
             className: 'ngdialog-theme-default',  
             scope:$scope,  
-            template: 'message/views/message.messageDetail.html'
+            template: 'Message/views/message.messageDetail.html'
         });
         })
     };
@@ -18,7 +18,7 @@ angular.module('message').controller('MessageController', ['$scope', 'MessageInf
             ngDialog.open({ 
             className: 'ngdialog-theme-default',  
             scope:$scope,  
-            template: 'message/views/message.sendMessage.html'
+            template: 'Message/views/message.sendMessage.html'
         });
     };
 }]);
