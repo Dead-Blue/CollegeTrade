@@ -37,7 +37,7 @@ var ItemSchema = new Schema({
 	},
   imagesUrl:[{
 		type:String,
-		default:''
+		default:'/views/Images/defaultItemImg.jpg'
 	}],
     itemType:{
         type:String,

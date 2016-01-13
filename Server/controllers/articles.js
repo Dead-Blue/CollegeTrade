@@ -21,9 +21,7 @@ exports.create = function(req, res) {
                 message: getErrorMessage(err)
             });
         } else {
-            res.json({success:true,
-                article:article
-                });
+            res.redirect('/manage/manageIndex');
         }
     });
 };

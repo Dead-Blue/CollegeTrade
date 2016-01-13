@@ -45,10 +45,9 @@ exports.renderAddmanage = function(req, res, next) {
 };
 
 exports.renderIndex=function(req,res){
-    console.log(req.session.error);
     if(req.session.manage){
       return res.render('manage/index',{
-          manage:JSON.stringify(req.session.manage)
+          manage:JSON.stringify(req.session.manage),
       });
     } else {
             req.session.error='用户未登录！';
@@ -344,3 +343,39 @@ exports.getOrderList = function(req,res){
 		}
 	});
 };
+
+exports.deleteItem = function(req,res){
+    Item.findById(req.body.itemId).exec(function(err, item){
+        if(err) return res.send({message:'查找失败!'});
+        item.remove(function(err) {
+            if(err){
+                return res.send({message:'删除失败！'});
+            } else {
+                res.send({message:'删除成功！'})
+            }
+        })
+    })
+}
+
+exports.deleteUser = function(req,res){
+    User.findById(req.body.userId).exec(function(err, user){
+        if(err) return res.send({message:'查找失败!'});
+        user.remove(function(err) {
+            if(err){
+                return res.send({message:'删除失败！'});
+            } else {
+                res.send({message:'删除成功！'})
+            }
+        })
+    })
+}
+exports.findUserList = function(req, res){
+     User.find().sort('-created').
+    exec(function(err, user) {
+        if(err) {
+            return res.send({message:'查找失败!'});
+        } else {
+            res.json(user);
+        }
+    });
+}

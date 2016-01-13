@@ -28,6 +28,26 @@
 					</div>
 				</div>
     		</div>
+             <script>
+$.ajax({
+   type:'GET',
+   url:'/api/user/messages',
+   dataType:'JSON',
+   async:false,
+   success:function(data){
+    for(var i in data.message){
+        var messageDate = new Date(data.message[i].created);
+        var messageData='<tr class="status_open">'+'<td><input type="checkbox" class="simple_form">'+i+'</td>'+'<td>'+data.message[i].user.fullName+'</td>'
+        +'<td>'+data.message[i].creator.fullName+'</td>'+'<td>'+(messageDate).toLocaleDateString() + " " + (messageDate).toLocaleTimeString()+'</td>'
+        +'<td>'+'<a class="btn btn-primary" data-ng-click=clickToOpen("'+data.message[i]._id+'")>查看&nbsp;&nbsp;&nbsp;&nbsp;</a>'
+         +'<a class="btn btn-primary" data-ng-click=clickToSend("'+data.message[i].creator._id+'"'+',"'+data.message[i].creator.fullName+'")>回复消息</a>'+'</td>'
+        +'</tr>'
+        $('#messageDataBody').append(messageData);
+    }
+   }
+});
+             </script>
+</section>
     <!-- jQuery -->
     <script src="../manage/Javascript/jQuery/jquery-1.7.2.min.js"></script>
 	<!-- Flot -->
@@ -62,23 +82,3 @@
 	<script src="../manage/Javascript/ColorBox/jquery.colorbox.js"></script>
 	<!-- Kanrisha Script -->
     <script src="../manage/Javascript/kanrisha.js"></script>
-             <script>
-$.ajax({
-   type:'GET',
-   url:'/api/user/messages',
-   dataType:'JSON',
-   async:false,
-   success:function(data){
-    for(var i in data.message){
-        var messageDate = new Date(data.message[i].created);
-        var messageData='<tr class="status_open">'+'<td><input type="checkbox" class="simple_form">'+i+'</td>'+'<td>'+data.message[i].user.fullName+'</td>'
-        +'<td>'+data.message[i].creator.fullName+'</td>'+'<td>'+(messageDate).toLocaleDateString() + " " + (messageDate).toLocaleTimeString()+'</td>'
-        +'<td>'+'<a class="btn btn-primary" data-ng-click=clickToOpen("'+data.message[i]._id+'")>查看&nbsp;&nbsp;&nbsp;&nbsp;</a>'
-         +'<a class="btn btn-primary" data-ng-click=clickToSend("'+data.message[i].creator._id+'"'+',"'+data.message[i].creator.fullName+'")>回复消息</a>'+'</td>'
-        +'</tr>'
-        $('#messageDataBody').append(messageData);
-    }
-   }
-});
-             </script>
-</section>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Kanrisha - A Premium HTML5 Responsive Admin Template</title>
+	<title>销售情况</title>
 	<!--[if lt IE 9]>
 		<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -99,7 +99,31 @@
 					<div><span class="label">表格数据</span></div>
 				</div>
 				<div class="g_12 separator"><span></span></div>
-
+                  <div class="g_12">
+					<div class="widget_header wwOptions">
+						<h4 class="widget_header_title wwIcon i_16_data">用户数据</h4>
+					</div>
+					<div class="widget_contents noPadding">
+						<table class="datatable tables userData" id="userData">
+							<thead>
+								<tr>
+									<th style="display:none">用户Id</th>
+                                    <th>用户名</th>
+									<th>学校</th>
+									<th>电话</th>
+                                    <th>email</th>
+                                    <th>注册时间</th>
+                                    <th>头像</th>
+                                    <th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="userDataBody">
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Separator -->
+				<div class="g_12 separator"><span></span></div>
 				<div class="g_12">
 					<div class="widget_header wwOptions">
 						<h4 class="widget_header_title wwIcon i_16_data">商品数据</h4>
@@ -115,6 +139,7 @@
                                     <th>单价</th>
                                     <th>商品类别</th>
                                     <th>状态</th>
+                                     <th>操作</th>
 								</tr>
 							</thead>
 							<tbody id="itemDataBody">
@@ -178,6 +203,25 @@
 		</div>
 	</div>
     <script>
+        
+ $.ajax({
+   type:'GET',
+   url:'/manage/findUserList',
+   dataType:'JSON',
+   async:false,
+   success:function(data){
+    for(var i in data){
+         var signUpDate = new Date(data[i].created);
+        var userData='<tr id="'+data[i]._id+'">'
+         +'<td style="display:none">'+data[i]._id+'</td>'
+        +'<td>'+data[i].firstName+data[i].lastName+'</td>'+'<td>'+data[i].college+'</td>'+'<td>'+data[i].phone+'</td>'
+        +'<td>'+data[i].email+'</td>'+'<td>'+(signUpDate).toLocaleDateString() + " " + (signUpDate).toLocaleTimeString()+'</td>'+'<td>'+'<img src='+data[i].avatar+' onload="if (this.width>140 || this.height>226) if (this.width/this.height>140/226) this.width=140; else this.height=226;">'+'</td>'
+        +'<td>'+'<button class="simple_buttons" onclick=deleteUser("'+data[i]._id+'")>删除用户</button>'+'</td>'
+        +'</tr>'
+        $('#userDataBody').append(userData);
+    }
+   }
+});
  $.ajax({
    type:'GET',
    url:'/api/items',
@@ -185,10 +229,11 @@
    async:false,
    success:function(data){
     for(var i in data){
-        var itemData='<tr>'
+        var itemData='<tr id="'+data[i]._id+'">'
          +'<td style="display:none">'+data[i]._id+'</td>'
         +'<td>'+data[i].seller.fullName+'</td>'+'<td>'+data[i].itemname+'</td>'+'<td>'+data[i].stock+'</td>'
         +'<td>'+data[i].unitPrice+'</td>'+'<td>'+data[i].itemType+'</td>'+'<td>'+data[i].state+'</td>'
+        +'<td>'+'<button class="simple_buttons" onclick=deleteItem("'+data[i]._id+'")>删除商品</button>'+'</td>'
         +'</tr>'
         $('#itemDataBody').append(itemData);
     }
@@ -202,10 +247,11 @@
    success:function(data){
     for(var i in data){
         if(data[i].rateValue==undefined) data[i].rateValue='暂未评价'
-        var orderData='<tr>'
+        var orderData='<tr id="'+data[i]._id+'">'
          +'<td style="display:none">'+data[i]._id+'</td>'
         +'<td>'+data[i].customer.fullName+'</td>'+'<td>'+data[i].seller.fullName+'</td>'+'<td>'+data[i].item.itemname+'</td>'+'<td>'+data[i].quantity+'</td>'
         +'<td>'+data[i].unitPrice+'</td>'+'<td>'+data[i].rateValue+'</td>'+'<td>'+data[i].state+'</td>'
+        
         +'</tr>'
         $('#orderDataBody').append(orderData);
     }
@@ -216,12 +262,41 @@
 $('#fullName').text(window.manage.fullName);
 
 }); 
+function deleteUser(userId){
+     $.ajax({
+   type:'POST',
+   url:'/manage/deleteUser',
+   dataType:'JSON',
+   data:{
+       userId:userId
+   },
+   success:function(data){
+    alert(data.message)
+    $('#'+userId).remove();
+   }
+});
+}
+
+function deleteItem(itemId){
+     $.ajax({
+   type:'POST',
+   url:'/manage/deleteItem',
+   dataType:'JSON',
+   data:{
+       itemId:itemId
+   },
+   success:function(data){
+    alert(data.message)
+    $('#'+itemId).remove();
+   }
+});
+}
 </script>
 	<script src="../manage/Javascript/DataTables/jquery.dataTables.min.js"></script>
 	<footer>
 		<div class="wrapper">
 			<span class="copyright">
-				&copy; Copyright &copy; 2013.Company name All rights reserved.<a target="_blank" href="http://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a>
+				&copy; Copyright &copy; 2015.Dreamer All rights reserved.
 			</span>
 		</div>
 	</footer>

@@ -298,7 +298,7 @@ $(function () {
         },
         "sPaginationType": "full_numbers",
         "fnInitComplete": function(){
-        	$(".dtShowPer select").uniform();
+        	$(".dtShowPer").uniform();
         	$(".dtFilter input").addClass("simple_field").css({
         		"width": "auto",
         		"margin-left": "15px",

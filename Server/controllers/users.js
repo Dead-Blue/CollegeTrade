@@ -4,6 +4,7 @@ var User = require('mongoose').model('User');
 var passport = require('passport');
 var formidable = require('formidable');
 var Message = require('mongoose').model('Message');
+var xssFilters = require('xss-filters');
 var getErrorMessage = function(err) {
 	var message = '';
 	if (err.code) {
@@ -263,7 +264,7 @@ exports.sendMessageToUser = function(req,res){
     var target = req.targetUser;
     req.targetUser=undefined;
     var creator = req.user;
-    var content = req.body.content;
+    var content = xssFilters.inHTMLData(req.body.content);
     var message = new Message({
         user:target,
         creator:creator,

@@ -39,6 +39,19 @@
 </style>
 
 <div class="row col-md-12">
+				<div class="col-md-12    text-center">
+					<img  src="/views/img/main.png " class=" col-md-12 thumbnail"/>
+				</div>
+				<div class="alert alert-info" >
+					<div class="text-center">
+						<h2>{{articles[articles.length-1].title}}</h4>
+					</div>
+
+					<span>发布时间：{{articles[articles.length-1].create| date:"yyyy-MM-dd hh:mm:ss" }}<br/></span>
+                    <span>
+                       <h4> {{articles[articles.length-1].content}}</h4>
+                    </span>
+				</div>
     <div class="input-group  " role="search" >
         <div class="form-group col-md-8">
             <input type="text" class="form-control  col-md-12" ng-model="searchName"/>

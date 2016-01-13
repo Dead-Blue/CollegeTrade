@@ -46,7 +46,7 @@ var UserSchema = new Schema({
 	]},
     avatar:{
 		type:String,
-		default:'views/Images/user_avatar.png'
+		default:'/views/Images/user_avatar.png'
 	},
 	college: {
 		type: String,

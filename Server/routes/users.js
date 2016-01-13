@@ -29,11 +29,11 @@ app.param('userId', users.userByID);
     .post(users.signin)
     .delete(users.signout);
     
-    app.route('/signin')
-    .get(users.renderSignin);
+    // app.route('/signin')
+    // .get(users.renderSignin);
     
-    app.route('/signup')
-    .get(users.renderSignup);
-    app.route('/signout')
-    .get(users.signout);
+    // app.route('/signup')
+    // .get(users.renderSignup);
+    // app.route('/signout')
+    // .get(users.signout);
 };

@@ -136,7 +136,7 @@ exports.customerUpdate=function(req,res){
         case 'rate&state': 
              order.state=xssFilters.inHTMLData(req.body.state);
              order.rate=xssFilters.inHTMLData(req.body.rate);
-             order.rateValue=req.body.rateValue;
+             order.rateValue=xssFilters.inHTMLData(req.body.rateValue);
              break;
     }
     order.save(function(err){
@@ -153,9 +153,9 @@ exports.sellerUpdate=function(req,res){
     var order = req.order;
     if (!order) return res.send({message: '载入订单信息失败'});
     switch(req.body.updateType){
-        case 'rate': order.rate=req.body.rate;break;
-        case 'state': order.state=req.body.state;break; 
-        case 'rate&state': order.state=req.body.state;order.rate=req.body.rate;break;
+        case 'rate': order.rate=xssFilters.inHTMLData(req.body.rate);break;
+        case 'state': order.state=xssFilters.inHTMLData(req.body.state);break; 
+        case 'rate&state': order.state=xssFilters.inHTMLData(req.body.state);order.rate=req.body.rate;break;
     }
     order.save(function(err){
         if(err){           
