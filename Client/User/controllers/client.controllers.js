@@ -390,7 +390,7 @@ client.controller('itemListCtrl', ['$rootScope', '$scope', '$cookieStore', '$loc
 /**
  * 详情页
  */
-client.controller('itemDetailsCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService', function ($rootScope, $scope, $cookieStore, $location, $window, itemService) {
+client.controller('itemDetailsCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'itemService','ngDialog', function ($rootScope, $scope, $cookieStore, $location, $window, itemService,ngDialog) {
     console.log('itemDetailsCtrl');
 
     $scope.quantity = 1;
@@ -398,7 +398,17 @@ client.controller('itemDetailsCtrl', ['$rootScope', '$scope', '$cookieStore', '$
     //
     $scope.itemDetails = $cookieStore.get("item");
     console.log($scope.itemDetails);
-
+    
+    
+    $scope.clickToSend = function (targetID,targetName) {
+          $scope.targetID = targetID;
+          $scope.targetName = targetName;
+            ngDialog.open({ 
+            className: 'ngdialog-theme-default',  
+            scope:$scope,  
+            template: 'Message/views/message.sendMessage.html'
+        });
+    };
 
     $scope.unitPrice = $scope.itemDetails.unitPrice;
 
@@ -454,13 +464,21 @@ client.controller('itemDetailsCtrl', ['$rootScope', '$scope', '$cookieStore', '$
 /**
  * 以消费者身份查看订单
  */
-client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'orderService', function ($rootScope, $scope, $cookieStore, $location, $window, orderService) {
+client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieStore', '$location', '$window', 'orderService','ngDialog', function ($rootScope, $scope, $cookieStore, $location, $window, orderService,ngDialog) {
     console.log('clientControllers.orderListOfCustomerCtrl');
     //在显示中的列表
     $scope.onShownOrders = [];
     //所有列表
     $scope.allOrders = [];
-
+ $scope.clickToSend = function (targetID,targetName) {
+          $scope.targetID = targetID;
+          $scope.targetName = targetName;
+            ngDialog.open({ 
+            className: 'ngdialog-theme-default',  
+            scope:$scope,  
+            template: 'Message/views/message.sendMessage.html'
+        });
+    };
     ///初始化分页
     initPagination = function () {
         $scope.paginationConf = {
@@ -487,6 +505,7 @@ client.controller('orderListOfCustomerCtrl', ['$rootScope', '$scope', '$cookieSt
                             return state;
                         })(),
                         'price': $scope.allOrders[i].price,
+                        'seller': $scope.allOrders[i].seller,
                         'rate': $scope.allOrders[i].rate
                     };
 

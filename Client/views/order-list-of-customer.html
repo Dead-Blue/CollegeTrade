@@ -47,9 +47,9 @@
                        ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
                     <span class="col-md-2"> {{order.created| date:"yyyy-MM-dd hh:mm:ss" }}</span>&nbsp;
                     <span class="col-md-2">  {{order.itemname}}</span> &nbsp;
-                    <span class="col-md-3"> {{order.price}}&yen;</span>&nbsp;
+                    <span class="col-md-2"> &yen;{{order.price}}</span>&nbsp;
                     <span class="col-md-2"> {{order.state}}</span>&nbsp;
-
+                    <button class="btn btn-sm btn-info" ng-click="clickToSend(order.seller._id , order.seller.fullName)">联系卖家</button>
                 </uib-accordion-heading>
             </div>
         </div>

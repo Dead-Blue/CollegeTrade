@@ -22,6 +22,7 @@
         <br>
         <h3>发布人</h3>
         <p>{{itemDetails.seller.fullName}}</p>
+        <button class="btn btn-primary" ng-click="clickToSend(itemDetails.seller._id,itemDetails.seller.fullName)">联系发布人</button>
         <br>
         <h3>库存：</h3>
         <p>{{itemDetails.stock}}</p>
