@@ -13,12 +13,9 @@
 						<table class="tables datatable noObOLine">
 							<thead>
 								<tr>
-									<th>
-										<input type="checkbox" class="simple_form tMainC">
-									</th>
+                                    <th>时间</th>
 									<th>收信人</th>
 									<th>发信人</th>
-									<th>时间</th>
                                     <th>操作</th>
 								</tr>
 							</thead>
@@ -37,8 +34,10 @@ $.ajax({
    success:function(data){
     for(var i in data.message){
         var messageDate = new Date(data.message[i].created);
-        var messageData='<tr class="status_open">'+'<td><input type="checkbox" class="simple_form">'+i+'</td>'+'<td>'+data.message[i].user.fullName+'</td>'
-        +'<td>'+data.message[i].creator.fullName+'</td>'+'<td>'+(messageDate).toLocaleDateString() + " " + (messageDate).toLocaleTimeString()+'</td>'
+        var messageData='<tr >'
+        +'<td>'+(messageDate).toLocaleDateString() + " " + (messageDate).toLocaleTimeString()+'</td>'
+        +'<td>'+data.message[i].user.fullName+'</td>'
+        +'<td>'+data.message[i].creator.fullName+'</td>'
         +'<td>'+'<a class="btn btn-primary" data-ng-click=clickToOpen("'+data.message[i]._id+'")>查看&nbsp;&nbsp;&nbsp;&nbsp;</a>'
          +'<a class="btn btn-primary" data-ng-click=clickToSend("'+data.message[i].creator._id+'"'+',"'+data.message[i].creator.fullName+'")>回复消息</a>'+'</td>'
         +'</tr>'
