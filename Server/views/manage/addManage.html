@@ -54,7 +54,7 @@
 		<div class="wrapper">
 			<div class="user">
 				<img src="../manage/Images/user_avatar.png" alt="user_avatar" class="user_avatar" />
-				<span class="label">John Alex</span>
+				<span class="label" id="fullName">John Alex</span>
 				<!-- Top Tooltip -->
 				<div class="top_tooltip">
 					<div>
@@ -247,6 +247,13 @@
 			</div>		
 		</div>
 	</div>
+    <script>
+              window.manage = <%- manage || 'null' %>;
+   $(document).ready(function() { 
+$('#fullName').text(window.manage.fullName);
+
+}); 
+    </script>
 	<footer>
 		<div class="wrapper">
 			<span class="copyright">

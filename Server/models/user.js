@@ -17,7 +17,7 @@ var UserSchema = new Schema({
 		function(password) {
 			return password && password.length >6;
 		},
-	'Password should be longer'
+	'密码必须大于等于7位'
 	]},
 	salt: {
 		type: String
