@@ -709,8 +709,12 @@ client.controller('changeAvatarCtrl', ['$rootScope', '$scope', '$cookieStore', '
             function (response) {
                 console.log('changeAvatarCtrl.changeAvatar.success');
                 console.log(response);
-                swal("修改成功!", "", "success");
-                $location.path("/");
+                if(response.success) {
+                    swal("修改成功!", "", "success");
+                    $rootScope.user.avatar = response.avatarPath;
+                    $cookieStore.put("user",$rootScope.user);
+                    $location.path("/");
+                }
             },
             function (response) {
                 console.log('changeAvatarCtrl.changeAvatar.fail');

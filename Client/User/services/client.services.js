@@ -127,9 +127,10 @@ clientServices.service('userService', function ($http, $q) {
             console.log('userService.updateAvatar');
             var deferred = $q.defer();
             var promise = deferred.promise;
-            data = {'username': username, 'avatar': avatar};
-            console.log(data);
-            $http.post('/api/user/avatar', data, {
+            var fd = new FormData();
+            fd.append('username', username);
+            fd.append('avatar', avatar);
+            $http.post('/api/user/avatar', fd, {
                 headers: {
                     'Content-Type': undefined
                 }
@@ -290,7 +291,27 @@ clientServices.service('orderService', function ($http, $q) {
 
     }
 });
-
+/**
+ * 公告服务
+ */
+clientServices.service('articleService', function ($http, $q) {
+        return {
+            getArticles:function(){
+                console.log('articleService.getArticles');
+                var deferred = $q.defer();
+                var promise = deferred.promise;
+                $http.get('/api/articles').success(function (response) {
+                    deferred.resolve(response);
+                    console.log('articleService.getArticles.success');
+                }).error(function (response) {
+                    deferred.reject(response);
+                    console.log('articleService.getArticles.error');
+                });
+                return promise;
+            }
+        }
+    }
+);
 clientServices.service('messageService', function ($http, $q) {
     return {
         /**
