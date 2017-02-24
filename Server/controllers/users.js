@@ -5,6 +5,7 @@ var passport = require('passport');
 var formidable = require('formidable');
 var Message = require('mongoose').model('Message');
 var xssFilters = require('xss-filters');
+var path=require('path');
 var getErrorMessage = function(err) {
 	var message = '';
 	if (err.code) {
@@ -240,7 +241,7 @@ exports.changePassword=function(req,res){
 
 exports.parseForm = function (req, res, next) {
     var form = new formidable.IncomingForm();
-    form.uploadDir = __dirname + "../../../Client/uploadAvatars/";
+    form.uploadDir = path.resolve(__dirname,'..','..','Client/uploadAvatars') ;
     form.encoding = 'utf-8';
     form.maxFieldsSize = 2 * 1024 * 1024;
     form.maxFields = 1000;

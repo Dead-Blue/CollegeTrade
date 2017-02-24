@@ -1,6 +1,6 @@
 {
-  "name": "CollegeTrade",
-  "version": "0.0.1",
+  "name": "collegetrade",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "node ./Config/www"

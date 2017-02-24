@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     Item = mongoose.model('Item');
 var formidable = require('formidable');
+var path = require('path');
 var getErrorMessage = function (err) {
     if (err.errors) {
         for (var errName in err.errors) {
@@ -95,7 +96,8 @@ exports.read = function (req, res) {
 };
 exports.parseForm = function (req, res, next) {
     var form = new formidable.IncomingForm();
-    form.uploadDir = __dirname + "../../../Client/uploadImages/";
+    console.log(__dirname);
+    form.uploadDir =path.resolve(__dirname,'..','..','Client/uploadImages/');
     form.encoding = 'utf-8';
     form.maxFieldsSize = 2 * 1024 * 1024;
     form.maxFields = 1000;
