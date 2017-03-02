@@ -97,7 +97,7 @@ exports.read = function (req, res) {
 exports.parseForm = function (req, res, next) {
     var form = new formidable.IncomingForm();
     console.log(__dirname);
-    form.uploadDir =path.resolve(__dirname,'..','..','Client/uploadImages/');
+    form.uploadDir =path.resolve(__dirname,'..','..','Client','uploadImages');
     form.encoding = 'utf-8';
     form.maxFieldsSize = 2 * 1024 * 1024;
     form.maxFields = 1000;
