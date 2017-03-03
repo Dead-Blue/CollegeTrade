@@ -6,6 +6,8 @@
 
 预览[Preview](http://www.deadblue.cn:8080)
 
+测试账号：test/1234567
+
 ### Features：
 
 1. 基于Node.js的Express的开发框架。
