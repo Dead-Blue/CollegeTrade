@@ -2,6 +2,10 @@
 
 ## 基于MEAN架构的交易平台(MongoDB,Express,AngularJS,Node.js)
 
+###
+
+预览[Preview](www.deadblue.cn:8080)
+
 ### Features：
 
 1. 基于Node.js的Express的开发框架。
